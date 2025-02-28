@@ -52,8 +52,8 @@ const BlueVariant = () => {
 };
 const GreenVariant = () => {
   return (
-    <MaxWidthContainer className="relative flex h-[55vh] items-center bg-primary md:h-[60vh] lg:h-[85vh] 2xl:h-[90vh]">
-      <div className="absolute  bottom-0 right-0 z-40 size-[450px] bg-[url(https://res.cloudinary.com/davidleo/image/upload/v1739730717/landtana/Untitled_design_8_imepng.png)] bg-contain bg-[right_90%] bg-no-repeat md:size-[550px] lg:size-[600px] xl:size-[700px] 2xl:size-[800px]" />
+    <MaxWidthContainer className="relative flex h-[55vh] items-center overflow-hidden bg-primary md:h-[60vh] lg:h-[85vh] 2xl:h-[90vh]">
+      <div className="absolute bottom-0 right-0 z-40  mr-[-120px] size-[450px] bg-[url(https://res.cloudinary.com/davidleo/image/upload/v1740754941/landtana/IMG-20250114-WA0043-removebg-preview_lk0qup_aapr2q.png)] bg-contain bg-[right_100%] bg-no-repeat md:size-[550px] lg:size-[600px] xl:size-[700px] 2xl:size-[800px]" />
       <div className="absolute bottom-0 left-0 size-[450px] bg-[url(https://res.cloudinary.com/davidleo/image/upload/v1739729649/landtana/Shape_rf7uak.png)] bg-contain bg-[left_90%] bg-no-repeat sm:size-[500px] md:size-full" />
       <div className="absolute right-0 top-0 size-[400px] bg-[url(https://res.cloudinary.com/davidleo/image/upload/v1739729649/landtana/Vector_3_so9eqz.png)] bg-contain bg-[right_0%] bg-no-repeat md:size-[450px] lg:size-[500px] xl:size-[700px]" />
       <div className="absolute bottom-0 right-0 size-[250px] bg-[url(https://res.cloudinary.com/davidleo/image/upload/v1739729649/landtana/Vector_ypxpyp.png)] bg-contain bg-[0%_0%] bg-no-repeat md:size-[400px] lg:size-[350px] xl:size-[600px]" />

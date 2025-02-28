@@ -66,7 +66,7 @@ export const HomePageClient = () => {
     <>
       {/* HERO SECTION */} <HeroSection heroVariant="GREEN" />
       {/* WHAT WE DO SECTION */}
-      <MaxWidthContainer className="!py-[40px]">
+      <MaxWidthContainer className="!py-[80px]">
         <div className="relative flex flex-col gap-14  md:flex-row ">
           <div className="flex w-full flex-col justify-center gap-6">
             <div className="space-y-2">
