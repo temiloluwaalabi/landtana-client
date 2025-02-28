@@ -298,7 +298,7 @@ export const HomePageClient = () => {
             >
               <div className="grid w-full gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {demoservices.slice(0, 6).map((service) => (
-                  <ProfessionalCard key={service.category} service={service} />
+                  <ProfessionalCard key={service.category} />
                 ))}
               </div>
               <Button className="mt-5 rounded-md border border-secondary bg-transparent text-secondary">

@@ -1,14 +1,8 @@
 // @flow
-import { Star } from "lucide-react";
 import Image from "next/image";
 import * as React from "react";
 
-import { DemoInter } from "@/config/constants";
-
-type Props = {
-  service: DemoInter;
-};
-export const ProfessionalCard = (props: Props) => {
+export const ProfessionalCard = () => {
   return (
     <div className="relative flex w-[400px] flex-col gap-1 lg:w-fit">
       <div className="relative h-[350px] lg:h-[300px]">
