@@ -38,7 +38,7 @@ export default async function middleware(req: NextRequest) {
   const isAuthRoute = authRoutes.includes(pathname);
 
   const isGuestRoute = guestRoutes.some(
-    (route) => pathname.startsWith(route) // Check if the pathname starts with a guest route
+    (route) => pathname.startsWith(route), // Check if the pathname starts with a guest route
   );
 
   const isSharedRoutes = isAccessibleRoute(pathname, sharedRoutes);
@@ -68,7 +68,7 @@ export default async function middleware(req: NextRequest) {
   if (privateRoutes && !isLoggedIn) {
     const sanitizeCallback = sanitizeCallbackUrl(
       `${pathname}${search}`,
-      origin
+      origin,
     );
 
     const callbackUrl = sanitizeCallback || DEFAULT_LOGIN_REDIRECT;

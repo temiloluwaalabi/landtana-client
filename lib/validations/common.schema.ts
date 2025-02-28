@@ -68,7 +68,7 @@ export const SetupPasswordCSchema = z
     {
       message: "Password is required",
       path: ["confirmPassword"],
-    }
+    },
   )
   .refine(
     (data) => {
@@ -80,7 +80,7 @@ export const SetupPasswordCSchema = z
     {
       message: "Password is required",
       path: ["password"],
-    }
+    },
   )
   .refine((data) => data.password === data.confirmPassword, {
     message: messages.passwordsDidNotMatch,

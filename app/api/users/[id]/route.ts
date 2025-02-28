@@ -8,7 +8,7 @@ import logger from "@/lib/logger";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const session = await getSession();
@@ -30,7 +30,7 @@ export async function GET(
         message: "User fetched",
         user,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     logger.error({ error }, "FAILED FETCHING USER");
@@ -38,14 +38,14 @@ export async function GET(
     if (error instanceof UnauthorizedError) {
       return NextResponse.json(
         { message: error.message },
-        { status: error.statusCode }
+        { status: error.statusCode },
       );
     }
 
     if (error instanceof ApiError) {
       return NextResponse.json(
         { message: error.message, details: error.rawErrors },
-        { status: error.statusCode }
+        { status: error.statusCode },
       );
     }
     return NextResponse.json(
@@ -53,7 +53,7 @@ export async function GET(
         message:
           error instanceof Error ? error.message : "Fetching user failed",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

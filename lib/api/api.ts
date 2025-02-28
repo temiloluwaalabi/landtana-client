@@ -10,7 +10,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/v1/auth/signin`
+        `${authClient.defaults.baseURL}/v1/auth/signin`,
       );
       console.log("Login Credentials:", credentials);
     }
@@ -27,7 +27,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/v1/users`
+        `${authClient.defaults.baseURL}/v1/users`,
       );
     }
 
@@ -96,7 +96,7 @@ export const authService = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     // ✅ Check response status manually like `fetch`
 
@@ -110,7 +110,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/v1/auth/reset-password-link`
+        `${authClient.defaults.baseURL}/v1/auth/reset-password-link`,
       );
       console.log("Payload:", values);
     }
@@ -127,7 +127,7 @@ export const authService = {
           // headers: {
           //   Authorization: `Bearer ${token}`,
           // },
-        }
+        },
       );
       // ✅ Check response status manually like `fetch`
 
@@ -149,7 +149,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/v1/auth/reset-password`
+        `${authClient.defaults.baseURL}/v1/auth/reset-password`,
       );
       console.log("Payload:", values);
     }
@@ -169,7 +169,7 @@ export const authService = {
           params: {
             token,
           },
-        }
+        },
       );
       // ✅ Check response status manually like `fetch`
 

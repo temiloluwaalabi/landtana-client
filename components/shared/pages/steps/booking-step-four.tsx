@@ -35,7 +35,7 @@ export const BookingStepFour = () => {
   const totalDuration = calculateTotalDuration(
     bookings,
     servicesList,
-    addonList
+    addonList,
   );
   // const isMobile = useIsMobile();
 
@@ -79,7 +79,7 @@ export const BookingStepFour = () => {
                 "flex w-full  items-center justify-between  bg-white  p-3",
                 openAccordionId === true
                   ? "rounded-se-lg rounded-ss-lg"
-                  : "rounded-lg"
+                  : "rounded-lg",
               )}
             >
               <div className="flex items-center gap-1">
@@ -115,7 +115,7 @@ export const BookingStepFour = () => {
             <CardHeader
               className={cn(
                 "flex w-full flex-row items-start justify-between  pb-4 shadow-none outline-none",
-                hideDetailsD && "border-b-[3px]"
+                hideDetailsD && "border-b-[3px]",
               )}
             >
               <div className="space-y-3">
@@ -164,11 +164,11 @@ export const BookingStepFour = () => {
                   <div className="w-full space-y-3">
                     {bookings.map((booking) => {
                       const bookingIndex = bookings.findIndex(
-                        (b) => b.serviceId === booking.serviceId
+                        (b) => b.serviceId === booking.serviceId,
                       );
 
                       const service = servicesList.find(
-                        (s) => s.id === booking.serviceId
+                        (s) => s.id === booking.serviceId,
                       );
                       let totalDuration = 0;
                       let totalPrice = 0;
@@ -181,7 +181,7 @@ export const BookingStepFour = () => {
                       if (booking.addons) {
                         booking.addons.forEach((addonID) => {
                           const addonService = addonList.find(
-                            (s) => s.id === addonID
+                            (s) => s.id === addonID,
                           );
                           if (addonService) {
                             totalDuration += 12;
@@ -237,7 +237,11 @@ export const BookingStepFour = () => {
                       <span className="text-sm">Total</span>
                       <span className="text-base font-bold text-primary">
                         {toCurrency(
-                          calculateTotalPrice(bookings, servicesList, addonList)
+                          calculateTotalPrice(
+                            bookings,
+                            servicesList,
+                            addonList,
+                          ),
                         )}
                       </span>
                     </span>
@@ -261,7 +265,7 @@ export const BookingStepFour = () => {
           <CardHeader
             className={cn(
               "flex w-full flex-row items-center justify-between  pb-4 shadow-none outline-none",
-              hideDetails && "border-b-[3px]"
+              hideDetails && "border-b-[3px]",
             )}
           >
             <div>
@@ -296,11 +300,11 @@ export const BookingStepFour = () => {
                 <div className="w-full space-y-3">
                   {bookings.map((booking) => {
                     const bookingIndex = bookings.findIndex(
-                      (b) => b.serviceId === booking.serviceId
+                      (b) => b.serviceId === booking.serviceId,
                     );
 
                     const service = servicesList.find(
-                      (s) => s.id === booking.serviceId
+                      (s) => s.id === booking.serviceId,
                     );
                     let totalDuration = 0;
                     let totalPrice = 0;
@@ -313,7 +317,7 @@ export const BookingStepFour = () => {
                     if (booking.addons) {
                       booking.addons.forEach((addonID) => {
                         const addonService = addonList.find(
-                          (s) => s.id === addonID
+                          (s) => s.id === addonID,
                         );
                         if (addonService) {
                           totalDuration += 12;

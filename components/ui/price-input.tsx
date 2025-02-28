@@ -71,7 +71,7 @@ const PriceInput: React.FC<PriceInputProps> = ({
       <div
         className={cn(
           "flex h-[42px] w-full items-center rounded-md !border",
-          className
+          className,
         )}
       >
         <span className="mr-2 flex items-center justify-center text-base w-[40px] h-full bg-red-200 dark:bg-dark-200 rounded-ss-md rounded-es-md font-normal text-primary dark:text-light-300">

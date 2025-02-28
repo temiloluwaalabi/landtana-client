@@ -24,7 +24,7 @@ export const BookingStepOne = () => {
           onClick={() => handleSelectType("individual")}
           className={cn(
             "group flex h-[75px] items-center justify-start gap-4 rounded-[8px] border border-[#D9D9D9] bg-transparent p-6 shadow-none",
-            type === "individual" && "border-primary"
+            type === "individual" && "border-primary",
           )}
         >
           <Image
@@ -46,7 +46,7 @@ export const BookingStepOne = () => {
           onClick={() => handleSelectType("group")}
           className={cn(
             "group flex h-[75px] items-center justify-start gap-4 rounded-[8px] border border-[#D9D9D9] bg-transparent p-6 shadow-none",
-            type === "group" && "border-primary"
+            type === "group" && "border-primary",
           )}
         >
           <Image
@@ -68,7 +68,7 @@ export const BookingStepOne = () => {
           onClick={() => handleSelectType("gift-card")}
           className={cn(
             "group flex h-[75px] items-center justify-start gap-4 rounded-[8px] border border-[#D9D9D9] bg-transparent p-6 shadow-none",
-            type === "gift-card" && "border-primary"
+            type === "gift-card" && "border-primary",
           )}
         >
           <Image

@@ -19,7 +19,7 @@ import { servicesList } from "../pages/steps/booking-step-two";
 export const calculateTotalDuration = (
   bookings: Booking[],
   serviceList: Service[],
-  addonList: Service[]
+  addonList: Service[],
 ): number => {
   let totalDuration = 0;
 
@@ -44,7 +44,7 @@ export const calculateTotalDuration = (
 export const calculateTotalPrice = (
   bookings: Booking[],
   serviceList: Service[],
-  addonList: Service[]
+  addonList: Service[],
 ): number => {
   let totalPrice = 0;
 
@@ -217,36 +217,36 @@ export default function TimeSelectionStep({
     selectedDate: Date,
     openingTime: string,
     closingTime: string,
-    breakTime?: { start: string; end: string }
+    breakTime?: { start: string; end: string },
   ) => {
     if (!bookedSlots) return true;
 
     const openingTimestamp = new Date(
-      `${format(selectedDate, "yyyy-MM-dd")}T${openingTime}`
+      `${format(selectedDate, "yyyy-MM-dd")}T${openingTime}`,
     ).getTime();
     const closingTimestamp = new Date(
-      `${format(selectedDate, "yyyy-MM-dd")}T${closingTime}`
+      `${format(selectedDate, "yyyy-MM-dd")}T${closingTime}`,
     ).getTime();
 
     // Convert break time to timestamps (if provided)
     const breakStart = breakTime
       ? new Date(
-          `${format(selectedDate, "yyyy-MM-dd")}T${breakTime.start}`
+          `${format(selectedDate, "yyyy-MM-dd")}T${breakTime.start}`,
         ).getTime()
       : null;
     const breakEnd = breakTime
       ? new Date(
-          `${format(selectedDate, "yyyy-MM-dd")}T${breakTime.end}`
+          `${format(selectedDate, "yyyy-MM-dd")}T${breakTime.end}`,
         ).getTime()
       : null;
 
     // Convert booked slots to a list of time ranges
     const bookedRanges = bookedSlots.map((slot) => ({
       start: new Date(
-        `${format(selectedDate, "yyyy-MM-dd")}T${slot.startTime}`
+        `${format(selectedDate, "yyyy-MM-dd")}T${slot.startTime}`,
       ).getTime(),
       end: new Date(
-        `${format(selectedDate, "yyyy-MM-dd")}T${slot.endTime}`
+        `${format(selectedDate, "yyyy-MM-dd")}T${slot.endTime}`,
       ).getTime(),
     }));
 
@@ -271,7 +271,7 @@ export default function TimeSelectionStep({
         (range) =>
           (slotStart.getTime() >= range.start &&
             slotStart.getTime() < range.end) ||
-          (slotEnd.getTime() > range.start && slotEnd.getTime() <= range.end)
+          (slotEnd.getTime() > range.start && slotEnd.getTime() <= range.end),
       );
       // Check if the slot overlaps with the break time
       const isDuringBreak =
@@ -306,7 +306,7 @@ export default function TimeSelectionStep({
       maxSlotsPerPeriod: 6,
       maxSlotsPerDay: 10,
       buffer: 5,
-    }
+    },
   ) => {
     const availableSlots: { startTime: string; endTime: string }[] = [];
 
@@ -320,13 +320,13 @@ export default function TimeSelectionStep({
 
     const bookedSlotsByHour = Array.from(
       { length: endDate.getHours() - startDate.getHours() + 1 },
-      (_, i) => startDate.getHours() + i
+      (_, i) => startDate.getHours() + i,
     ).reduce(
       (acc, hour) => {
         acc[hour] = 0; // Initialize all hours to 0
         return acc;
       },
-      {} as Record<number, number>
+      {} as Record<number, number>,
     );
 
     const normalizedBookedSlots =
@@ -345,13 +345,13 @@ export default function TimeSelectionStep({
     // Initialize availableSlotsPerHour with all hours from opening to closing time, set to 0
     const availableSlotsPerHour = Array.from(
       { length: endDate.getHours() - startDate.getHours() + 1 },
-      (_, i) => startDate.getHours() + i
+      (_, i) => startDate.getHours() + i,
     ).reduce(
       (acc, hour) => {
         acc[hour] = 0; // Initialize all hours to 0
         return acc;
       },
-      {} as Record<number, number>
+      {} as Record<number, number>,
     );
 
     let totalSlotsGenerated = 0;
@@ -361,7 +361,7 @@ export default function TimeSelectionStep({
         (booked) =>
           (start >= booked.start && start < booked.end) ||
           (end > booked.start && end <= booked.end) ||
-          (start <= booked.start && end >= booked.end)
+          (start <= booked.start && end >= booked.end),
       );
     };
 
@@ -393,7 +393,7 @@ export default function TimeSelectionStep({
       if (totalSlotsGenerated >= config.maxSlotsPerDay) break;
       const slotStart = new Date(startDate.getTime() + minute * 60 * 1000);
       const slotEnd = new Date(
-        slotStart.getTime() + config.slotDuration * 60 * 1000
+        slotStart.getTime() + config.slotDuration * 60 * 1000,
       );
 
       if (slotEnd > endDate) break;
@@ -412,7 +412,7 @@ export default function TimeSelectionStep({
       // Validate the slot
       if (isTimeSlotAvailable(slotStart, slotEnd)) {
         const displayEndTime = new Date(
-          slotEnd.getTime() + config.buffer * 60 * 1000
+          slotEnd.getTime() + config.buffer * 60 * 1000,
         );
 
         availableSlots.push({
@@ -442,7 +442,7 @@ export default function TimeSelectionStep({
         case "anytime": {
           const morningSlots = slots.filter((slot) => getSlotHour(slot) < 12);
           const afternoonSlots = slots.filter(
-            (slot) => getSlotHour(slot) >= 12
+            (slot) => getSlotHour(slot) >= 12,
           );
           return [
             ...morningSlots.slice(0, config.maxSlotsPerPeriod),
@@ -474,7 +474,7 @@ export default function TimeSelectionStep({
       selectedDate,
       openingTime,
       closingTime,
-      breakTime
+      breakTime,
     );
     if (!isAvailable) {
       return (
@@ -499,7 +499,7 @@ export default function TimeSelectionStep({
         maxSlotsPerDay: 30,
         maxSlotsPerPeriod: 12,
         buffer: 5,
-      }
+      },
     );
 
     if (availableSlots.length === 0) {
@@ -515,7 +515,7 @@ export default function TimeSelectionStep({
               `w-full justify-center bg-transparent border border-[#D9D9D9] h-[42px]
                text-primary hover:text-white hover:bg-secondary hover:border-secondary`,
               time === `${slot.startTime}-${slot.endTime}` &&
-                "bg-[#FED8DE] text-secondary border-secondary"
+                "bg-[#FED8DE] text-secondary border-secondary",
             )}
             onClick={() => handleTimeSelect(slot.startTime, slot.endTime)}
           >

@@ -19,13 +19,13 @@ export const BookingStepTwo = () => {
 
   const handleToggleService = (service: Service) => {
     const isServiceBooked = bookings.some(
-      (booking) => booking.serviceId === service.id
+      (booking) => booking.serviceId === service.id,
     );
 
     if (isServiceBooked) {
       // Remove the booking if the service is already booked
       const bookingIndex = bookings.findIndex(
-        (booking) => booking.serviceId === service.id
+        (booking) => booking.serviceId === service.id,
       );
       if (bookingIndex !== -1) {
         removeBooking(bookingIndex);
@@ -101,14 +101,14 @@ export const BookingStepTwo = () => {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {servicesList.map((item) => {
               const isBooked = bookings.some(
-                (booking) => booking.serviceId === item.id
+                (booking) => booking.serviceId === item.id,
               );
               return (
                 <div
                   key={item.id}
                   className={cn(
                     "flex h-[130px] transition-all items-center justify-between rounded-[8px] border border-[#D9D9D9] p-6",
-                    isBooked && "border-secondary"
+                    isBooked && "border-secondary",
                   )}
                 >
                   <div className="space-y-4">

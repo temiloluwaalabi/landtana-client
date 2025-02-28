@@ -10,7 +10,7 @@ const sessionApiRoute = "/api/auth/session";
 
 export async function fetchJSON<JSON = unknown>(
   input: RequestInfo,
-  init?: RequestInit
+  init?: RequestInit,
 ): Promise<JSON> {
   return fetch(input, {
     headers: {

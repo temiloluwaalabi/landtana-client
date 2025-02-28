@@ -15,7 +15,7 @@ const defaultFormatter = (crumb: string) => {
   return crumb
     .replace(/[-_]/g, " ")
     .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-      index === 0 ? word.toUpperCase() : word.toLowerCase()
+      index === 0 ? word.toUpperCase() : word.toLowerCase(),
     );
 };
 export const StepsBreadcrumbs = () => {
@@ -60,7 +60,7 @@ export const StepsBreadcrumbs = () => {
               <BreadcrumbItem
                 className={cn(
                   "cursor-pointer",
-                  isLast && "font-semibold text-black"
+                  isLast && "font-semibold text-black",
                 )}
                 onClick={() => updateState({ step: crumb.step })}
               >

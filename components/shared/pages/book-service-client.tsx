@@ -29,7 +29,7 @@ export const BookServiceClient = () => {
     .map(
       (booking) =>
         servicesList.find((service) => service.id === booking.serviceId)
-          ?.price || 0
+          ?.price || 0,
     )
     .reduce((sum, price) => sum + price, 0);
   const renderStage = () => {
@@ -64,7 +64,7 @@ export const BookServiceClient = () => {
             <CardHeader
               className={cn(
                 "flex w-full flex-row items-center justify-between  pb-4 shadow-none outline-none",
-                hideDetails && "border-b-[3px]"
+                hideDetails && "border-b-[3px]",
               )}
             >
               <div>
@@ -99,10 +99,10 @@ export const BookServiceClient = () => {
                   <div className="w-full space-y-3">
                     {bookings.map((booking) => {
                       const service = servicesList.find(
-                        (s) => s.id === booking.serviceId
+                        (s) => s.id === booking.serviceId,
                       );
                       const bookingIndex = bookings.findIndex(
-                        (b) => b.serviceId === booking.serviceId
+                        (b) => b.serviceId === booking.serviceId,
                       );
                       return (
                         <div

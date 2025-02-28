@@ -81,7 +81,7 @@ export const formUrlQuery = ({ params, updates }: UrlQueryParams) => {
     {
       skipNull: true,
       skipEmptyString: true,
-    }
+    },
   );
 };
 
@@ -103,7 +103,7 @@ export const removeKeysFromQuery = ({
     {
       skipNull: true,
       skipEmptyString: true,
-    }
+    },
   );
 };
 
@@ -122,7 +122,7 @@ export function generateSlug(title: string) {
 export function toCurrency(
   number: number | string,
   disableDecimal = false,
-  decimalPlaces = 2
+  decimalPlaces = 2,
 ) {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -259,7 +259,7 @@ export const secondsToTime = (seconds: number): string => {
  * @returns An object containing the date and time (e.g., { date: "2025-02-01", time: "11:00:00" }).
  */
 export const extractDateTime = (
-  isoString: string
+  isoString: string,
 ): { date: string; time: string } => {
   const dateObj = new Date(isoString);
 

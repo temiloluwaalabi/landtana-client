@@ -17,7 +17,7 @@ export const addonList = [
 ];
 export const BookingStepThree = () => {
   const [openAccordionId, setOpenAccordionId] = React.useState<string | null>(
-    null
+    null,
   );
   const { step, bookings, updateBooking, updateState } = useBookingStore();
   // const isMobile = useIsMobile();
@@ -31,17 +31,17 @@ export const BookingStepThree = () => {
 
   const handleToggleService = (
     addonServiceId: string,
-    parentServiceId: string
+    parentServiceId: string,
   ) => {
     console.log(
       "Toggling addon:",
       addonServiceId,
       "for service:",
-      parentServiceId
+      parentServiceId,
     );
 
     const parentBookingIndex = bookings.findIndex(
-      (booking) => booking.serviceId === parentServiceId
+      (booking) => booking.serviceId === parentServiceId,
     );
 
     if (parentBookingIndex === -1) return;
@@ -88,7 +88,7 @@ export const BookingStepThree = () => {
         <div className="w-full space-y-3">
           {bookings.map((booking) => {
             const service = servicesList.find(
-              (s) => s.id === booking.serviceId
+              (s) => s.id === booking.serviceId,
             );
             return (
               service && (
@@ -111,7 +111,7 @@ export const BookingStepThree = () => {
                           setOpenAccordionId((prevId) =>
                             prevId === booking.serviceId
                               ? null
-                              : booking.serviceId
+                              : booking.serviceId,
                           )
                         }
                         variant={"link"}
@@ -137,7 +137,7 @@ export const BookingStepThree = () => {
                       <div className="grid grid-cols-4 gap-4">
                         {addonList.map((item) => {
                           const isAddonBooked = booking.addons?.includes(
-                            item.id
+                            item.id,
                           );
 
                           return (
@@ -145,7 +145,7 @@ export const BookingStepThree = () => {
                               key={item.id}
                               className={cn(
                                 "flex h-[130px] transition-all items-center justify-between rounded-[8px] border border-[#D9D9D9] p-6",
-                                isAddonBooked && "border-secondary"
+                                isAddonBooked && "border-secondary",
                               )}
                             >
                               <div className="space-y-4">
@@ -173,7 +173,7 @@ export const BookingStepThree = () => {
                                   onCheckedChange={() =>
                                     handleToggleService(
                                       item.id,
-                                      booking.serviceId
+                                      booking.serviceId,
                                     )
                                   }
                                   checkClassName="size-[32px]"
@@ -184,7 +184,7 @@ export const BookingStepThree = () => {
                                     e.stopPropagation();
                                     handleToggleService(
                                       item.id,
-                                      booking.serviceId
+                                      booking.serviceId,
                                     );
                                   }}
                                   variant={"link"}
