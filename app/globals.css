@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: 238 94% 98%;
+    --foreground: 238 94% 7%;
+    --card: 0 0% 100%;
+    --card-foreground: 238 94% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 238 94% 7%;
+    --primary: 147 91% 13%; /* Your green */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 347 100% 59%; /* Your red */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 238 20% 96%;
+    --muted-foreground: 238 40% 45%;
+    --accent: 238 94% 7%; /* Your blue */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 347 100% 59%; /* Using your red for destructive */
+    --destructive-foreground: 0 0% 98%;
+    --border: 238 20% 90%;
+    --input: 238 20% 90%;
+    --ring: 147 91% 13%;
+    --chart-1: 147 91% 13%; /* Green */
+    --chart-2: 347 100% 59%; /* Red */
+    --chart-3: 238 94% 7%; /* Blue */
+    --chart-4: 147 91% 33%; /* Lighter green */
+    --chart-5: 347 100% 79%; /* Lighter red */
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 238 94% 7%; /* Your dark blue as background */
+    --foreground: 0 0% 98%;
+    --card: 238 94% 10%;
+    --card-foreground: 0 0% 98%;
+    --popover: 238 94% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 147 91% 23%; /* Lighter version of your green */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 347 100% 59%; /* Your red */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 238 50% 20%;
+    --muted-foreground: 238 20% 70%;
+    --accent: 147 91% 23%; /* Using green as accent in dark mode */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 347 100% 59%; /* Your red */
+    --destructive-foreground: 0 0% 98%;
+    --border: 238 50% 20%;
+    --input: 238 50% 20%;
+    --ring: 147 91% 23%;
+    --chart-1: 147 91% 33%; /* Brighter green for dark mode */
+    --chart-2: 347 100% 69%; /* Brighter red for dark mode */
+    --chart-3: 238 94% 47%; /* Brighter blue for dark mode */
+    --chart-4: 147 91% 53%; /* Even brighter green */
+    --chart-5: 347 100% 79%; /* Even brighter red */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-white text-foreground h-full;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.custom-head-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+}
+.custom-weekday {
+  font-weight: normal;
+  font-size: 14px;
+}
