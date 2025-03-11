@@ -4,8 +4,8 @@ import * as React from "react";
 
 export const ProfessionalCard = () => {
   return (
-    <div className="relative flex w-[400px] flex-col gap-1 lg:w-fit">
-      <div className="relative h-[350px] lg:h-[300px]">
+    <div className="relative flex w-fit flex-col gap-1 lg:w-fit">
+      <div className="relative h-[300px] lg:h-[300px]">
         <Image
           src="https://res.cloudinary.com/davidleo/image/upload/v1739748138/landtana/a4ae835795f7033b83f7ebf019ce8bd0_r8h7d7.png"
           alt="Box Braid"

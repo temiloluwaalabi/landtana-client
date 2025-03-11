@@ -4,7 +4,9 @@ import { format, parse } from "date-fns";
 import qs from "query-string";
 import { twMerge } from "tailwind-merge";
 
-import { Booking } from "./use-booking-store";
+import { Service } from "@/types";
+
+import { Booking, Guest } from "./use-booking-store";
 export interface nBooking {
   serviceId: string;
   stylist: { id: string; name: string; avatar: string } | null;
@@ -47,21 +49,36 @@ export const formUrlQuery = ({ params, updates }: UrlQueryParams) => {
     } else if (key === "bookings" && Array.isArray(value)) {
       const serializeBookings = value
         .map((booking: Booking) => {
-          const addons = booking.addons?.join(",") || "";
-          const stylist = booking.stylist || null; // Use stylist ID or "null"
-          // return `${booking.serviceId}:${stylist}:${addons}`;
+          // Prepare all possible parts
+          const parts = [];
 
-          if (stylist === null) {
-            return `${booking.serviceId}:${addons}`; // Format: serviceId:stylist:date:time:addon1,addon2
-          } else {
-            return `${booking.serviceId}:${stylist}:${addons}`; // Format: serviceId:stylist:date:time:addon1,addon2
-          }
-          // const date = booking.date?.toISOString() || "null"; // Use ISO string or "null"
-          // const time = booking.time || "null"; // Use time or "null"
+          // Always add serviceId (required)
+          parts.push(`s:${booking.serviceId}`);
+
+          // Add optional parts only if they exist
+          if (booking.variationId) parts.push(`v:${booking.variationId}`);
+          if (booking.styleOptionId) parts.push(`so:${booking.styleOptionId}`);
+          if (booking.stylist) parts.push(`sy:${booking.stylist}`);
+
+          // Handle addons specially - only add if there are addons
+          if (booking.addons?.length)
+            parts.push(`a:${booking.addons.join(",")}`);
+
+          // Add guestId only if it exists
+          if (booking.guestId) parts.push(`g:${booking.guestId}`);
+
+          // Join all parts with colons
+          return parts.join(";");
         })
         .join("&bookings=");
-      // Serialize bookings array to JSON
       currentUrl[key] = serializeBookings;
+    } else if (key === "guests" && Array.isArray(value)) {
+      const serializeGuests = value
+        .map((guest: Guest) => {
+          return `${guest.id}:${guest.name}:${guest.bookingIndex}`;
+        })
+        .join("&guests=");
+      currentUrl[key] = serializeGuests;
     } else if (value instanceof Date) {
       currentUrl[key] = value.toISOString(); // Convert Date to ISO string
     } else if (typeof value === "boolean") {
@@ -81,7 +98,7 @@ export const formUrlQuery = ({ params, updates }: UrlQueryParams) => {
     {
       skipNull: true,
       skipEmptyString: true,
-    },
+    }
   );
 };
 
@@ -103,7 +120,7 @@ export const removeKeysFromQuery = ({
     {
       skipNull: true,
       skipEmptyString: true,
-    },
+    }
   );
 };
 
@@ -122,7 +139,7 @@ export function generateSlug(title: string) {
 export function toCurrency(
   number: number | string,
   disableDecimal = false,
-  decimalPlaces = 2,
+  decimalPlaces = 2
 ) {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -259,7 +276,7 @@ export const secondsToTime = (seconds: number): string => {
  * @returns An object containing the date and time (e.g., { date: "2025-02-01", time: "11:00:00" }).
  */
 export const extractDateTime = (
-  isoString: string,
+  isoString: string
 ): { date: string; time: string } => {
   const dateObj = new Date(isoString);
 
@@ -312,3 +329,132 @@ export const formatDayDate = (dateString: Date): string => {
   // Combine into the desired format
   return `${day} ${dayOfWeek} ${year}`;
 };
+// export const formatDate = (dateString: string) => {
+//   if (!dateString) return "";
+//   const date = parse(dateString, "yyyy-MM-dd", new Date());
+//   return format(date, "MMMM d, yyyy");
+// };
+export const formatDateI = (dateString: Date) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+// Helper function to calculate total price and duration for a booking
+export const calculateBookingDetails = (
+  bookings: Booking[],
+  services: Service[],
+  allAddons: Service[]
+) => {
+  const bookingDetails = bookings.map((booking) => {
+    const service = services.find((s) => s.id === booking.serviceId);
+    if (!service)
+      return {
+        bookingId: booking.serviceId,
+        totalPrice: 0,
+        totalDuration: 0,
+        addons: [] as string[],
+      };
+
+    // start with 0 as total price
+    let totalPrice = 0;
+    let totalDuration = 0;
+
+    const variation = service?.variations.find(
+      (s) => s.id === booking.variationId
+    );
+    if (variation) {
+      totalPrice = Number(variation.price); // Replace base price with variation price
+      totalDuration = variation.duration;
+    }
+
+    const styleOption = service?.style_options.find(
+      (s) => s.id === booking.styleOptionId
+    );
+
+    if (styleOption) {
+      totalPrice += Number(styleOption.price);
+      totalDuration += styleOption.duration;
+    }
+
+    if (!variation && !styleOption) {
+      totalPrice += Number(service.base_price);
+      totalDuration += service.duration;
+    }
+
+    const addons: string[] = [];
+
+    // Add addon prices
+    if (booking.addons && booking.addons.length) {
+      booking.addons.forEach((addonId) => {
+        const addon = allAddons.find((a) => a.id === addonId);
+        if (addon) {
+          addons.push(addonId);
+
+          totalPrice += Number(addon.base_price) || 0;
+          totalDuration += addon.duration || 0;
+        }
+      });
+    }
+
+    return {
+      bookingId: booking.serviceId,
+      guestId: booking.guestId,
+      totalPrice,
+      totalDuration,
+      addons,
+    };
+  });
+
+  const totalGroupPrice = bookingDetails.reduce(
+    (sum, booking) => sum + booking.totalPrice,
+    0
+  );
+  const totalGroupDuration = bookingDetails.reduce(
+    (sum, booking) => sum + booking.totalDuration,
+    0
+  );
+
+  return {
+    bookingDetails,
+    totalGroupPrice,
+    totalGroupDuration,
+  };
+};
+
+// // Helper function to calculate group booking totals
+// export const calculateGroupTotals = (
+//   state: BookingState,
+//   services: Service[],
+//   allAddons: Service[]
+// ) => {
+//   let totalPrice = 0;
+//   let totalDuration = 0;
+//   let longestServiceDuration = 0;
+
+//   state.bookings.forEach((booking) => {
+//     const { totalPrice: price, totalDuration: duration } =
+//       calculateBookingDetails(booking, services, allAddons);
+
+//     totalPrice += price;
+
+//     // For group bookings, we track the longest service duration since they'll happen in parallel
+//     if (state.isGroupBooking) {
+//       longestServiceDuration = Math.max(longestServiceDuration, duration);
+//     } else {
+//       totalDuration += duration;
+//     }
+//   });
+
+//   if (state.isGroupBooking) {
+//     totalDuration = longestServiceDuration;
+//   }
+
+//   return { totalPrice, totalDuration };
+// };

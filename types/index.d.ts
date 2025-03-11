@@ -74,7 +74,13 @@ export interface GetAllStylistsResponse {
 export interface GetStylistByIdResponse {
   stylist: Stylist;
 }
-
+export interface StyleOption {
+  id: string;
+  name: string;
+  price: string;
+  duration: number;
+  service_id: string;
+}
 export interface Service {
   id: string;
   name: string;
@@ -83,11 +89,10 @@ export interface Service {
   duration: number;
   category_id: null | string;
   aftercare_tips: null | string;
-  featured_image: null | string;
-  is_addon: boolean;
-  addons: null | [];
   images: string[];
   is_active: boolean;
+  featured_image: null | string;
+
   isAddon: boolean;
   created_by: string;
   updated_by: string;
@@ -95,6 +100,9 @@ export interface Service {
   deleted_at: null;
   deleted_by: null;
   created_at: Date;
+  style_options: StyleOption[];
+  variations: StyleOption[];
+
   updated_at: Date;
 }
 export interface GetAllServicesResponse {
@@ -115,6 +123,7 @@ export interface Category {
   created_at: Date;
   updated_at: Date;
 }
+
 export type GetAllCategoriesResponse = {
   categories: Category[];
   total: number;

@@ -7,41 +7,33 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 // import { useIsMobile } from "@/hooks/use-mobile";
 import { useBookingStore } from "@/lib/use-booking-store";
-import { cn } from "@/lib/utils";
+import { calculateBookingDetails, cn } from "@/lib/utils";
+import { Service } from "@/types";
 
-import { servicesList } from "./booking-step-two";
-export const addonList = [
-  { id: "6", name: "Washing Hair", price: 50 },
-  { id: "7", name: "Dying", price: 30 },
-  { id: "8", name: "Burning", price: 20 },
-];
-export const BookingStepThree = () => {
+type Props = {
+  services: Service[];
+};
+
+export const BookingStepThree = ({ services }: Props) => {
   const [openAccordionId, setOpenAccordionId] = React.useState<string | null>(
-    null,
+    null
   );
-  const { step, bookings, updateBooking, updateState } = useBookingStore();
-  // const isMobile = useIsMobile();
-  // Utility function to toggle an item in an array
-  // const toggleArrayItem = <T,>(array: T[], item: T): T[] => {
-  //   const index = array.indexOf(item);
-  //   return index === -1
-  //     ? [...array, item] // Add item
-  //     : array.filter((_, i) => i !== index); // Remove item
-  // };
+  const { step, bookings, updateBooking, updateState, currentGuestId, type } =
+    useBookingStore();
 
   const handleToggleService = (
     addonServiceId: string,
-    parentServiceId: string,
+    parentServiceId: string
   ) => {
     console.log(
       "Toggling addon:",
       addonServiceId,
       "for service:",
-      parentServiceId,
+      parentServiceId
     );
 
     const parentBookingIndex = bookings.findIndex(
-      (booking) => booking.serviceId === parentServiceId,
+      (booking) => booking.serviceId === parentServiceId
     );
 
     if (parentBookingIndex === -1) return;
@@ -49,12 +41,7 @@ export const BookingStepThree = () => {
     const parentBooking = bookings[parentBookingIndex];
 
     const isAddonBooked = parentBooking.addons?.includes(addonServiceId);
-    // const updatedAddons = toggleArrayItem(
-    //   parentBooking.addons ?? [],
-    //   addonServiceId
-    // );
-    // Set the flag to indicate a state update
-    // isStateUpdate.current = true;
+
     // // Create updated addons array
     const updatedAddons = isAddonBooked
       ? parentBooking.addons?.filter((id) => id !== addonServiceId) // Remove addon
@@ -64,6 +51,14 @@ export const BookingStepThree = () => {
     updateBooking(parentBookingIndex, { addons: updatedAddons });
   };
 
+  const totalPrice = calculateBookingDetails(bookings, services, services);
+
+  const mappedService =
+    type === "group"
+      ? totalPrice.bookingDetails.filter(
+          (book) => book.guestId === currentGuestId
+        )
+      : totalPrice.bookingDetails;
   return (
     <div className="flex h-full flex-col gap-6">
       {/* <div className="space-y-2">
@@ -76,27 +71,25 @@ export const BookingStepThree = () => {
 
       <div className="rounded-md border border-primary bg-[#E7FFE3] p-4 text-lg font-semibold text-primary">
         <h3>
-          A Professional will be automatizally assigned to you and sent to your
-          mail and registered phone number
+          A stylist will be automatically assigned to you and sent to your mail
+          and registered phone number
         </h3>
       </div>
       <div className="space-y-3">
         <h2 className="font-lora text-lg font-medium text-gray-500">
-          {bookings.length} {bookings.length > 1 ? "services" : "service"}{" "}
-          selected
+          {mappedService.length}{" "}
+          {mappedService.length > 1 ? "services" : "service"} selected
         </h2>
         <div className="w-full space-y-3">
-          {bookings.map((booking) => {
-            const service = servicesList.find(
-              (s) => s.id === booking.serviceId,
-            );
+          {mappedService.map((booking) => {
+            const service = services.find((s) => s.id === booking.bookingId);
             return (
               service && (
                 <div
-                  key={booking.serviceId}
-                  className="flex w-full animate-accordion-down flex-col rounded-md border p-3 transition-transform"
+                  key={booking.bookingId}
+                  className="flex w-full animate-accordion-down flex-col rounded-[12px]  border bg-white  transition-transform"
                 >
-                  <div className="flex w-full items-center justify-between">
+                  <div className="flex w-full items-center justify-between border-b p-3">
                     <div className="flex items-center gap-1">
                       <div>
                         <h3 className="font-cormorant text-xl font-bold">
@@ -109,9 +102,9 @@ export const BookingStepThree = () => {
                       <Button
                         onClick={() =>
                           setOpenAccordionId((prevId) =>
-                            prevId === booking.serviceId
+                            prevId === booking.bookingId
                               ? null
-                              : booking.serviceId,
+                              : booking.bookingId!
                           )
                         }
                         variant={"link"}
@@ -122,30 +115,26 @@ export const BookingStepThree = () => {
                     </div>
                     <div className="flex items-center  gap-2">
                       <p className="space-x-1">
-                        <span className="font-lora text-sm font-normal text-gray-500">
-                          from
-                        </span>
                         <span className="font-cormorant text-2xl font-bold text-primary">
-                          ${service?.price}
+                          ${booking?.totalPrice}
                         </span>
                       </p>
                     </div>
                   </div>
-                  {openAccordionId === booking.serviceId && (
-                    <div className="mt-2 space-y-3 py-4">
+                  {openAccordionId === booking.bookingId && (
+                    <div className="mt-2 space-y-3 px-3 py-4">
                       <Input placeholder="Search Addon Services" />
                       <div className="grid grid-cols-4 gap-4">
-                        {addonList.map((item) => {
+                        {services.slice(0, 6).map((item) => {
                           const isAddonBooked = booking.addons?.includes(
-                            item.id,
+                            item.id
                           );
-
                           return (
                             <div
                               key={item.id}
                               className={cn(
                                 "flex h-[130px] transition-all items-center justify-between rounded-[8px] border border-[#D9D9D9] p-6",
-                                isAddonBooked && "border-secondary",
+                                isAddonBooked && "border-secondary"
                               )}
                             >
                               <div className="space-y-4">
@@ -162,7 +151,7 @@ export const BookingStepThree = () => {
                                     From
                                   </span>
                                   <span className="text-base font-bold text-primary">
-                                    ${item.price}
+                                    ${item.base_price}
                                   </span>
                                 </p>
                               </div>
@@ -173,7 +162,7 @@ export const BookingStepThree = () => {
                                   onCheckedChange={() =>
                                     handleToggleService(
                                       item.id,
-                                      booking.serviceId,
+                                      booking.bookingId
                                     )
                                   }
                                   checkClassName="size-[32px]"
@@ -184,7 +173,7 @@ export const BookingStepThree = () => {
                                     e.stopPropagation();
                                     handleToggleService(
                                       item.id,
-                                      booking.serviceId,
+                                      booking.bookingId
                                     );
                                   }}
                                   variant={"link"}
@@ -207,9 +196,15 @@ export const BookingStepThree = () => {
       </div>
       <Button
         className="h-[48px]"
-        onClick={() => updateState({ step: step + 1 })}
+        onClick={() => {
+          if (type === "group") {
+            updateState({ step: step - 2 });
+          } else {
+            updateState({ step: step + 1 });
+          }
+        }}
       >
-        Proceed to select date
+        {type === "group" ? "Continue" : "Proceed to select date"}
       </Button>
     </div>
   );

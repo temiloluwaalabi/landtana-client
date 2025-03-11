@@ -11,8 +11,8 @@ export const MainFooter = () => {
   return (
     <footer className="bg-accent">
       <MaxWidthContainer className="">
-        <div className="grid grid-cols-12 gap-14  text-white">
-          <div className="col-span-4 space-y-4">
+        <div className="flex w-fit grid-cols-12 flex-col gap-14 text-white  md:grid">
+          <div className="col-span-12 space-y-4 lg:col-span-4">
             <h3 className="text-lg font-medium uppercase">Salon Hours</h3>
             <div className="space-y-2">
               <p className="flex items-center justify-between font-lora text-sm font-normal">
@@ -49,7 +49,7 @@ export const MainFooter = () => {
               <p>**Hours vary slightly according to appts on particular day</p>
             </div>
           </div>
-          <div className="col-span-5 space-y-4">
+          <div className="col-span-12 space-y-4 lg:col-span-5">
             <h3 className="text-lg font-medium uppercase">Menu</h3>
             <div className="grid grid-cols-3 gap-10">
               <div className="space-y-2">
@@ -84,11 +84,11 @@ export const MainFooter = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-3 space-y-4">
+          <div className="col-span-12 space-y-4 lg:col-span-3">
             <div className="space-y-3">
               <h3 className="text-lg font-medium">Booking 24/7</h3>
-              <div className="rounded-full border border-white p-1">
-                <Button className="w-full rounded-full bg-white text-primary hover:bg-secondary hover:text-white">
+              <div className="w-fit rounded-full border border-white p-1">
+                <Button className="w-fit rounded-full bg-white text-primary hover:bg-secondary hover:text-white">
                   Book Online <ArrowRight />
                 </Button>
               </div>
@@ -146,19 +146,25 @@ export const MainFooter = () => {
             </div>
           </div>
         </div>
-        <div className="mt-8 flex items-center justify-between border-t pt-6 text-white">
+        <div className="mt-8 flex w-full items-center justify-between border-t pt-6 text-white">
           <div>
-            <p>©2025 Landtana Crown Braids</p>
+            <p className="text-sm">
+              ©2025 Landtana
+              <br /> Crown Braids
+            </p>
           </div>
           <div>
             <Logo
-              bgClass="bg-white size-[60px]"
+              bgClass="bg-white size-[40px] lg:size-[60px]"
               logoLink="https://res.cloudinary.com/davidleo/image/upload/v1739272858/landtana/WhatsApp_Image_2025-02-11_at_09.19.09_b530cecd-removebg-preview_tb50q3.png"
             />
           </div>
           <div>
-            <Link href="https://davidleotech.com">
-              Designed By DavidLeoTech
+            <Link
+              className="text-right text-sm"
+              href="https://davidleotech.com"
+            >
+              Designed By <br /> DavidLeoTech
             </Link>
           </div>
         </div>

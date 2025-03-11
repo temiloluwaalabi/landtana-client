@@ -3,95 +3,65 @@
 "use client";
 
 import { format, parse } from "date-fns";
-import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { sampleAvailabilityData } from "@/config/constants";
-import { Booking, Service, useBookingStore } from "@/lib/use-booking-store";
-import { cn } from "@/lib/utils";
-import { AvailabilityResponse, TimeSlot } from "@/types";
-
-import { addonList } from "../pages/steps/booking-step-three";
-import { servicesList } from "../pages/steps/booking-step-two";
-
-export const calculateTotalDuration = (
-  bookings: Booking[],
-  serviceList: Service[],
-  addonList: Service[],
-): number => {
-  let totalDuration = 0;
-
-  bookings.forEach((booking) => {
-    const mainService = serviceList.find((s) => s.id === booking.serviceId);
-    if (mainService) {
-      totalDuration += 60;
-    }
-
-    if (booking.addons) {
-      booking.addons.forEach((addonId) => {
-        const addonService = addonList.find((s) => s.id === addonId);
-        if (addonService) {
-          totalDuration += 12;
-        }
-      });
-    }
-  });
-
-  return totalDuration;
-};
-export const calculateTotalPrice = (
-  bookings: Booking[],
-  serviceList: Service[],
-  addonList: Service[],
-): number => {
-  let totalPrice = 0;
-
-  bookings.forEach((booking) => {
-    const mainService = serviceList.find((s) => s.id === booking.serviceId);
-    if (mainService) {
-      totalPrice += mainService.price;
-    }
-
-    if (booking.addons) {
-      booking.addons.forEach((addonId) => {
-        const addonService = addonList.find((s) => s.id === addonId);
-        if (addonService) {
-          totalPrice += addonService.price;
-        }
-      });
-    }
-  });
-
-  return totalPrice;
-};
+import { useBookingStore } from "@/lib/use-booking-store";
+import { calculateBookingDetails, cn } from "@/lib/utils";
+import { AvailabilityResponse, Service, TimeSlot } from "@/types";
 
 interface SchedulerConfig {
   slotDuration: number; // in minutes
   minStartInterval: number; // minimum minutes between slot starts (20 or 25)
-  maxSlotsPerHour: number; // maximum slots that can start in an hour
-  maxSlotsPerPeriod: number; // maximum slots to return per period when "anytime" is selected
-  maxSlotsPerDay: number; // maximum total slots per day
-  buffer: number;
+  maxCapacityPerSlot: number; // maximum concurrent bookings allowed per time slot
+  maxDailyCapacity: number; // maximum total capacity for the day (in service hours)
+  buffer: number; // buffer time between appointments in minutes
+}
+
+interface SalonCapacity {
+  totalDailyHours: number; // Total hours salon can operate in a day
+  maxBookingsPerHour: number; // Maximum number of concurrent bookings per hour
+  bookedHours: number; // Already booked hours for the day
+}
+
+interface WorkingHours {
+  openingTime: string;
+  closingTime: string;
+  breakTime?: { start: string; end: string };
+  isBookingEnabled: boolean; // Flag to determine if booking is enabled for a specific day
 }
 
 interface TimeSelectionStepProps {
   onNext: () => void;
   onBack: () => void;
+  services: Service[];
 }
 
 export default function TimeSelectionStep({
   onNext,
   onBack,
+  services,
 }: TimeSelectionStepProps) {
   const [availabilityData, setAvailabilityData] =
     useState<AvailabilityResponse>();
+
+  const [salonCapacity, setSalonCapacity] = useState<SalonCapacity>({
+    totalDailyHours: 6, // Default to 8 hours per day
+    maxBookingsPerHour: 2, // Default to 2 concurrent bookings per hour
+    bookedHours: 0,
+  });
+  const [workingHours, setWorkingHours] = useState<WorkingHours>({
+    openingTime: "09:00",
+    closingTime: "17:00",
+    breakTime: { start: "12:00", end: "13:00" },
+    isBookingEnabled: true,
+  });
+
+  console.log("workingHours", workingHours);
+  console.log("Saloon Capacity", salonCapacity);
   const [loading, setLoading] = useState(true);
   const { bookings, date, time, updateState } = useBookingStore();
-  //   const { updateBookingStep } = useSyncUrlState();
-  const [showStylistSelector, setShowStylistSelector] = useState(false);
-  const [selectedStylist, setSelectedStylist] = useState<string | null>(null);
 
   const selectedDate = date;
 
@@ -134,21 +104,32 @@ export default function TimeSelectionStep({
     return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
   };
 
-  // const convertTo12Hour = (timeStr: string): string => {
-  //   const [hours, minutes] = timeStr.split(":");
-  //   const hour = parseInt(hours, 10);
-  //   const ampm = hour >= 12 ? "PM" : "AM";
-  //   const hour12 = hour % 12 || 12;
-  //   return `${hour12}:${minutes} ${ampm}`;
+  const totalBooking = calculateBookingDetails(bookings, services, services);
+
+  // Helper function to transform backend booking data
+  // const transformBookingData = (bookings: any[]): TimeSlot[] => {
+  //   if (!bookings || bookings.length === 0) return [];
+
+  //   return bookings.map(booking => {
+  //     // Extract the booking date and convert to local time format
+  //     const bookingDate = new Date(booking.booking_datetime);
+  //     const startTime = formatTime(bookingDate);
+
+  //     // Calculate end time based on service durations
+  //     const totalDuration = booking.services.reduce((total: number, service: Service) =>
+  //       total + (service.duration || 0), 0);
+
+  //     const endDate = new Date(bookingDate.getTime() + totalDuration * 60 * 1000);
+  //     const endTime = formatTime(endDate);
+
+  //     return {
+  //       startTime,
+  //       endTime,
+  //       id: booking.id
+  //     };
+  //   });
   // };
 
-  const totalDuration = bookings
-    ? calculateTotalDuration(bookings, servicesList, addonList)
-    : 0;
-  // Site settings (opening time, closing time, break time)
-  const openingTime = "09:00";
-  const closingTime = "17:00";
-  const breakTime = { start: "12:00", end: "13:00" };
   useEffect(() => {
     const getTimeSlots = async () => {
       setLoading(true);
@@ -158,6 +139,23 @@ export default function TimeSelectionStep({
 
         // Using mock data for now
         setAvailabilityData(sampleAvailabilityData);
+
+        const mockCapacity: SalonCapacity = {
+          totalDailyHours: 7,
+          maxBookingsPerHour: 3,
+          bookedHours: 2.5,
+        };
+
+        setSalonCapacity(mockCapacity);
+
+        // Mock data for now
+        const mockWorkingHours: WorkingHours = {
+          openingTime: "9:00",
+          closingTime: "17:00",
+          breakTime: { start: "12:00", end: "13:00" },
+          isBookingEnabled: true, // Admin can toggle this to disable bookings
+        };
+        setWorkingHours(mockWorkingHours);
       } catch (error) {
         console.error("Failed to fetch time slots:", error);
       } finally {
@@ -180,28 +178,9 @@ export default function TimeSelectionStep({
     // setTime(time);
     // updateBookingStep({ time });
 
-    const dateString = format(selectedDate, "yyyy-MM-dd");
-    const dateData = availabilityData?.dates[dateString];
+    // const dateString = format(selectedDate, "yyyy-MM-dd");
+    // const dateData = availabilityData?.dates[dateString];
     // If this date requires stylist selection, show that interface
-    if (
-      dateData?.message === "Choose other available staff" &&
-      dateData?.stylists &&
-      dateData.stylists.length > 0
-    ) {
-      setShowStylistSelector(true);
-    } else {
-      onNext();
-    }
-  };
-
-  const handleStylistSelect = (stylistId: string) => {
-    setSelectedStylist(stylistId);
-    // Update the booking with the selected stylist
-    // updateBooking(
-    //   bookings.findIndex((b) => b.serviceId === serviceId),
-    //   { stylist: stylistId }
-    // );
-    // updateBookingStep({ stylist: stylistId });
     onNext();
   };
 
@@ -211,42 +190,77 @@ export default function TimeSelectionStep({
     return format(date, "MMMM d, yyyy");
   };
 
+  // Check if the salon has enough capacity for the day
+  const hasSalonCapacity = (
+    totalServiceDuration: number,
+    bookedHours: number,
+    totalDailyHours: number
+  ): boolean => {
+    // Convert service duration from minutes to hours
+    const serviceDurationHours = totalServiceDuration / 60;
+
+    // Check if adding this booking would exceed the salon's daily capacity
+    return bookedHours + serviceDurationHours <= totalDailyHours;
+  };
+
+  // Check if booking is enabled for the selected date
+  const isBookingEnabled = (workingHours: WorkingHours): boolean => {
+    return workingHours.isBookingEnabled;
+  };
+
   const isDateAvailabe = (
     bookedSlots: TimeSlot[] | undefined,
     totalDuration: number,
     selectedDate: Date,
-    openingTime: string,
-    closingTime: string,
-    breakTime?: { start: string; end: string },
+    workingHours: WorkingHours,
+    salonCapacity: SalonCapacity
   ) => {
+    if (!isBookingEnabled(workingHours)) {
+      return false;
+    }
+
+    if (
+      !hasSalonCapacity(
+        totalDuration,
+        salonCapacity.bookedHours,
+        salonCapacity.totalDailyHours
+      )
+    ) {
+      return false;
+    }
+
     if (!bookedSlots) return true;
 
+    const openingTime = workingHours.openingTime;
+    const closingTime = workingHours.closingTime;
+    const breakTime = workingHours.breakTime;
+
     const openingTimestamp = new Date(
-      `${format(selectedDate, "yyyy-MM-dd")}T${openingTime}`,
+      `${format(selectedDate, "yyyy-MM-dd")}T${openingTime}`
     ).getTime();
     const closingTimestamp = new Date(
-      `${format(selectedDate, "yyyy-MM-dd")}T${closingTime}`,
+      `${format(selectedDate, "yyyy-MM-dd")}T${closingTime}`
     ).getTime();
 
     // Convert break time to timestamps (if provided)
     const breakStart = breakTime
       ? new Date(
-          `${format(selectedDate, "yyyy-MM-dd")}T${breakTime.start}`,
+          `${format(selectedDate, "yyyy-MM-dd")}T${breakTime.start}`
         ).getTime()
       : null;
     const breakEnd = breakTime
       ? new Date(
-          `${format(selectedDate, "yyyy-MM-dd")}T${breakTime.end}`,
+          `${format(selectedDate, "yyyy-MM-dd")}T${breakTime.end}`
         ).getTime()
       : null;
 
     // Convert booked slots to a list of time ranges
     const bookedRanges = bookedSlots.map((slot) => ({
       start: new Date(
-        `${format(selectedDate, "yyyy-MM-dd")}T${slot.startTime}`,
+        `${format(selectedDate, "yyyy-MM-dd")}T${slot.startTime}`
       ).getTime(),
       end: new Date(
-        `${format(selectedDate, "yyyy-MM-dd")}T${slot.endTime}`,
+        `${format(selectedDate, "yyyy-MM-dd")}T${slot.endTime}`
       ).getTime(),
     }));
 
@@ -254,25 +268,43 @@ export default function TimeSelectionStep({
     let currentTime = openingTimestamp;
 
     while (currentTime + totalDuration * 60 * 1000 <= closingTimestamp) {
-      //   const slotStart = currentTime;
-      // const slotEnd = currentTime + totalDuration * 60 * 1000;
-
       const slotStart = new Date(currentTime);
       const slotEnd = new Date(currentTime + totalDuration * 60 * 1000);
 
-      //  // Check if the slot overlaps with any booked slots
-      //  const isBooked = bookedRanges.some(
-      //   (range) =>
-      //     (slotStart >= range.start && slotStart < range.end) ||
-      //     (slotEnd > range.start && slotEnd <= range.end)
-      // );
-      // Check if the slot overlaps with any booked slots
-      const isBooked = bookedRanges.some(
+      // Count concurrent bookings for this time slot
+      const concurrentBookings = bookedRanges.filter(
         (range) =>
           (slotStart.getTime() >= range.start &&
             slotStart.getTime() < range.end) ||
-          (slotEnd.getTime() > range.start && slotEnd.getTime() <= range.end),
-      );
+          (slotEnd.getTime() > range.start && slotEnd.getTime() <= range.end) ||
+          (slotStart.getTime() <= range.start && slotEnd.getTime() >= range.end)
+      ).length;
+
+      let overlapsWithExistingBooking = false;
+      if (bookedSlots && bookedSlots.length > 0) {
+        for (const booking of bookedSlots) {
+          const bookingStart = parseTime(booking.startTime);
+          const bookingEnd = parseTime(booking.endTime);
+
+          // Check if the new slot overlaps with the booking
+          if (
+            (slotStart < bookingEnd && slotEnd > bookingStart) ||
+            slotStart.getTime() === bookingStart.getTime()
+          ) {
+            overlapsWithExistingBooking = true;
+            break;
+          }
+        }
+      }
+
+      // Skip if this slot overlaps with existing bookings
+      if (overlapsWithExistingBooking) {
+        continue;
+      }
+
+      // Check if the slot has available capacity
+      const hasCapacity = concurrentBookings < salonCapacity.maxBookingsPerHour;
+
       // Check if the slot overlaps with the break time
       const isDuringBreak =
         breakStart &&
@@ -281,7 +313,7 @@ export default function TimeSelectionStep({
           slotStart.getTime() < breakEnd) ||
           (slotEnd.getTime() > breakStart && slotEnd.getTime() <= breakEnd));
 
-      if (!isBooked && !isDuringBreak) {
+      if (hasCapacity && !isDuringBreak) {
         return true; // At least one available slot
       }
       // Move to the next slot (e.g., every 15 minutes)
@@ -291,169 +323,182 @@ export default function TimeSelectionStep({
     return false;
   };
 
+  // Generate available time slots based on bookings and capacity
   const generateAvailableSlots = (
     bookedSlots: TimeSlot[] | undefined,
     totalDuration: number,
     selectedDate: Date,
-    openingTime: string,
-    closingTime: string,
-    breakTime?: { start: string; end: string },
-    period?: "morning" | "afternoon" | "anytime", // Period of the day
+    workingHours: WorkingHours,
+    salonCapacity: SalonCapacity,
+    period?: "morning" | "afternoon" | "anytime",
     config: SchedulerConfig = {
       slotDuration: totalDuration,
       minStartInterval: 20,
-      maxSlotsPerHour: 2,
-      maxSlotsPerPeriod: 6,
-      maxSlotsPerDay: 10,
+      maxCapacityPerSlot: salonCapacity.maxBookingsPerHour,
+      maxDailyCapacity: Math.floor(salonCapacity.totalDailyHours * 60), // Convert hours to minutes
       buffer: 5,
-    },
+    }
   ) => {
+    if (!isBookingEnabled(workingHours)) {
+      return []; // Admin has disabled bookings for this day
+    }
+
+    if (
+      !hasSalonCapacity(
+        totalDuration,
+        salonCapacity.bookedHours,
+        salonCapacity.totalDailyHours
+      )
+    ) {
+      return []; // Not enough capacity left for the day
+    }
+
     const availableSlots: { startTime: string; endTime: string }[] = [];
 
-    // const dateStr = format(selectedDate, "yyyy-MM-dd");
+    const { openingTime, closingTime, breakTime } = workingHours;
+
     const startDate = parseTime(openingTime);
     const endDate = parseTime(closingTime);
     const startBreakTime = parseTime(breakTime?.start || "12:00");
     const endBreakTime = parseTime(breakTime?.end || "13:00");
+
     const totalMinutes =
       (endDate.getTime() - startDate.getTime()) / (1000 * 60);
 
-    const bookedSlotsByHour = Array.from(
-      { length: endDate.getHours() - startDate.getHours() + 1 },
-      (_, i) => startDate.getHours() + i,
-    ).reduce(
-      (acc, hour) => {
-        acc[hour] = 0; // Initialize all hours to 0
-        return acc;
-      },
-      {} as Record<number, number>,
-    );
+    // Create a map to track bookings for each time slot
+    const bookingsByTime: Record<number, number> = {};
 
-    const normalizedBookedSlots =
-      bookedSlots &&
-      bookedSlots.map((slot) => {
-        const startDate = parseTime(slot.startTime);
-        const hour = startDate.getHours();
-        bookedSlotsByHour[hour] = (bookedSlotsByHour[hour] || 0) + 1;
-        return {
-          start: startDate,
-          end: parseTime(slot.endTime),
-        };
+    // Initialize booking count for each time slot
+    for (let minute = 0; minute < totalMinutes; minute += 15) {
+      const timeSlot = startDate.getTime() + minute * 60 * 1000;
+      bookingsByTime[timeSlot] = 0;
+    }
+
+    // Count existing bookings for each time slot
+    if (bookedSlots && bookedSlots.length > 0) {
+      bookedSlots.forEach((slot) => {
+        const start = parseTime(slot.startTime).getTime();
+        const end = parseTime(slot.endTime).getTime();
+
+        // Mark all 15-minute intervals within this booking as occupied
+        for (let time = start; time < end; time += 15 * 60 * 1000) {
+          if (bookingsByTime[time] !== undefined) {
+            bookingsByTime[time] += 1;
+          }
+        }
       });
+    }
 
-    // Track available slots per hour, considering already booked slots
-    // Initialize availableSlotsPerHour with all hours from opening to closing time, set to 0
-    const availableSlotsPerHour = Array.from(
-      { length: endDate.getHours() - startDate.getHours() + 1 },
-      (_, i) => startDate.getHours() + i,
-    ).reduce(
-      (acc, hour) => {
-        acc[hour] = 0; // Initialize all hours to 0
-        return acc;
-      },
-      {} as Record<number, number>,
-    );
+    // Track daily capacity usage (in minutes)
+    let dailyCapacityUsed = salonCapacity.bookedHours * 60; // Convert hours to minutes
 
-    let totalSlotsGenerated = 0;
-
-    const isTimeSlotAvailable = (start: Date, end: Date): boolean => {
-      return !normalizedBookedSlots?.some(
-        (booked) =>
-          (start >= booked.start && start < booked.end) ||
-          (end > booked.start && end <= booked.end) ||
-          (start <= booked.start && end >= booked.end),
-      );
-    };
-
-    // Check if a slot can be added to the current hour
-    // const canAddSlotToHour = (
-    //   hour: number,
-    //   bookedInHour: number,
-    //   availableInHour: number
-    // ): boolean => {
-    //   return bookedInHour + availableInHour < config.maxSlotsPerHour;
-    // };
-    // Add break time check
-    const isDuringBreak = (start: Date, end: Date): boolean => {
-      if (!startBreakTime || !endBreakTime) return false;
-      return (
-        (start.getTime() >= startBreakTime.getTime() &&
-          start.getTime() < endBreakTime.getTime()) ||
-        (end.getTime() > startBreakTime.getTime() &&
-          end.getTime() <= endBreakTime.getTime()) ||
-        (start.getTime() <= startBreakTime.getTime() &&
-          end.getTime() >= endBreakTime.getTime())
-      );
-    };
+    // Generate slots
     for (
       let minute = 0;
       minute < totalMinutes;
       minute += config.minStartInterval
     ) {
-      if (totalSlotsGenerated >= config.maxSlotsPerDay) break;
+      // Check if we've reached max daily capacity
+      if (dailyCapacityUsed + totalDuration >= config.maxDailyCapacity) {
+        break;
+      }
+
       const slotStart = new Date(startDate.getTime() + minute * 60 * 1000);
       const slotEnd = new Date(
-        slotStart.getTime() + config.slotDuration * 60 * 1000,
+        slotStart.getTime() + config.slotDuration * 60 * 1000
+      );
+      const displayEndTime = new Date(
+        slotEnd.getTime() + config.buffer * 60 * 1000
       );
 
-      if (slotEnd > endDate) break;
+      // Skip if slot extends beyond closing time
+      if (slotEnd > endDate) continue;
 
-      const hour = slotStart.getHours();
+      // MODIFIED BREAK TIME HANDLING:
+      // Only prevent slots from starting during break time
+      // Long services can overlap the break time if they start before the break
+      if (
+        startBreakTime &&
+        endBreakTime &&
+        slotStart >= startBreakTime &&
+        slotStart < endBreakTime
+      ) {
+        continue; // Skip if service would start during break time
+      }
 
-      // const bookedInHour = bookedSlotsByHour[hour] || 0;
-      availableSlotsPerHour[hour] = availableSlotsPerHour[hour] || 0;
-      // const availableInHour = availableSlotsPerHour[hour] || 0;
+      // Skip if service would overlap with break time
+      if (
+        startBreakTime &&
+        endBreakTime &&
+        slotStart < startBreakTime &&
+        slotEnd > startBreakTime
+      ) {
+        continue;
+      }
 
-      // bookedSlotsByHour[hour] = (bookedSlotsByHour[hour] || 0) + 1;
+      let overlapsWithExistingBooking = false;
+      if (bookedSlots && bookedSlots.length > 0) {
+        for (const booking of bookedSlots) {
+          const bookingStart = parseTime(booking.startTime);
+          const bookingEnd = parseTime(booking.endTime);
 
-      if (isDuringBreak(slotStart, slotEnd)) continue;
-      // if (!canAddSlotToHour(hour, bookedInHour, availableInHour)) continue;
+          // Check if the new slot overlaps with the booking
+          if (slotStart < bookingEnd && slotEnd > bookingStart) {
+            overlapsWithExistingBooking = true;
+            break;
+          }
+        }
+      }
 
-      // Validate the slot
-      if (isTimeSlotAvailable(slotStart, slotEnd)) {
-        const displayEndTime = new Date(
-          slotEnd.getTime() + config.buffer * 60 * 1000,
-        );
+      // Skip if this slot overlaps with existing bookings
+      if (overlapsWithExistingBooking) {
+        continue;
+      }
+      // Check if this slot has enough capacity (check all 15-min intervals)
+      let hasCapacity = true;
+      const slotStartTime = slotStart.getTime();
+      const slotEndTime = slotEnd.getTime();
 
+      for (
+        let time = slotStartTime;
+        time < slotEndTime;
+        time += 15 * 60 * 1000
+      ) {
+        if (bookingsByTime[time] >= config.maxCapacityPerSlot) {
+          hasCapacity = false;
+          break;
+        }
+      }
+
+      if (hasCapacity) {
         availableSlots.push({
           startTime: formatTime(slotStart),
           endTime: formatTime(displayEndTime),
         });
 
-        availableSlotsPerHour[hour]++;
-        totalSlotsGenerated++;
+        // Update capacity used
+        dailyCapacityUsed += totalDuration;
       }
     }
 
-    // Filter slots based on the selected period
-
+    // Filter slots based on period (morning/afternoon)
     const filterByPeriod = (slots: TimeSlot[]): TimeSlot[] => {
-      const getSlotHour = (slot: TimeSlot) => {
-        const [hours] = convertTo24Hour(slot.startTime).split(":");
-        return parseInt(hours, 10);
-      };
-
-      switch (period) {
-        case "morning":
-          return slots.filter((slot) => getSlotHour(slot) < 12);
-        case "afternoon":
-          return slots.filter((slot) => getSlotHour(slot) >= 12);
-
-        case "anytime": {
-          const morningSlots = slots.filter((slot) => getSlotHour(slot) < 12);
-          const afternoonSlots = slots.filter(
-            (slot) => getSlotHour(slot) >= 12,
-          );
-          return [
-            ...morningSlots.slice(0, config.maxSlotsPerPeriod),
-            ...afternoonSlots.slice(0, config.maxSlotsPerPeriod),
-          ];
-        }
-
-        default:
-          return slots;
+      if (!period || period === "anytime") {
+        return slots; // Return all slots if no period specified or "anytime"
       }
+      return slots.filter((slot) => {
+        const [hours] = convertTo24Hour(slot.startTime).split(":");
+        const hour = parseInt(hours, 10);
+
+        if (period === "morning") {
+          return hour < 12;
+        } else if (period === "afternoon") {
+          return hour >= 12;
+        }
+        return true;
+      });
     };
+
     return filterByPeriod(availableSlots);
   };
 
@@ -463,47 +508,88 @@ export default function TimeSelectionStep({
     const dateString = format(selectedDate, "yyyy-MM-dd");
     const dateData = availabilityData?.dates[dateString];
 
-    // if (!dateData) {
-    //   return <p>No availability data for this date.</p>;
-    // }
-
-    // Calculate if the date is available
-    const isAvailable = isDateAvailabe(
-      dateData?.bookedSlot,
-      totalDuration,
-      selectedDate,
-      openingTime,
-      closingTime,
-      breakTime,
-    );
-    if (!isAvailable) {
+    console.log(dateData);
+    // Check if booking is disabled for this day
+    if (!isBookingEnabled(workingHours)) {
       return (
         <div className="rounded-md bg-gray-100 p-4 text-center">
-          <p>No available time slots</p>
+          <p>Bookings are not available for this date</p>
+          <p className="mt-2 text-sm text-gray-500">
+            Please select another date
+          </p>
+        </div>
+      );
+    }
+    // Check if the salon has enough capacity for the day
+    if (
+      !hasSalonCapacity(
+        totalBooking.totalGroupDuration,
+        salonCapacity.bookedHours,
+        salonCapacity.totalDailyHours
+      )
+    ) {
+      return (
+        <div className="rounded-md bg-gray-100 p-4 text-center">
+          <p>We&apos;re fully booked for this date</p>
+          <p className="mt-2 text-sm text-gray-500">
+            Please select another date
+          </p>
         </div>
       );
     }
 
-    const availableSlots = generateAvailableSlots(
-      dateData?.bookedSlot || [],
-      totalDuration,
+    // Calculate if the date has available slots
+    const isAvailable = isDateAvailabe(
+      dateData?.bookedSlot,
+      totalBooking.totalGroupDuration,
       selectedDate,
-      openingTime,
-      closingTime,
-      breakTime,
-      "anytime",
-      {
-        slotDuration: totalDuration,
-        minStartInterval: 20,
-        maxSlotsPerHour: 3,
-        maxSlotsPerDay: 30,
-        maxSlotsPerPeriod: 12,
-        buffer: 5,
-      },
+      workingHours,
+      salonCapacity
     );
 
+    if (!isAvailable) {
+      return (
+        <div className="rounded-md bg-gray-100 p-4 text-center">
+          <p>No available time slots for this date</p>
+          <p className="mt-2 text-sm text-gray-500">
+            Please select another date
+          </p>
+        </div>
+      );
+    }
+    const availableSlots = generateAvailableSlots(
+      dateData?.bookedSlot || [],
+      totalBooking.totalGroupDuration,
+      selectedDate,
+      workingHours,
+      salonCapacity,
+      "anytime",
+      {
+        slotDuration: totalBooking.totalGroupDuration,
+        minStartInterval: 20,
+        maxCapacityPerSlot: salonCapacity.maxBookingsPerHour,
+        maxDailyCapacity: salonCapacity.totalDailyHours * 60, // Convert hours to minutes
+        buffer: 5,
+      }
+    );
+
+    console.log(
+      "Existing bookings:",
+      dateData?.bookedSlot || [{ startTime: "10:00", endTime: "14:35" }]
+    );
+    console.log("Service duration:", totalBooking.totalGroupDuration);
+    console.log("Working hours:", workingHours);
+    console.log("Salon capacity:", salonCapacity);
+    console.log("Generated slots:", availableSlots);
     if (availableSlots.length === 0) {
-      return <p>No available time slots for this date.</p>;
+      return (
+        <div className="rounded-md bg-gray-100 p-4 text-center">
+          <p>No available time slots for this date</p>
+          <p className="mt-2 text-sm text-gray-500">
+            Please select another date
+          </p>
+        </div>
+      );
     }
     return (
       <div className="flex w-full flex-col gap-2 ">
@@ -515,7 +601,7 @@ export default function TimeSelectionStep({
               `w-full justify-center bg-transparent border border-[#D9D9D9] h-[42px]
                text-primary hover:text-white hover:bg-secondary hover:border-secondary`,
               time === `${slot.startTime}-${slot.endTime}` &&
-                "bg-[#FED8DE] text-secondary border-secondary",
+                "bg-[#FED8DE] text-secondary border-secondary"
             )}
             onClick={() => handleTimeSelect(slot.startTime, slot.endTime)}
           >
@@ -526,149 +612,6 @@ export default function TimeSelectionStep({
     );
   };
 
-  const renderStylistSelector = () => {
-    if (!selectedDate) return null;
-
-    const dateString = format(selectedDate, "yyyy-MM-dd");
-    if (!availabilityData?.dates[dateString]?.stylists) {
-      return null;
-    }
-
-    const stylists = availabilityData.dates[dateString].stylists;
-
-    return (
-      <div className="mt-6">
-        <h3 className="mb-3 text-lg font-medium">Select a stylist:</h3>
-        <div className="space-y-3">
-          {stylists &&
-            stylists.map((stylist: any) => (
-              <Card
-                key={stylist.id}
-                className={`cursor-pointer transition-all hover:border-blue-300 ${
-                  selectedStylist === stylist.id
-                    ? "border-blue-500 bg-blue-50"
-                    : ""
-                }`}
-                onClick={() => handleStylistSelect(stylist.id)}
-              >
-                <CardContent className="flex items-center justify-between p-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex size-10 items-center justify-center rounded-full bg-red-200 font-medium text-red-800">
-                      {stylist.avatar}
-                    </div>
-                    <div>
-                      <p className="font-medium">{stylist.name}</p>
-                      <p className="text-sm text-gray-500">
-                        {stylist.availableSlots.length}{" "}
-                        {stylist.availableSlots.length === 1 ? "slot" : "slots"}{" "}
-                        available
-                      </p>
-                    </div>
-                  </div>
-                  <ChevronRight className="size-5 text-gray-400" />
-                </CardContent>
-              </Card>
-            ))}
-        </div>
-      </div>
-    );
-  };
-
-  // Render the daily availability view (as shown in Image 4)
-  // const renderDailyAvailability = () => {
-  //   if (!availabilityData) return null;
-
-  //   // This is for the vertical date listing with time slots
-  //   // Find the next 5-7 days with availability
-  //   const days = availabilityData
-  //     ? Object.entries(availabilityData.dates)
-  //         .filter(([_, data]: [string, any]) => {
-  //           try {
-  //             const date = parse(_, "yyyy-MM-dd", new Date());
-  //             return isValid(date);
-  //           } catch {
-  //             return false;
-  //           }
-  //         })
-  //         .sort(([a], [b]) => {
-  //           const dateA = parse(a, "yyyy-MM-dd", new Date());
-  //           const dateB = parse(b, "yyyy-MM-dd", new Date());
-  //           return dateA.getTime() - dateB.getTime();
-  //         })
-  //         .slice(0, 7)
-  //     : [];
-
-  //   return (
-  //     <div className="mt-6 space-y-4 border-t pt-6">
-  //       {days.map(([dateStr, dateData]: [string, any]) => {
-  //         const date = parse(dateStr, "yyyy-MM-dd", new Date());
-  //         const dayNumber = format(date, "d");
-  //         const dayName = format(date, "EEE");
-
-  //         return (
-  //           <div key={dateStr} className="border-b pb-4">
-  //             <div className="mb-4 flex items-center justify-between">
-  //               <div className="flex flex-col">
-  //                 <span className="text-2xl font-bold">{dayNumber}</span>
-  //                 <span className="text-gray-500">{dayName}</span>
-  //               </div>
-
-  //               {!dateData.available ? (
-  //                 <div className="ml-4 flex-1">
-  //                   <p className="text-gray-500">
-  //                     {dateData.message || "Sorry, no availability."}
-  //                   </p>
-  //                   {dateData.message === "Choose other available staff" && (
-  //                     <Button
-  //                       variant="ghost"
-  //                       size="sm"
-  //                       className="text-blue-600"
-  //                       onClick={() => {
-  //                         //   setDate(dateStr);
-  //                        updateState({
-  //                         date
-  //                        })
-  //                         setShowStylistSelector(true);
-  //                       }}
-  //                     >
-  //                       Choose other available staff{" "}
-  //                       <ChevronRight className="ml-1 size-4" />
-  //                     </Button>
-  //                   )}
-  //                 </div>
-  //               ) : (
-  //                 <div className="ml-4 flex flex-1 flex-wrap gap-2">
-  //                   {dateData.slots &&
-  //                     dateData.slots
-  //                       .slice(0, 7)
-  //                       .map((slot: any, idx: number) => (
-  //                         <Button
-  //                           key={idx}
-  //                           size="sm"
-  //                           variant="outline"
-  //                           className="text-xs"
-  //                           disabled={!slot.available}
-  //                           onClick={() => {
-  //                             //   setDate(dateStr);
-  //                            updateState({
-  //                             date
-  //                            })
-  //                             handleTimeSelect(slot.startTime, slot.endTime);
-  //                           }}
-  //                         >
-  //                           {slot.startTime}
-  //                         </Button>
-  //                       ))}
-  //                 </div>
-  //               )}
-  //             </div>
-  //           </div>
-  //         );
-  //       })}
-  //     </div>
-  //   );
-  // };
-
   if (loading) {
     return (
       <div className="py-10 text-center">Loading available time slots...</div>
@@ -678,30 +621,19 @@ export default function TimeSelectionStep({
   return (
     <div className="z-20 w-full space-y-6">
       <h2 className="text-xl font-bold">
-        {showStylistSelector
-          ? "Select a Stylist"
-          : `Select a Time - ${selectedDate ? formatDate(format(selectedDate, "yyyy-MM-dd")) : ""}`}
+        {`Select a Time - ${selectedDate ? formatDate(format(selectedDate, "yyyy-MM-dd")) : ""}`}
       </h2>
 
-      {/* <h2>{totalDuration}</h2> */}
-      {!showStylistSelector && (
-        <>
-          {renderTimeSlots()}
-          {/* {renderDailyAvailability()} */}
-        </>
-      )}
-
-      {showStylistSelector && renderStylistSelector()}
+      <>
+        {renderTimeSlots()}
+        {/* {renderDailyAvailability()} */}
+      </>
 
       <div className="mt-8 flex justify-between">
         <Button
           variant="outline"
           onClick={() => {
-            if (showStylistSelector) {
-              setShowStylistSelector(false);
-            } else {
-              onBack();
-            }
+            onBack();
           }}
         >
           Back

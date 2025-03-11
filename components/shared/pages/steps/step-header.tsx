@@ -1,33 +1,14 @@
 import * as React from "react";
 
-const steps = [
-  {
-    step: 1,
-    title: "Brading Services",
-    description: "Start by selecting the type of service you need.",
-  },
-  {
-    step: 2,
-    title: "Select Service",
-    description:
-      "Choose from our list of available services. We have services available to all and delivered by our experienced specialists",
-  },
-  {
-    step: 3,
-    title: "Select Addons",
-    description: "Enhance your service with additional add-ons.",
-  },
-  {
-    step: 4,
-    title: "Select Date & Time",
-    description: "Pick a convenient date and time for your appointment.",
-  },
-  {
-    step: 5,
-    title: "Confirmation",
-    description: "Review and confirm your booking details.",
-  },
-];
+import { useBookingStore } from "@/lib/use-booking-store";
+
+// Define an interface for step details with an optional type
+interface StepDetail {
+  step: number;
+  title: string;
+  description: string;
+  type?: string[]; // Array of types this step applies to
+}
 
 interface StepHeaderProps {
   currentStep: number;
@@ -35,8 +16,90 @@ interface StepHeaderProps {
 }
 
 export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
+  const { type } = useBookingStore();
+  const steps: StepDetail[] = React.useMemo(() => {
+    if (type === "individual") {
+      return [
+        {
+          step: 1,
+          title: "Brading Services",
+          description: "Start by selecting the type of service you need.",
+        },
+        {
+          step: 2,
+          title: "Select Service",
+          description:
+            "Choose from our list of available services. We have services available to all and delivered by our experienced specialists",
+          type: ["individual", "group"], // Specify types for this step
+        },
+        {
+          step: 4,
+          title: "Select Addons",
+          description: "Enhance your service with additional add-ons.",
+          type: ["individual", "group"], // Applies to both types
+        },
+        {
+          step: 5,
+          title: "Select Date & Time",
+          description: "Pick a convenient date and time for your appointment.",
+          type: ["individual", "group"],
+        },
+        {
+          step: 6,
+          title: "Confirmation",
+          description: "Review and confirm your booking details.",
+          type: ["individual", "group"],
+        },
+      ];
+    }
+
+    return [
+      {
+        step: 1,
+        title: "Brading Services",
+        description: "Start by selecting the type of service you need.",
+      },
+      {
+        step: 2,
+        title: "Add guests and services",
+        description:
+          "Book a group appointment for up to 4 guests. Select the services you need for each guest.",
+        type: ["group"], // Only for group type
+      },
+      {
+        step: 3,
+        title: "Select Service",
+        description:
+          "Choose from our list of available services. We have services available to all and delivered by our experienced specialists",
+        type: ["individual", "group"], // Specify types for this step
+      },
+
+      {
+        step: 4,
+        title: "Select Addons",
+        description: "Enhance your service with additional add-ons.",
+        type: ["individual", "group"], // Applies to both types
+      },
+      {
+        step: 5,
+        title: "Select Date & Time",
+        description: "Pick a convenient date and time for your appointment.",
+        type: ["individual", "group"],
+      },
+      {
+        step: 6,
+        title: "Confirmation",
+        description: "Review and confirm your booking details.",
+        type: ["individual", "group"],
+      },
+    ];
+  }, [type]);
   // Find the current step details
-  const currentStepDetails = steps.find((step) => step.step === currentStep);
+  const currentStepDetails = steps.find(
+    (step) =>
+      step.step === currentStep &&
+      (!step.type || (type && step.type.includes(type)))
+  );
 
   if (!currentStepDetails) {
     return null; // Handle case where step is not found

@@ -31,7 +31,7 @@ export const servicesCategories = Object.values(ServiceCategories).map(
       href: `/services/category/${serv}`,
       imageUrl: imageUrlMap[serv],
     };
-  },
+  }
 );
 
 export interface DemoInter {
@@ -437,3 +437,29 @@ const sampleAvailabilityData: AvailabilityResponse = {
     },
   },
 };
+export const durations = [
+  { label: "10 mins", value: 10 },
+  { label: "15 mins", value: 15 },
+  { label: "20 mins", value: 20 },
+  { label: "30 mins", value: 30 },
+  { label: "45 mins", value: 45 },
+  { label: "1 hour", value: 60 },
+  { label: "1 hour 30 mins", value: 90 },
+  { label: "2 hours", value: 120 },
+  { label: "2 hours 30 mins", value: 150 },
+  { label: "3 hours", value: 180 },
+  { label: "3 hours 30 mins", value: 210 },
+  { label: "4 hours", value: 240 },
+  { label: "4 hours 30 mins", value: 270 },
+  { label: "5 hours", value: 300 },
+  { label: "5 hours 30 mins", value: 330 },
+  { label: "6 hours", value: 360 },
+  { label: "6 hours 30 mins", value: 390 },
+  { label: "7 hours", value: 420 },
+  { label: "7 hours 30 mins", value: 450 },
+  { label: "8 hours", value: 480 },
+  { label: "8 hours 30 mins", value: 510 },
+  { label: "9 hours", value: 540 },
+  { label: "9 hours 30 mins", value: 570 },
+  { label: "10 hours", value: 600 },
+];

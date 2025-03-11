@@ -96,39 +96,41 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
         >
           <div
             className={cn(
-              "absolute right-0  z-[1000] h-auto  w-[5%] overflow-hidden bg-gradient-to-l",
+              "absolute right-0  z-[1000] h-auto  w-[5%] overflow-hidden bg-gradient-to-l"
             )}
           ></div>
 
-          <div
-            className={cn(
-              "flex flex-row justify-start gap-4",
-              "max-w-7xl mx-auto", // remove max-w-4xl if you want the carousel to span the full width of its container
-            )}
-          >
-            {items.map((item, index) => (
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  y: 20,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.5,
-                    delay: 0.2 * index,
-                    ease: "easeOut",
-                    once: true,
-                  },
-                }}
-                key={"card" + index}
-                className="last:pr-[5%] md:last:pr-[33%]  rounded-3xl"
-              >
-                {item}
-              </motion.div>
-            ))}
-          </div>
+          <AnimatePresence mode="wait">
+            <div
+              className={cn(
+                "flex flex-row justify-start gap-4",
+                "max-w-7xl mx-auto" // remove max-w-4xl if you want the carousel to span the full width of its container
+              )}
+            >
+              {items.map((item, index) => (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: 20,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      duration: 0.5,
+                      delay: 0.2 * index,
+                      ease: "easeOut",
+                      once: true,
+                    },
+                  }}
+                  key={"card" + index}
+                  className="last:pr-[5%] md:last:pr-[33%]  rounded-3xl"
+                >
+                  {item}
+                </motion.div>
+              ))}
+            </div>
+          </AnimatePresence>
         </div>
         <div className="absolute top-0 right-0 -mt-[68px] flex justify-end my-4 gap-2 mr-10">
           <button
@@ -279,7 +281,7 @@ export const BlurImage = ({
       className={cn(
         "transition duration-300",
         isLoading ? "blur-sm" : "blur-0",
-        className,
+        className
       )}
       onLoad={() => setLoading(false)}
       src={src}

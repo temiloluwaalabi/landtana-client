@@ -9,17 +9,19 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { sampleAvailabilityData } from "@/config/constants";
 import { useBookingStore } from "@/lib/use-booking-store";
-import { AvailabilityResponse } from "@/types";
+import { AvailabilityResponse, Service } from "@/types";
 
 import TimeSelectionStep from "./time-selection-step";
 
 interface DateSelectionStepProps {
   onNext: () => void;
   onBack: () => void;
+  services: Service[];
 }
 
 export default function DateSelectionStep({
   onNext,
+  services,
   onBack,
 }: DateSelectionStepProps) {
   const [showTimeSelector, setShowTimeSelector] = useState(false);
@@ -157,7 +159,7 @@ export default function DateSelectionStep({
 
   const findNextAvailableDate = (
     availabilityData: AvailabilityResponse,
-    selectedDate: Date,
+    selectedDate: Date
   ): string | null => {
     const dates = Object.keys(availabilityData.dates).sort();
 
@@ -190,6 +192,7 @@ export default function DateSelectionStep({
     <div className="flex items-center justify-center space-y-6">
       {showTimeSelector ? (
         <TimeSelectionStep
+          services={services}
           onNext={() => console.log("DATE SELECTED")}
           onBack={() => setShowTimeSelector(false)}
         />
@@ -233,7 +236,7 @@ export default function DateSelectionStep({
                   onClick={() => {
                     const nextAvailableDateStr = findNextAvailableDate(
                       availabilityData,
-                      selectedDate,
+                      selectedDate
                     );
                     if (nextAvailableDateStr) {
                       const nextAvailableDate = new Date(nextAvailableDateStr);

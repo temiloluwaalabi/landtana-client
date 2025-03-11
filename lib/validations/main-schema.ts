@@ -32,11 +32,19 @@ export const CreateBookingSchema = z.object({
     .string()
     .refine(
       (val) => !isNaN(Date.parse(val)),
-      "Invalid date format. Must be an ISO8601 timestamp (e.g., '2025-02-01T10:00:00.000Z')",
+      "Invalid date format. Must be an ISO8601 timestamp (e.g., '2025-02-01T10:00:00.000Z')"
     ),
   additional_notes: z.string().optional(), // Optional field
 });
 
+export const GuestSchema = z.object({
+  name: z.string(),
+  // email: z.optional(validateEmail),
+  // phone: z.optional(z.string()),
+});
+export const GuestFormSchema = z.object({
+  guests: z.array(GuestSchema),
+});
 export type CreateBookingSchemaType = z.infer<typeof CreateBookingSchema>;
 export type CreateServicesSchemaType = z.infer<typeof CreateServiceSchema>;
 export type CreateStylistSchemaType = z.infer<typeof CreateStylistSchema>;

@@ -13,6 +13,7 @@ export const guestRoutes = [
   "/reset-password",
   "/error",
   "/confirm-email",
+  "access-denied",
   "/",
 ];
 
@@ -40,6 +41,7 @@ export const DEFAULT_LOGIN_REDIRECT = "/";
 export const LOGIN_LINK = "/sign-in";
 export const REGISTER_LINK = "/sign-up";
 export const DEFAULT_ONBOARDING_REDIRECT = "/onboard";
+export const ACCESS_DENIED = "/access-denied";
 export const DEFAULT_BOOK_REDIRECT = "/book-service";
 
 /**

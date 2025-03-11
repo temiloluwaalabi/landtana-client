@@ -12,58 +12,30 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { useBookingStore } from "@/lib/use-booking-store";
-import { cn, formatDayDate, formatMinutes, toCurrency } from "@/lib/utils";
-
-import { servicesList } from "./booking-step-two";
-import DateSelectionStep from "../../booking/date-selection-comp";
 import {
-  calculateTotalDuration,
-  calculateTotalPrice,
-} from "../../booking/time-selection-step";
-export const addonList = [
-  { id: "6", name: "Washing Hair", price: 50 },
-  { id: "7", name: "Dying", price: 30 },
-  { id: "8", name: "Burning", price: 20 },
-];
-export const BookingStepFour = () => {
+  calculateBookingDetails,
+  cn,
+  formatDayDate,
+  formatMinutes,
+  toCurrency,
+} from "@/lib/utils";
+import { Service } from "@/types";
+
+import DateSelectionStep from "../../booking/date-selection-comp";
+
+type Props = {
+  services: Service[];
+};
+
+export const BookingStepFour = ({ services }: Props) => {
   const [openAccordionId, setOpenAccordionId] = React.useState<boolean>(true);
   const [hideDetails, setHideDetails] = React.useState(false);
   const [hideDetailsD, setHideDetailsD] = React.useState(true);
 
   const { step, bookings, updateState, removeBooking, date, time } =
     useBookingStore();
-  const totalDuration = calculateTotalDuration(
-    bookings,
-    servicesList,
-    addonList,
-  );
-  // const isMobile = useIsMobile();
 
-  // const handleToggleService = (
-  //   addonServiceId: string,
-  //   parentServiceId: string
-  // ) => {
-  //   const parentBookingIndex = bookings.findIndex(
-  //     (booking) => booking.serviceId === parentServiceId
-  //   );
-
-  //   if (parentBookingIndex === -1) return;
-
-  //   const parentBooking = bookings[parentBookingIndex];
-  //   const isAddonBooked = parentBooking.addons?.includes(addonServiceId);
-
-  //   if (isAddonBooked) {
-  //     const updatedAddons = parentBooking.addons?.filter(
-  //       (id) => id !== addonServiceId
-  //     );
-
-  //     updateBooking(parentBookingIndex, { addons: updatedAddons });
-  //   } else {
-  //     // Add the addon if it's not booked
-  //     const updatedAddons = [...(parentBooking.addons || []), addonServiceId];
-  //     updateBooking(parentBookingIndex, { addons: updatedAddons });
-  //   }
-  // };
+  const totalPrice = calculateBookingDetails(bookings, services, services);
 
   return (
     <section className="relative flex h-full flex-col gap-6 ">
@@ -79,7 +51,7 @@ export const BookingStepFour = () => {
                 "flex w-full  items-center justify-between  bg-white  p-3",
                 openAccordionId === true
                   ? "rounded-se-lg rounded-ss-lg"
-                  : "rounded-lg",
+                  : "rounded-lg"
               )}
             >
               <div className="flex items-center gap-1">
@@ -103,6 +75,7 @@ export const BookingStepFour = () => {
             {openAccordionId && (
               <div className="relative !mb-32 !h-fit animate-accordion-down space-y-3 rounded-none rounded-ee-lg rounded-es-lg border-t-2 bg-white px-3 py-4 transition-transform">
                 <DateSelectionStep
+                  services={services}
                   onNext={() => console.log("DATE SELECTED")}
                   onBack={() => console.log("DATE Not SELECTED")}
                 />
@@ -115,7 +88,7 @@ export const BookingStepFour = () => {
             <CardHeader
               className={cn(
                 "flex w-full flex-row items-start justify-between  pb-4 shadow-none outline-none",
-                hideDetailsD && "border-b-[3px]",
+                hideDetailsD && "border-b-[3px]"
               )}
             >
               <div className="space-y-3">
@@ -133,18 +106,10 @@ export const BookingStepFour = () => {
                   {time && (
                     <span className="flex items-center gap-1 text-base">
                       <Clock className="size-4 text-gray-500" />
-                      {time} ({formatMinutes(totalDuration)})
+                      {time} ({formatMinutes(totalPrice.totalGroupDuration)})
                     </span>
                   )}
                 </div>
-                {/* <p className="space-x-1">
-                  <span className="font-lora text-sm font-normal text-gray-500">
-                    from
-                  </span>
-                  <span className="font-lora text-xl font-bold text-primary">
-                    ${calculateTotalPrice(bookings, servicesList, addonList)}
-                  </span>
-                </p> */}
               </div>
               <div>
                 <Button
@@ -162,36 +127,18 @@ export const BookingStepFour = () => {
                 <div className="flex flex-col items-start justify-between gap-4">
                   <h3 className="font-semibold">Selected Services</h3>
                   <div className="w-full space-y-3">
-                    {bookings.map((booking) => {
+                    {totalPrice.bookingDetails.map((booking) => {
                       const bookingIndex = bookings.findIndex(
-                        (b) => b.serviceId === booking.serviceId,
+                        (b) => b.serviceId === booking.bookingId
                       );
 
-                      const service = servicesList.find(
-                        (s) => s.id === booking.serviceId,
+                      const service = services.find(
+                        (s) => s.id === booking.bookingId
                       );
-                      let totalDuration = 0;
-                      let totalPrice = 0;
 
-                      if (service) {
-                        totalDuration += 60;
-                        totalPrice += service.price;
-                      }
-
-                      if (booking.addons) {
-                        booking.addons.forEach((addonID) => {
-                          const addonService = addonList.find(
-                            (s) => s.id === addonID,
-                          );
-                          if (addonService) {
-                            totalDuration += 12;
-                            totalPrice += addonService.price;
-                          }
-                        });
-                      }
                       return (
                         <div
-                          key={booking.serviceId}
+                          key={booking.bookingId}
                           className="flex w-full items-center justify-between rounded-md "
                         >
                           <div>
@@ -199,13 +146,13 @@ export const BookingStepFour = () => {
                               {service?.name}{" "}
                             </h3>
                             <p className="font-lora text-sm font-normal text-gray-500">
-                              {formatMinutes(totalDuration)}
+                              {formatMinutes(booking.totalDuration)}
                             </p>
                           </div>
                           <div className="flex items-center  gap-2">
                             <p className="space-x-1">
                               <span className="font-cormorant text-2xl font-bold text-primary">
-                                {toCurrency(totalPrice)}
+                                {toCurrency(booking.totalPrice)}
                               </span>
                             </p>
                             <Button
@@ -236,13 +183,7 @@ export const BookingStepFour = () => {
                     <span className="flex items-center justify-between">
                       <span className="text-sm">Total</span>
                       <span className="text-base font-bold text-primary">
-                        {toCurrency(
-                          calculateTotalPrice(
-                            bookings,
-                            servicesList,
-                            addonList,
-                          ),
-                        )}
+                        {toCurrency(totalPrice.totalGroupPrice)}
                       </span>
                     </span>
                   </div>
@@ -265,7 +206,7 @@ export const BookingStepFour = () => {
           <CardHeader
             className={cn(
               "flex w-full flex-row items-center justify-between  pb-4 shadow-none outline-none",
-              hideDetails && "border-b-[3px]",
+              hideDetails && "border-b-[3px]"
             )}
           >
             <div>
@@ -274,11 +215,8 @@ export const BookingStepFour = () => {
                 selected
               </h2>
               <p className="space-x-1">
-                <span className="font-lora text-sm font-normal text-gray-500">
-                  from
-                </span>
                 <span className="font-lora text-xl font-bold text-primary">
-                  ${totalDuration}
+                  ${totalPrice.totalGroupPrice}
                 </span>
               </p>
             </div>
@@ -298,36 +236,18 @@ export const BookingStepFour = () => {
               <div className="flex flex-col items-start justify-between gap-4">
                 <h3 className="font-semibold">Selected Services</h3>
                 <div className="w-full space-y-3">
-                  {bookings.map((booking) => {
+                  {totalPrice.bookingDetails.map((booking) => {
                     const bookingIndex = bookings.findIndex(
-                      (b) => b.serviceId === booking.serviceId,
+                      (b) => b.serviceId === booking.bookingId
                     );
 
-                    const service = servicesList.find(
-                      (s) => s.id === booking.serviceId,
+                    const service = services.find(
+                      (s) => s.id === booking.bookingId
                     );
-                    let totalDuration = 0;
-                    let totalPrice = 0;
 
-                    if (service) {
-                      totalDuration += 60;
-                      totalPrice += service.price;
-                    }
-
-                    if (booking.addons) {
-                      booking.addons.forEach((addonID) => {
-                        const addonService = addonList.find(
-                          (s) => s.id === addonID,
-                        );
-                        if (addonService) {
-                          totalDuration += 12;
-                          totalPrice += addonService.price;
-                        }
-                      });
-                    }
                     return (
                       <div
-                        key={booking.serviceId}
+                        key={booking.bookingId}
                         className="flex w-full items-center justify-between rounded-md "
                       >
                         <div>
@@ -335,13 +255,13 @@ export const BookingStepFour = () => {
                             {service?.name}{" "}
                           </h3>
                           <p className="font-lora text-sm font-normal text-gray-500">
-                            {formatMinutes(totalDuration)}
+                            {formatMinutes(booking.totalDuration)}
                           </p>
                         </div>
                         <div className="flex items-center  gap-2">
                           <p className="space-x-1">
                             <span className="font-cormorant text-2xl font-bold text-primary">
-                              {toCurrency(totalPrice)}
+                              {toCurrency(booking.totalPrice)}
                             </span>
                           </p>
                           <Button

@@ -68,16 +68,42 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-white text-foreground h-full;
+    @apply bg-gray-100 text-foreground h-full;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+@layer utilities {
+  .no-focus {
+    @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
   }
-  body {
-    @apply bg-background text-foreground;
+  .custom-scrollbar::-webkit-scrollbar {
+    @apply !size-[3px] !max-h-2 rounded-[2px]
+    /* width: 3px;
+    height: 3px;
+    border-radius: 2px; */;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-200  rounded-[50px];
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .PhoneInputInput {
+    @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:!ring-offset-0 focus-visible:outline-0 focus-visible:outline-offset-0 focus-visible:border-0;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
 }
 

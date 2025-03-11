@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 import { useBookingStore } from "@/lib/use-booking-store";
-import { debounce, formUrlQuery } from "@/lib/utils";
+import { formUrlQuery } from "@/lib/utils";
 
 export default function useSyncBookingState() {
   const searchParams = useSearchParams();
@@ -15,6 +15,10 @@ export default function useSyncBookingState() {
     isStateUpdate,
     setIsStateUpdate,
     bookings,
+    guests,
+    currentGuestId,
+    primaryGuestId,
+    isGroupBooking,
     checkout,
     confirmed,
     syncFromUrl,
@@ -22,7 +26,7 @@ export default function useSyncBookingState() {
   console.log("USE STORE BOOKINGS", bookings);
 
   // Debounced function to update the URL
-  const debouncedUpdateUrl = debounce(() => {
+  const debouncedUpdateUrl = () => {
     console.log("DEBOUNCED EFFECT CALLED - Updating URL");
 
     const newUrl = formUrlQuery({
@@ -30,7 +34,10 @@ export default function useSyncBookingState() {
       updates: {
         step,
         type,
+        currentGuestId,
+        primaryGuestId,
         bookings: bookings.length > 0 ? bookings : undefined,
+        guests: guests.length > 0 ? guests : undefined,
         checkout,
         preview,
         confirmed,
@@ -42,7 +49,7 @@ export default function useSyncBookingState() {
       console.log("Pushing new URL:", newUrl);
       router.push(newUrl, { scroll: false });
     }
-  }, 300); // 300ms delay
+  };
 
   // Sync URL from state (debounced)
   useEffect(() => {
@@ -52,6 +59,9 @@ export default function useSyncBookingState() {
     step,
     type,
     bookings,
+    currentGuestId,
+    guests,
+    isGroupBooking,
     checkout,
     preview,
     confirmed,
