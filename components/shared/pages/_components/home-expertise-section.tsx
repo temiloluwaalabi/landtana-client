@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,7 +28,7 @@ const ExpertiseSection = ({ filteredCategories }: Categories) => {
   });
 
   return (
-    <MaxWidthContainer className="py-20">
+    <MaxWidthContainer className="!bg-[#F5F6F7] py-20">
       <motion.div
         ref={ref}
         className="relative flex flex-col justify-center space-y-14"

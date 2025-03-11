@@ -23,7 +23,7 @@ export default async function ServiceDetailsServer({
       category={categoryD.category}
       services={
         services.services?.services.filter(
-          (service) => service.category_id === category
+          (service) => service.category_id === category,
         ) || []
       }
     />

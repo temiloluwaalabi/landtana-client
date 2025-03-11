@@ -20,7 +20,7 @@ type Props = {
 
 export const BookingStepTwo = (props: Props) => {
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    "b15bd255-537b-4738-bb98-74938098599d"
+    "b15bd255-537b-4738-bb98-74938098599d",
   );
   const { bookings, currentGuestId, primaryGuestId, guests, type } =
     useBookingStore();
@@ -35,7 +35,7 @@ export const BookingStepTwo = (props: Props) => {
         ? bookings.some(
             (booking) =>
               booking.serviceId === service.id &&
-              booking.guestId === currentGuestId
+              booking.guestId === currentGuestId,
           )
         : bookings.some((booking) => booking.serviceId === service.id);
     return (
@@ -47,7 +47,7 @@ export const BookingStepTwo = (props: Props) => {
             key={service.id}
             className={cn(
               "flex h-[130px] transition-all items-center justify-between rounded-[8px] border hover:bg-white cursor-pointer border-[#D9D9D9] p-6",
-              isBooked && "border-secondary bg-white"
+              isBooked && "border-secondary bg-white",
             )}
           >
             <div className="flex flex-col items-start space-y-4">
@@ -120,14 +120,14 @@ export const BookingStepTwo = (props: Props) => {
               onClick={() => setSelectedCategory(category.id)}
               className={cn(
                 "flex h-[40px] w-full items-center bg-primary/10 text-primary hover:text-white  justify-between rounded-[16px] px-[16px] py-[8px]",
-                selectedCategory === category.id && "bg-primary text-white"
+                selectedCategory === category.id && "bg-primary text-white",
               )}
             >
               <span className="text-base font-normal">{category.name}</span>{" "}
               <div className="flex size-6 items-center justify-center rounded-full bg-[#e2f5e8] text-primary">
                 {
                   props.services.filter(
-                    (service) => service.category_id === category.id
+                    (service) => service.category_id === category.id,
                   ).length
                 }
               </div>
@@ -158,7 +158,7 @@ export const BookingStepTwo = (props: Props) => {
                 .filter(
                   (service) =>
                     !selectedCategory ||
-                    service.category_id === selectedCategory
+                    service.category_id === selectedCategory,
                 )
                 .map(renderServiceCard)}
             </div>

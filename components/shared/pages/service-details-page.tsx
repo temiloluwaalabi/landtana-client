@@ -30,7 +30,7 @@ export const ServiceDetailsPage = ({ service, services }: Props) => {
   const [additionalServiceType, setAdditionalServiceType] =
     useState<string>(""); // 'pre-service' or 'post-service'
   const [selectedVariations, setSelectedVariations] = useState<StyleOption[]>(
-    []
+    [],
   );
 
   // useEffect to handle initial step setup
@@ -141,7 +141,7 @@ export const ServiceDetailsPage = ({ service, services }: Props) => {
                           -{" "}
                           {
                             durations.find(
-                              (dur) => dur.value === variation.duration
+                              (dur) => dur.value === variation.duration,
                             )?.label
                           }
                         </Label>
@@ -178,7 +178,7 @@ export const ServiceDetailsPage = ({ service, services }: Props) => {
                             {option.name} - {toCurrency(option.price, true)} -{" "}
                             {
                               durations.find(
-                                (dur) => dur.value === option.duration
+                                (dur) => dur.value === option.duration,
                               )?.label
                             }
                           </Label>

@@ -51,7 +51,7 @@ export const BookingStepFour = ({ services }: Props) => {
                 "flex w-full  items-center justify-between  bg-white  p-3",
                 openAccordionId === true
                   ? "rounded-se-lg rounded-ss-lg"
-                  : "rounded-lg"
+                  : "rounded-lg",
               )}
             >
               <div className="flex items-center gap-1">
@@ -88,7 +88,7 @@ export const BookingStepFour = ({ services }: Props) => {
             <CardHeader
               className={cn(
                 "flex w-full flex-row items-start justify-between  pb-4 shadow-none outline-none",
-                hideDetailsD && "border-b-[3px]"
+                hideDetailsD && "border-b-[3px]",
               )}
             >
               <div className="space-y-3">
@@ -129,11 +129,11 @@ export const BookingStepFour = ({ services }: Props) => {
                   <div className="w-full space-y-3">
                     {totalPrice.bookingDetails.map((booking) => {
                       const bookingIndex = bookings.findIndex(
-                        (b) => b.serviceId === booking.bookingId
+                        (b) => b.serviceId === booking.bookingId,
                       );
 
                       const service = services.find(
-                        (s) => s.id === booking.bookingId
+                        (s) => s.id === booking.bookingId,
                       );
 
                       return (
@@ -206,7 +206,7 @@ export const BookingStepFour = ({ services }: Props) => {
           <CardHeader
             className={cn(
               "flex w-full flex-row items-center justify-between  pb-4 shadow-none outline-none",
-              hideDetails && "border-b-[3px]"
+              hideDetails && "border-b-[3px]",
             )}
           >
             <div>
@@ -238,11 +238,11 @@ export const BookingStepFour = ({ services }: Props) => {
                 <div className="w-full space-y-3">
                   {totalPrice.bookingDetails.map((booking) => {
                     const bookingIndex = bookings.findIndex(
-                      (b) => b.serviceId === booking.bookingId
+                      (b) => b.serviceId === booking.bookingId,
                     );
 
                     const service = services.find(
-                      (s) => s.id === booking.bookingId
+                      (s) => s.id === booking.bookingId,
                     );
 
                     return (

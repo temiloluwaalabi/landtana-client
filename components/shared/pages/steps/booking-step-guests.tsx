@@ -65,7 +65,7 @@ export const BookingGroupStep = ({ services }: Props) => {
 
   const onSubmit = (values: z.infer<typeof GuestFormSchema>) => {
     const validGuests = values.guests.filter(
-      (guest) => guest.name.trim() !== ""
+      (guest) => guest.name.trim() !== "",
     );
 
     validGuests.forEach((guest) => {
@@ -249,13 +249,13 @@ export const BookingGroupStep = ({ services }: Props) => {
                     key={guest.id}
                     className={cn(
                       "space-y-2 border-b pb-3",
-                      guests.length - 1 === i && "!border-none !pb-0"
+                      guests.length - 1 === i && "!border-none !pb-0",
                     )}
                   >
                     <h3 className="text-lg font-bold">{guest.name}</h3>
                     <div>
                       {totalPrice.bookingDetails.filter(
-                        (book) => book.guestId === guest.id
+                        (book) => book.guestId === guest.id,
                       ).length === 0 && (
                         <p className="text-sm text-gray-300">
                           No services selected
@@ -273,14 +273,15 @@ export const BookingGroupStep = ({ services }: Props) => {
                                 {
                                   services.find(
                                     (servicee) =>
-                                      servicee.id === service.bookingId
+                                      servicee.id === service.bookingId,
                                   )?.name
                                 }
                               </h3>
                               <p className="font-lora text-sm font-normal text-gray-500">
                                 {
                                   durations.find(
-                                    (dur) => dur.value === service.totalDuration
+                                    (dur) =>
+                                      dur.value === service.totalDuration,
                                   )?.label
                                 }
                               </p>

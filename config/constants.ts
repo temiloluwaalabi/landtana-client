@@ -31,7 +31,7 @@ export const servicesCategories = Object.values(ServiceCategories).map(
       href: `/services/category/${serv}`,
       imageUrl: imageUrlMap[serv],
     };
-  }
+  },
 );
 
 export interface DemoInter {

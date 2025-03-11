@@ -19,7 +19,7 @@ export const useEnhancedCarousel = (options = {}) => {
       if (!emblaApi) return;
       emblaApi.scrollTo(index);
     },
-    [emblaApi]
+    [emblaApi],
   );
 
   useEffect(() => {

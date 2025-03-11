@@ -54,7 +54,7 @@ export const buttonHover = {
 };
 
 // Instagram Feed Component
-const InstagramFeed = () => {
+export const InstagramFeed = () => {
   const controls = useAnimation();
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
 
@@ -138,7 +138,7 @@ const InstagramFeed = () => {
 };
 
 // Enhanced CTA Component
-const EnhancedCTA = () => {
+export const EnhancedCTA = () => {
   const controls = useAnimation();
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
 
@@ -202,7 +202,7 @@ const EnhancedCTA = () => {
               size="lg"
               className="bg-white font-medium text-primary hover:bg-white/90"
             >
-              <Link href="/book-service">Book Appointment</Link>
+              <Link href="/consultation">Book Consultation</Link>
             </Button>
           </motion.div>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -225,9 +225,14 @@ export const HomePageClient = (props: Props) => {
   // Animation controls
   const controls = useAnimation();
   const faqControls = useAnimation();
+  const reviewControl = useAnimation();
 
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
   const [faqRef, faqInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+  const [reviewRef, reviewInView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
@@ -236,7 +241,8 @@ export const HomePageClient = (props: Props) => {
       controls.start("visible");
     }
     if (faqInView) faqControls.start("visible");
-  }, [controls, faqControls, faqInView, inView]);
+    if (reviewInView) reviewControl.start("visible");
+  }, [controls, faqControls, faqInView, inView, reviewControl, reviewInView]);
 
   const filteredServices = props.services.sort(
     (a, b) =>
@@ -448,15 +454,15 @@ export const HomePageClient = (props: Props) => {
       </MaxWidthContainer>
       <ExpertiseSection filteredCategories={filteredCategories} />
       <ServicesSection filteredServices={filteredServices} />
-      <MaxWidthContainer>
+      <MaxWidthContainer className="!bg-[#F5F6F7]">
         <EnhancedCTA />
       </MaxWidthContainer>
       <ProfessionalSection filteredServices={filteredServices} />
       <MaxWidthContainer className="bg-primary !py-[40px]">
         <motion.div
-          ref={ref}
+          ref={reviewRef}
           initial="hidden"
-          animate={controls}
+          animate={reviewControl}
           variants={fadeInUp}
           className="relative overflow-hidden py-8"
         >

@@ -35,18 +35,18 @@ export const BookServiceClient = (props: Props) => {
     useBookingStore();
 
   const sortedCategories = props.categories.sort((a, b) =>
-    a.name.localeCompare(b.name)
+    a.name.localeCompare(b.name),
   );
   const sortedServices = props.services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
   );
 
   // Calculate total price
   const totalPrice = calculateBookingDetails(
     bookings,
     props.services,
-    props.services
+    props.services,
   );
 
   // Updated navigation logic
@@ -130,7 +130,7 @@ export const BookServiceClient = (props: Props) => {
               <CardHeader
                 className={cn(
                   "flex w-full flex-row items-center justify-between  pb-4 shadow-none outline-none",
-                  hideDetails && "border-b-[3px]"
+                  hideDetails && "border-b-[3px]",
                 )}
               >
                 <div>
@@ -165,10 +165,10 @@ export const BookServiceClient = (props: Props) => {
                     <div className="w-full space-y-3">
                       {totalPrice.bookingDetails.map((booking) => {
                         const service = props.services.find(
-                          (s) => s.id === booking.bookingId
+                          (s) => s.id === booking.bookingId,
                         );
                         const bookingIndex = bookings.findIndex(
-                          (b) => b.serviceId === booking.bookingId
+                          (b) => b.serviceId === booking.bookingId,
                         );
                         return (
                           <div
@@ -182,7 +182,7 @@ export const BookServiceClient = (props: Props) => {
                                   <span>
                                     {
                                       guests.find(
-                                        (cat) => cat.id === booking?.guestId
+                                        (cat) => cat.id === booking?.guestId,
                                       )?.name
                                     }
                                   </span>
@@ -194,7 +194,7 @@ export const BookServiceClient = (props: Props) => {
                               <p className="font-lora text-sm font-normal text-gray-500">
                                 {
                                   props.categories.find(
-                                    (cat) => cat.id === service?.category_id
+                                    (cat) => cat.id === service?.category_id,
                                   )?.name
                                 }
                               </p>

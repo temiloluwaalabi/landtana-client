@@ -1,12 +1,14 @@
 "use client";
 import { motion, useAnimation } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
 import { Button } from "@/components/ui/button";
 import { fadeInUp, staggerChildren } from "@/lib/variants";
+
+import { EnhancedCTA, InstagramFeed } from "./home-page-client";
+import MaxWidthContainer from "../max-width-container";
 
 export default function AboutUsClient() {
   // Animated section hooks
@@ -30,7 +32,7 @@ export default function AboutUsClient() {
     triggerOnce: true,
     threshold: 0.1,
   });
-  const [ctaRef, ctaInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  // const [ctaRef, ctaInView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   // Animation controls
   const heroControls = useAnimation();
@@ -47,14 +49,13 @@ export default function AboutUsClient() {
     if (philosophyInView) philosophyControls.start("visible");
     if (commitmentInView) commitmentControls.start("visible");
     if (spaceInView) spaceControls.start("visible");
-    if (ctaInView) ctaControls.start("visible");
+    // if (ctaInView) ctaControls.start("visible");
   }, [
     heroInView,
     storyInView,
     philosophyInView,
     commitmentInView,
     spaceInView,
-    ctaInView,
     heroControls,
     storyControls,
     philosophyControls,
@@ -244,34 +245,75 @@ export default function AboutUsClient() {
         </div>
       </motion.div>
 
-      {/* Philosophy Section with 3D Card Effect */}
       <motion.div
         ref={philosophyRef}
-        animate={philosophyControls}
-        initial="hidden"
-        variants={fadeInUp}
-        className="bg-gradient-to-br from-orange-50 to-orange-100/30 py-20"
+        className="relative overflow-hidden bg-black py-24 text-white"
       >
-        <div className="mx-auto max-w-5xl px-4">
-          <motion.div variants={fadeInUp} className="mb-16 text-center">
-            <h2 className="mb-4 text-4xl font-bold">Our Philosophy</h2>
-            <div className="mx-auto h-1 w-24 bg-orange-400"></div>
-          </motion.div>
+        <div className="absolute inset-0 opacity-10">
+          <Image
+            src="/texture.png"
+            alt="texture"
+            fill
+            className="object-cover"
+          />
+        </div>
 
+        <div className="relative mx-auto max-w-5xl px-4">
           <motion.div
-            className="relative rounded-2xl bg-white p-8 shadow-lg"
-            whileHover={{ y: -10, boxShadow: "0 20px 30px rgba(0,0,0,0.1)" }}
-            transition={{ type: "spring", stiffness: 300 }}
+            className="flex flex-col items-center gap-12 lg:flex-row"
+            initial="hidden"
+            animate={philosophyInView ? "visible" : ""}
+            variants={staggerChildren}
           >
-            <div className="absolute -left-8 -top-8 text-6xl">💫</div>
-            <p className="text-center text-2xl font-light italic text-gray-700">
-              &quot;At Landtana Crown Braids, we believe that your hair is your
-              crown. We take pride in creating styles that not only enhance your
-              natural beauty but also protect and nurture your hair. Our
-              approach combines traditional braiding techniques with modern
-              trends to deliver results that are both timeless and
-              fashion-forward.&quot;
-            </p>
+            <motion.div className="relative flex-1" variants={fadeInUp}>
+              <div className="absolute -left-20 -top-20 size-72 rounded-full bg-purple-500/20 blur-3xl"></div>
+              <motion.div
+                className="relative overflow-hidden rounded-2xl border border-white/10"
+                whileHover={{ scale: 1.02 }}
+              >
+                <Image
+                  src="https://res.cloudinary.com/davidleo/image/upload/v1741645591/landtana/beautiful-woman-getting-her-hair-done-beauty-salon_lsrus3.jpg"
+                  alt="Stylist working"
+                  width={600}
+                  height={400}
+                  className="h-auto w-full"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              </motion.div>
+            </motion.div>
+
+            <motion.div className="flex-1" variants={fadeInUp}>
+              <motion.h2
+                className="mb-6 text-4xl font-bold"
+                initial={{ x: 50 }}
+                animate={{ x: 0 }}
+              >
+                Crafting Beauty
+                <br />
+                <span className="text-purple-400">With Purpose</span>
+              </motion.h2>
+
+              <motion.div
+                className="space-y-6 text-lg font-light"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                <p>
+                  At Landtana, we view each braid as a love letter to
+                  traditional African hair artistry, reinterpreted through a
+                  modern lens.
+                </p>
+
+                <div className="relative border-l-4 border-purple-400 pl-8">
+                  <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-purple-400 to-pink-400"></div>
+                  <p className="italic">
+                    &quot;Our hands don&apos;t just style hair - they weave
+                    stories of cultural pride and individual expression&quot;
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
           </motion.div>
         </div>
       </motion.div>
@@ -300,7 +342,7 @@ export default function AboutUsClient() {
             <motion.div
               key={index}
               variants={fadeInUp}
-              whileHover={{ y: -10, transition: { duration: 0.3 } }}
+              // whileHover={{ y: -10, transition: { duration: 0.3 } }}
               className={`overflow-hidden rounded-xl border ${item.color} p-1`}
             >
               <div className="h-full rounded-lg bg-white p-6">
@@ -320,122 +362,93 @@ export default function AboutUsClient() {
       {/* Our Space Section with Gallery */}
       <motion.div
         ref={spaceRef}
-        animate={spaceControls}
         initial="hidden"
+        animate={spaceControls}
         variants={fadeInUp}
-        className="bg-gray-50 py-20"
+        className="relative bg-white py-24"
       >
         <div className="mx-auto max-w-7xl px-4">
-          <motion.div variants={fadeInUp} className="mb-12 text-center">
-            <h2 className="mb-4 text-4xl font-bold">Our Space</h2>
-            <p className="mx-auto max-w-3xl text-xl text-gray-600">
-              A sanctuary where beauty and comfort meet
+          <motion.div
+            className="mb-16 text-center"
+            initial={{ opacity: 0 }}
+            animate={spaceInView ? { opacity: 1 } : {}}
+          >
+            <h2 className="mb-4 text-5xl font-bold">Our Sanctuary</h2>
+            <p className="mx-auto max-w-2xl text-xl text-gray-600">
+              Where modern luxury meets warm, inviting comfort
             </p>
           </motion.div>
 
           <motion.div
+            className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-12"
             variants={staggerChildren}
-            className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-12"
           >
             <motion.div
-              variants={fadeInUp}
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-              className="relative h-96 overflow-hidden rounded-xl md:col-span-8"
+              className="group relative h-96 overflow-hidden rounded-3xl md:col-span-8"
+              whileHover="hover"
             >
               <Image
-                src="https://res.cloudinary.com/davidleo/image/upload/v1739726298/landtana/IMG-20250114-WA0031_sl9rvo.jpg"
-                alt="Salon interior main"
+                src="https://res.cloudinary.com/davidleo/image/upload/v1741645591/landtana/modern-beauty-salon-interior_q7xdvr.jpg"
+                alt="Main salon area"
                 fill
-                className="object-cover transition-transform duration-700 hover:scale-105"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             </motion.div>
 
-            <motion.div
-              variants={staggerChildren}
-              className="grid grid-rows-2 gap-4 md:col-span-4"
-            >
-              <motion.div
-                variants={fadeInUp}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-                className="relative h-44 overflow-hidden rounded-xl"
-              >
-                <Image
-                  src="https://res.cloudinary.com/davidleo/image/upload/v1739726302/landtana/IMG-20250114-WA0030_uenvud.jpg"
-                  alt="Salon interior detail"
-                  fill
-                  className="object-cover transition-transform duration-700 hover:scale-105"
-                />
-              </motion.div>
-
-              <motion.div
-                variants={fadeInUp}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-                className="relative h-44 overflow-hidden rounded-xl"
-              >
+            <motion.div className="grid gap-6 md:col-span-4">
+              <div className="group relative h-44 overflow-hidden rounded-2xl">
                 <Image
                   src="https://res.cloudinary.com/davidleo/image/upload/v1739726304/landtana/IMG-20250114-WA0029_ppafw9.jpg"
-                  alt="Salon services"
+                  alt="Salon detail"
                   fill
-                  className="object-cover transition-transform duration-700 hover:scale-105"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-              </motion.div>
+              </div>
+              <div className="group relative h-44 overflow-hidden rounded-2xl">
+                <Image
+                  src="https://res.cloudinary.com/davidleo/image/upload/v1739726298/landtana/IMG-20250114-WA0031_sl9rvo.jpg"
+                  alt="Salon detail"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
             </motion.div>
           </motion.div>
 
-          <motion.p
-            variants={fadeInUp}
-            className="mx-auto max-w-4xl text-center text-lg text-gray-700"
-          >
-            Located in northwest San Antonio, our salon offers a relaxing
-            atmosphere where you can unwind while our skilled stylists work
-            their magic. Our space was designed with your comfort in mind,
-            featuring modern amenities and a warm, inviting ambiance.
-          </motion.p>
-        </div>
-      </motion.div>
-
-      {/* CTA Section */}
-      <motion.div
-        ref={ctaRef}
-        animate={ctaControls}
-        initial="hidden"
-        variants={fadeInUp}
-        className="bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-24 text-white"
-      >
-        <div className="mx-auto max-w-5xl text-center">
-          <motion.h2
-            variants={fadeInUp}
-            className="mb-6 text-4xl font-bold md:text-5xl"
-          >
-            Experience the Landtana Difference
-          </motion.h2>
-
-          <motion.p
-            variants={fadeInUp}
-            className="mx-auto mb-10 max-w-3xl text-xl font-light"
-          >
-            Come discover why our clients trust us with their crowning glory and
-            join our growing family of satisfied customers.
-          </motion.p>
-
           <motion.div
-            variants={fadeInUp}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="grid gap-8 md:grid-cols-3"
+            initial="hidden"
+            animate={spaceInView ? "visible" : ""}
+            variants={staggerChildren}
           >
-            <Button
-              asChild
-              size="lg"
-              className="rounded-full bg-white px-8 py-6 text-lg text-orange-600 shadow-lg hover:bg-gray-100"
-            >
-              <Link href="/booking">Book an Appointment</Link>
-            </Button>
+            {[
+              "Eco-Friendly Products",
+              "Ergonomic Seating",
+              "Refreshment Bar",
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="rounded-xl border border-purple-100 bg-gradient-to-br from-white to-purple-50 p-6"
+              >
+                <div className="mb-4 flex size-12 items-center justify-center rounded-lg bg-purple-100">
+                  <span className="text-2xl">✨</span>
+                </div>
+                <h3 className="mb-2 text-lg font-semibold">{feature}</h3>
+                <p className="text-sm text-gray-600">test</p>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </motion.div>
+
+      <MaxWidthContainer>
+        <InstagramFeed />
+      </MaxWidthContainer>
+      <MaxWidthContainer className="!bg-white">
+        <EnhancedCTA />
+      </MaxWidthContainer>
     </div>
   );
 }

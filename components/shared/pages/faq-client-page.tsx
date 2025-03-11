@@ -147,8 +147,8 @@ const FAQPage = () => {
           faqData[category as keyof typeof faqData].filter(
             (faq) =>
               faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
-          )
+              faq.answer.toLowerCase().includes(searchQuery.toLowerCase()),
+          ),
         )
       : faqData[activeTab as keyof typeof faqData];
 
@@ -357,7 +357,7 @@ const FAQPage = () => {
                             {category}
                           </TabsTrigger>
                         </motion.div>
-                      )
+                      ),
                     )}
                   </TabsList>
                 </motion.div>
@@ -406,7 +406,7 @@ const FAQPage = () => {
                                     </AccordionContent>
                                   </AccordionItem>
                                 </motion.div>
-                              )
+                              ),
                             )}
                           </Accordion>
                         </motion.div>
