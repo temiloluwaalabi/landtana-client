@@ -39,7 +39,7 @@ export const ServiceCardDialog = (props: Props) => {
   const { bookings, addBooking, updateBooking, type, guests, currentGuestId } =
     useBookingStore();
   const [selectedVariations, setSelectedVariations] = useState<StyleOption[]>(
-    []
+    [],
   );
 
   const guest = guests.find((guest) => guest.id === currentGuestId);
@@ -52,7 +52,7 @@ export const ServiceCardDialog = (props: Props) => {
       : bookings.some((book) => book.serviceId === props.service.id);
 
   const bookedService = bookings.find(
-    (book) => book.serviceId === props.service.id
+    (book) => book.serviceId === props.service.id,
   );
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export const ServiceCardDialog = (props: Props) => {
       if (bookedService) {
         updateBooking(
           bookings.findIndex(
-            (book) => book.serviceId === bookedService.serviceId
+            (book) => book.serviceId === bookedService.serviceId,
           ),
           {
             serviceId: props.service.id,
@@ -95,7 +95,7 @@ export const ServiceCardDialog = (props: Props) => {
             styleOptionId: selectedStyleOption,
             guestId: currentGuestId,
             clientName: guest?.name,
-          }
+          },
         );
       } else {
         addBooking({
@@ -111,14 +111,14 @@ export const ServiceCardDialog = (props: Props) => {
       if (bookedService) {
         updateBooking(
           bookings.findIndex(
-            (book) => book.serviceId === bookedService.serviceId
+            (book) => book.serviceId === bookedService.serviceId,
           ),
           {
             serviceId: props.service.id,
             stylist: null,
             status: "pending",
             styleOptionId: selectedStyleOption,
-          }
+          },
         );
       } else {
         addBooking({
@@ -189,7 +189,7 @@ export const ServiceCardDialog = (props: Props) => {
                               className={cn(
                                 "borber-b flex cursor-pointer items-center space-x-2 border border-x-0 border-t-0 px-2  py-5 hover:rounded-[12px] hover:bg-gray-100",
                                 i === props.service.style_options.length - 1 &&
-                                  "border-none"
+                                  "border-none",
                               )}
                             >
                               <RadioGroupItem
@@ -204,7 +204,7 @@ export const ServiceCardDialog = (props: Props) => {
                                   <p className=" text-sm text-gray-500">
                                     {
                                       durations.find(
-                                        (tr) => tr.value === item.duration
+                                        (tr) => tr.value === item.duration,
                                       )?.label
                                     }
                                   </p>
@@ -224,7 +224,7 @@ export const ServiceCardDialog = (props: Props) => {
                             className={cn(
                               "borber-b flex cursor-pointer items-center space-x-2 border border-x-0 border-t-0 px-2  py-5 hover:rounded-[12px] hover:bg-gray-100",
                               i === props.service.variations.length - 1 &&
-                                "border-none"
+                                "border-none",
                             )}
                           >
                             <Checkbox
@@ -240,7 +240,7 @@ export const ServiceCardDialog = (props: Props) => {
                                 <p className=" text-sm text-gray-500">
                                   {
                                     durations.find(
-                                      (tr) => tr.value === item.duration
+                                      (tr) => tr.value === item.duration,
                                     )?.label
                                   }
                                 </p>
