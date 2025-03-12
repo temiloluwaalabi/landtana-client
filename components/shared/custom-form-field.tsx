@@ -68,7 +68,7 @@ interface BaseCustomProps<TFormValues extends FieldValues> {
   children?: React.ReactNode;
   formDescription?: string;
   renderSkeleton?: (
-    field: UseControllerReturn<TFormValues>["field"]
+    field: UseControllerReturn<TFormValues>["field"],
   ) => React.ReactNode;
 }
 
@@ -305,7 +305,7 @@ const RenderInput = <TFormValues extends FieldValues>({
                 "landtana-input no-focus !w-full",
                 inputProps.prefix && "pl-10",
                 inputProps.suffix && "pr-10",
-                props.className
+                props.className,
               )}
               type={inputProps.inputType}
             />
@@ -364,7 +364,7 @@ const RenderInput = <TFormValues extends FieldValues>({
                   aria-expanded={open}
                   className={cn(
                     "w-full justify-between",
-                    !selected.length && "text-muted-foreground"
+                    !selected.length && "text-muted-foreground",
                   )}
                 >
                   <span className="truncate">{getSelectedLabel()}</span>
@@ -464,7 +464,7 @@ const RenderInput = <TFormValues extends FieldValues>({
                   variant="outline"
                   className={cn(
                     "w-full pl-3 text-left font-normal",
-                    !field.value && "text-muted-foreground"
+                    !field.value && "text-muted-foreground",
                   )}
                   disabled={props.disabled}
                 >
@@ -504,7 +504,7 @@ const RenderInput = <TFormValues extends FieldValues>({
             className={cn(
               "landtana-input min-h-32",
               !textareaProps.resizable && "resize-none",
-              props.className
+              props.className,
             )}
             {...field}
           />
@@ -571,7 +571,7 @@ const RenderInput = <TFormValues extends FieldValues>({
             disabled={props.disabled}
             className={cn(
               "landtana-input !border !p-2 !rounded-md",
-              props.className
+              props.className,
             )}
           />
         </FormControl>
@@ -632,7 +632,7 @@ const RenderInput = <TFormValues extends FieldValues>({
 };
 
 export const CustomFormField = <TFormValues extends FieldValues>(
-  props: CustomProps<TFormValues>
+  props: CustomProps<TFormValues>,
 ) => {
   return (
     <FormField

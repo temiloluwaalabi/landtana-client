@@ -17,7 +17,7 @@ type Props = {
 
 export const BookingStepThree = ({ services }: Props) => {
   const [openAccordionId, setOpenAccordionId] = React.useState<string | null>(
-    null
+    null,
   );
   const [searchTerm, setSearchTerm] = React.useState("");
   const [activeSection, setActiveSection] = React.useState("services");
@@ -31,17 +31,17 @@ export const BookingStepThree = ({ services }: Props) => {
 
   const handleToggleService = (
     addonServiceId: string,
-    parentServiceId: string
+    parentServiceId: string,
   ) => {
     console.log(
       "Toggling addon:",
       addonServiceId,
       "for service:",
-      parentServiceId
+      parentServiceId,
     );
 
     const parentBookingIndex = bookings.findIndex(
-      (booking) => booking.serviceId === parentServiceId
+      (booking) => booking.serviceId === parentServiceId,
     );
 
     if (parentBookingIndex === -1) return;
@@ -64,13 +64,13 @@ export const BookingStepThree = ({ services }: Props) => {
   const mappedService =
     type === "group"
       ? totalPrice.bookingDetails.filter(
-          (book) => book.guestId === currentGuestId
+          (book) => book.guestId === currentGuestId,
         )
       : totalPrice.bookingDetails;
 
   const filteredServices = services
     .filter((service) =>
-      service.name.toLowerCase().includes(searchTerm.toLowerCase())
+      service.name.toLowerCase().includes(searchTerm.toLowerCase()),
     )
     .slice(0, 8);
   return (
@@ -159,7 +159,7 @@ export const BookingStepThree = ({ services }: Props) => {
               <div className="w-full space-y-4">
                 {mappedService.map((booking, index) => {
                   const service = services.find(
-                    (s) => s.id === booking.bookingId
+                    (s) => s.id === booking.bookingId,
                   );
 
                   return (
@@ -214,7 +214,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                   setOpenAccordionId((prev) =>
                                     prev === booking.bookingId
                                       ? null
-                                      : booking.bookingId
+                                      : booking.bookingId,
                                   )
                                 }
                                 variant="outline"
@@ -276,12 +276,12 @@ export const BookingStepThree = ({ services }: Props) => {
                                           "flex flex-col justify-between rounded-xl border p-4 h-[160px] transition-all cursor-pointer",
                                           isAddonBooked
                                             ? "border-secondary/50 bg-secondary/5"
-                                            : "border-gray-200 hover:border-primary/30"
+                                            : "border-gray-200 hover:border-primary/30",
                                         )}
                                         onClick={() =>
                                           handleToggleService(
                                             item.id,
-                                            booking.bookingId
+                                            booking.bookingId,
                                           )
                                         }
                                       >
