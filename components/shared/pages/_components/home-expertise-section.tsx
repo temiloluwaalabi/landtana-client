@@ -31,7 +31,7 @@ const ExpertiseSection = ({ filteredCategories }: Categories) => {
     <MaxWidthContainer className="!bg-[#F5F6F7] py-20">
       <motion.div
         ref={ref}
-        className="relative flex flex-col justify-center space-y-14"
+        className="relative flex flex-col justify-center space-y-8 lg:space-y-12"
         variants={containerVariants}
         initial="hidden"
         animate={inView ? "visible" : "hidden"}
@@ -40,7 +40,7 @@ const ExpertiseSection = ({ filteredCategories }: Categories) => {
           className="flex flex-col items-center justify-center space-y-4"
           variants={titleVariants}
         >
-          <h2 className="bg-gradient-to-r from-accent to-pink-400 bg-clip-text font-cormorant text-6xl font-bold text-accent">
+          <h2 className="relative bg-gradient-to-r from-accent to-pink-400 bg-clip-text font-cormorant text-3xl font-bold text-accent md:text-4xl lg:text-6xl">
             Our Expertise
           </h2>
           <motion.div
@@ -49,7 +49,7 @@ const ExpertiseSection = ({ filteredCategories }: Categories) => {
             animate={{ width: "80px" }}
             transition={{ delay: 0.5, duration: 0.8 }}
           />
-          <p className="max-w-2xl text-center text-2xl font-light text-[#2F201A]">
+          <p className="max-w-2xl text-center text-base font-light text-[#2F201A] lg:text-2xl">
             We always provide the best service for you, with our highly skilled
             professionals
           </p>
@@ -62,7 +62,7 @@ const ExpertiseSection = ({ filteredCategories }: Categories) => {
           {filteredCategories.map((service) => (
             <motion.div
               key={service.id}
-              className="group relative flex h-[350px] w-full items-center justify-center overflow-hidden rounded-[20px]"
+              className="group relative flex h-[300px] w-full items-center justify-center overflow-hidden rounded-[20px] md:h-[350px]"
               variants={cardVariants}
               whileHover="hover"
             >

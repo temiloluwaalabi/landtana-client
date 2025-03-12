@@ -1,4 +1,6 @@
+import { motion } from "framer-motion";
 import * as React from "react";
+import { useInView } from "react-intersection-observer";
 
 import { useBookingStore } from "@/lib/use-booking-store";
 
@@ -7,6 +9,7 @@ interface StepDetail {
   step: number;
   title: string;
   description: string;
+  hide?: boolean;
   type?: string[]; // Array of types this step applies to
 }
 
@@ -16,6 +19,10 @@ interface StepHeaderProps {
 }
 
 export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
+  const { ref: headerRef, inView: headerInView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
   const { type } = useBookingStore();
   const steps: StepDetail[] = React.useMemo(() => {
     if (type === "individual") {
@@ -34,8 +41,9 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
         },
         {
           step: 4,
-          title: "Select Addons",
-          description: "Enhance your service with additional add-ons.",
+          title: "Customize Your Experience",
+          description:
+            " Enhance your salon experience with our premium add-on services",
           type: ["individual", "group"], // Applies to both types
         },
         {
@@ -62,6 +70,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
       {
         step: 2,
         title: "Add guests and services",
+        hide: true,
         description:
           "Book a group appointment for up to 4 guests. Select the services you need for each guest.",
         type: ["group"], // Only for group type
@@ -76,8 +85,9 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
 
       {
         step: 4,
-        title: "Select Addons",
-        description: "Enhance your service with additional add-ons.",
+        title: "Customize Your Experience",
+        description:
+          " Enhance your salon experience with our premium add-on services",
         type: ["individual", "group"], // Applies to both types
       },
       {
@@ -98,7 +108,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
   const currentStepDetails = steps.find(
     (step) =>
       step.step === currentStep &&
-      (!step.type || (type && step.type.includes(type))),
+      (!step.type || (type && step.type.includes(type)))
   );
 
   if (!currentStepDetails) {
@@ -106,7 +116,12 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
   }
 
   return (
-    <div className="mb-6 space-y-4">
+    <motion.div
+      className="mb-6 space-y-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
       {/* Go Back Button (Top-Left Corner) */}
       {currentStep > 1 && ( // Only show the button if it's not the first step
         <button
@@ -130,14 +145,30 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
           Go Back
         </button>
       )}
-      <div className=" space-y-2">
+      {!currentStepDetails.hide && (
+        <motion.div
+          ref={headerRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: headerInView ? 1 : 0, y: headerInView ? 0 : 20 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="mb-8 space-y-4"
+        >
+          <h2 className="bg-gradient-to-r from-primary to-secondary bg-clip-text font-cormorant text-5xl font-bold text-transparent">
+            {currentStepDetails.title}
+          </h2>
+          <p className="max-w-md font-lora text-base font-normal text-gray-600">
+            {currentStepDetails.description}
+          </p>
+        </motion.div>
+      )}
+      {/* <div className=" space-y-2">
         <h2 className="font-cormorant text-5xl font-bold">
-          {currentStepDetails.title}
+      
         </h2>
         <p className="max-w-md font-lora text-base font-normal">
-          {currentStepDetails.description}
+         
         </p>
-      </div>
-    </div>
+      </div> */}
+    </motion.div>
   );
 };

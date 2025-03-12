@@ -89,7 +89,7 @@ export const ServicePriceCard = (props: Props) => {
             }
             alt="Box Braid"
             fill
-            className="relative inset-[-2px] z-10 size-full object-cover object-center"
+            className="relative z-10 size-full object-cover object-center"
           />
         </motion.div>
       </div>
@@ -99,7 +99,9 @@ export const ServicePriceCard = (props: Props) => {
             variants={textVariants}
             className="max-w-[130px] font-cormorant text-lg font-semibold !leading-5 text-gray-800"
           >
-            {props.service.name}
+            <Link href={`/services/${props.service.id}`}>
+              {props.service.name}
+            </Link>
           </motion.h3>
           <motion.span
             variants={textVariants}
@@ -113,7 +115,7 @@ export const ServicePriceCard = (props: Props) => {
         </div>
         <motion.div whileHover="hover">
           <Link
-            href="#"
+            href={`services/${props.service.id}`}
             className="flex items-center gap-1 text-base font-semibold text-secondary hover:underline"
           >
             Book Today
@@ -123,7 +125,7 @@ export const ServicePriceCard = (props: Props) => {
           </Link>
         </motion.div>
         <motion.div
-          className="absolute right-0 top-0 -mr-6 -mt-6 flex size-[65px] flex-col items-center justify-center rounded-full border-4 border-primary bg-[#E7FFE3] shadow-md"
+          className="absolute right-0 top-0 -mr-3 -mt-6 flex size-[65px] flex-col items-center justify-center rounded-full border-4 border-primary bg-[#E7FFE3] shadow-md"
           variants={priceCircleVariants}
         >
           <span className="text-xs">From</span>

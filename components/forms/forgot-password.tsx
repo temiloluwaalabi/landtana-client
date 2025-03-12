@@ -35,7 +35,7 @@ export default function ForgotPasswordForm() {
       <div className="space-y-4">
         <form
           onSubmit={loginForm.handleSubmit(LoginSubmit)}
-          className="space-y-4"
+          className=" space-y-4"
         >
           <div className="space-y-4">
             <CustomFormField

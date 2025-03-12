@@ -81,7 +81,7 @@ export default function EnhancedServicesCarousel(props: Props) {
               className="basis-full cursor-pointer pl-4  transition-all duration-300 ease-in-out md:basis-3/4"
               onClick={() => openSlideshow(index)}
             >
-              <div className="group relative h-[500px]  overflow-hidden rounded-[12px] border-[7px] border-primary">
+              <div className="group relative h-[400px] overflow-hidden rounded-[12px]  border-[7px] border-primary md:h-[500px] lg:h-[600px]">
                 <Image
                   src={image}
                   alt={props.service.name}

@@ -81,7 +81,7 @@ const NavContent = ({ otherClasses, routes }: ContentProps) => {
                   "!bg-transparent hover:!bg-secondary text-base text-black uppercase",
                   navigationMenuTriggerStyle(),
                   isActive &&
-                    "!text-primary font-bold underline underline-offset-4 text-white",
+                    "!text-primary font-bold underline underline-offset-4 text-white"
                 )}
               >
                 {nav.name}
@@ -183,7 +183,7 @@ const LeftNavbar = (props: NavbarProps) => {
                     href={route.href}
                     className={cn(
                       "text-lg text-black font-fira font-normal",
-                      isActive && "text-primary underline underline-offset-8",
+                      isActive && "text-primary underline underline-offset-8"
                     )}
                   >
                     {route.name}
@@ -217,7 +217,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
     <nav
       className={cn(
         "flex items-center justify-between lg:grid gap-2 lg:grid-cols-12 ",
-        props.className,
+        props.className
       )}
     >
       <Sheet open={openSheet} onOpenChange={setopenSheet}>
@@ -234,12 +234,12 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                 `${pathname}${currentHash}` === route.href; // Match full path with hash
 
               return (
-                <SheetClose key={route.name}>
+                <SheetClose key={route.name} asChild>
                   <Link
                     href={route.href}
                     className={cn(
                       "text-lg text-black font-fira font-normal",
-                      isActive && "text-primary underline underline-offset-8",
+                      isActive && "text-primary underline underline-offset-8"
                     )}
                   >
                     {route.name}
@@ -262,7 +262,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
       </div> */}
       <div
         className={cn(
-          " relative items-center flex col-span-2  justify-center  2xl:justify-start ",
+          " relative items-center flex col-span-2  justify-center  2xl:justify-start "
         )}
       >
         <Logo />
@@ -305,7 +305,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                     <div className="">
                       <Avatar
                         className={cn(
-                          "!h-12 w-12 sm:!h-16 sm:w-16 border-2 cursor-pointer border-gray-0 dark:border-gray-100",
+                          "!h-12 w-12 sm:!h-16 sm:w-16 border-2 cursor-pointer border-gray-0 dark:border-gray-100"
                         )}
                       >
                         <AvatarImage
@@ -328,11 +328,11 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                     {authMenuRoutes.map((route, id) => {
                       const pathnameExistsInDropdowns: any =
                         route.dropdownItems?.filter(
-                          (dropdownItem) => dropdownItem.href === pathname,
+                          (dropdownItem) => dropdownItem.href === pathname
                         );
                       // const isOpen = openIndex === id;
                       const isDropdownOpen = Boolean(
-                        pathnameExistsInDropdowns?.length,
+                        pathnameExistsInDropdowns?.length
                       );
                       const isActive = pathname === (route.href as string);
 
@@ -358,7 +358,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                                 <p
                                   className={cn(
                                     "flex  h-full items-center w-full text-black justify-between py-3 gap-2 mb-2 hover:px-2 hover:rounded-md",
-                                    isActive && "text-primary ",
+                                    isActive && "text-primary "
                                   )}
                                 >
                                   <div className="flex items-center gap-2">
@@ -388,7 +388,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                                         href={item.href}
                                         className={cn(
                                           "text-14_medium font-semibold flex  h-full items-center py-3 gap-2 cursor-pointer ",
-                                          isChildActive && "text-primary",
+                                          isChildActive && "text-primary"
                                         )}
                                       >
                                         {item.name}

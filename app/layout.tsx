@@ -11,6 +11,8 @@ import Providers from "@/providers/tansack-provider";
 import { getSession } from "./actions/session.action";
 import { cormorant, iSans, lora } from "./fonts";
 
+// You're attempting to animate multiple children within AnimatePresence, but its mode is set to "wait". This will lead to odd visual behaviour.
+
 export const metadata: Metadata = {
   title: "Landtana Crown Braids",
   description:
@@ -32,7 +34,7 @@ export default async function RootLayout({
           cormorant.variable,
           lora.variable,
           iSans.variable,
-          "font-lora antialiased",
+          "font-lora antialiased"
         )}
       >
         <Providers>

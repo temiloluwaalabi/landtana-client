@@ -246,17 +246,17 @@ export const HomePageClient = (props: Props) => {
 
   const filteredServices = props.services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const filteredCategories = props.categories.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const cards = data.map((card) => (
     <motion.div
       key={card.src}
       whileHover={{ y: -5 }}
-      className="h-fit w-full rounded-[40px] sm:w-[540px]"
+      className="h-fit w-[400px] rounded-[40px] sm:w-[540px]"
     >
       <Card className="h-full overflow-hidden border-none bg-white/10 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
         <CardHeader className="flex flex-row items-center gap-2">
@@ -273,11 +273,13 @@ export const HomePageClient = (props: Props) => {
           </div>
           <div className="flex flex-col items-start gap-1">
             <h4 className="text-white/90">Temi Alabi</h4>
-            <h2 className="text-white">Exceptional Service & Atmosphere</h2>
+            <h2 className="text-xs text-white md:text-sm">
+              Exceptional Service & Atmosphere
+            </h2>
           </div>
         </CardHeader>
         <CardContent>
-          <p className="font-lora text-base font-normal text-white/80">
+          <p className="font-lora text-sm font-normal text-white/80 md:text-base">
             &quot;I had an amazing experience at Landtana! From the moment I
             walked in, the staff made me feel welcome and comfortable. The salon
             has a relaxing atmosphere, and my stylist truly listened to what I
@@ -285,7 +287,7 @@ export const HomePageClient = (props: Props) => {
             hairstyle. Highly recommend!&quot;
           </p>
         </CardContent>
-        <CardFooter className="flex items-center justify-between text-white/70">
+        <CardFooter className="flex flex-row items-center justify-between text-white/70">
           <div className="flex">
             <Star
               fill="#FF2C56"
@@ -367,7 +369,7 @@ export const HomePageClient = (props: Props) => {
                 </Button>
               </motion.div>
             </div>
-            <motion.div variants={staggerChildren} className="flex gap-6">
+            <motion.div variants={staggerChildren} className="flex gap-6 ">
               <div className="w-fit space-y-[30px]">
                 <motion.div
                   variants={fadeInUp}
@@ -440,7 +442,7 @@ export const HomePageClient = (props: Props) => {
           >
             <motion.div
               variants={imageHover}
-              className="relative h-[500px] w-full md:h-[700px] lg:h-[900px]"
+              className="relative h-[450px] w-full md:h-[700px] lg:h-[900px]"
             >
               <Image
                 src="https://res.cloudinary.com/davidleo/image/upload/v1739726293/landtana/IMG-20250114-WA0044_jd79oj.jpg"

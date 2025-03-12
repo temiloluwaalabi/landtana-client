@@ -1,9 +1,10 @@
 "use client";
-import { Plus } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Check, Plus, Search, X } from "lucide-react";
 import * as React from "react";
+import { useInView } from "react-intersection-observer";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 // import { useIsMobile } from "@/hooks/use-mobile";
 import { useBookingStore } from "@/lib/use-booking-store";
@@ -16,24 +17,31 @@ type Props = {
 
 export const BookingStepThree = ({ services }: Props) => {
   const [openAccordionId, setOpenAccordionId] = React.useState<string | null>(
-    null,
+    null
   );
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [activeSection, setActiveSection] = React.useState("services");
+
+  const { ref: servicesRef, inView: servicesInView } = useInView({
+    threshold: 0.1,
+    triggerOnce: false,
+  });
   const { step, bookings, updateBooking, updateState, currentGuestId, type } =
     useBookingStore();
 
   const handleToggleService = (
     addonServiceId: string,
-    parentServiceId: string,
+    parentServiceId: string
   ) => {
     console.log(
       "Toggling addon:",
       addonServiceId,
       "for service:",
-      parentServiceId,
+      parentServiceId
     );
 
     const parentBookingIndex = bookings.findIndex(
-      (booking) => booking.serviceId === parentServiceId,
+      (booking) => booking.serviceId === parentServiceId
     );
 
     if (parentBookingIndex === -1) return;
@@ -56,156 +64,410 @@ export const BookingStepThree = ({ services }: Props) => {
   const mappedService =
     type === "group"
       ? totalPrice.bookingDetails.filter(
-          (book) => book.guestId === currentGuestId,
+          (book) => book.guestId === currentGuestId
         )
       : totalPrice.bookingDetails;
-  return (
-    <div className="flex h-full flex-col gap-6">
-      {/* <div className="space-y-2">
-        <h2 className="font-cormorant text-5xl font-bold">Select Addons</h2>
-        <p className="max-w-md font-lora text-base font-normal">
-          We have services available to all and delivered by our experienced
-          specialists
-        </p>
-      </div> */}
 
-      <div className="rounded-md border border-primary bg-[#E7FFE3] p-4 text-lg font-semibold text-primary">
-        <h3>
-          A stylist will be automatically assigned to you and sent to your mail
-          and registered phone number
-        </h3>
+  const filteredServices = services
+    .filter((service) =>
+      service.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .slice(0, 8);
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      className="flex h-full flex-col"
+    >
+      <div className="mb-8 flex space-x-6">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className={`relative rounded-full px-4 py-2 font-medium ${activeSection === "services" ? "bg-primary text-white" : "bg-gray-100 text-gray-600"}`}
+          onClick={() => setActiveSection("services")}
+        >
+          Your Services
+          {activeSection === "services" && (
+            <motion.div
+              layoutId="activePill"
+              className="absolute inset-0 -z-10 rounded-full bg-primary"
+            />
+          )}
+        </motion.button>
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className={`relative rounded-full px-4 py-2 font-medium ${activeSection === "stylist" ? "bg-primary text-white" : "bg-gray-100 text-gray-600"}`}
+          onClick={() => setActiveSection("stylist")}
+        >
+          Stylist Info
+          {activeSection === "stylist" && (
+            <motion.div
+              layoutId="activePill"
+              className="absolute inset-0 -z-10 rounded-full bg-primary"
+            />
+          )}
+        </motion.button>
       </div>
-      <div className="space-y-3">
-        <h2 className="font-lora text-lg font-medium text-gray-500">
-          {mappedService.length}{" "}
-          {mappedService.length > 1 ? "services" : "service"} selected
-        </h2>
-        <div className="w-full space-y-3">
-          {mappedService.map((booking) => {
-            const service = services.find((s) => s.id === booking.bookingId);
-            return (
-              service && (
-                <div
-                  key={booking.bookingId}
-                  className="flex w-full animate-accordion-down flex-col rounded-[12px]  border bg-white  transition-transform"
-                >
-                  <div className="flex w-full items-center justify-between border-b p-3">
-                    <div className="flex items-center gap-1">
-                      <div>
-                        <h3 className="font-cormorant text-xl font-bold">
-                          {service?.name}{" "}
-                        </h3>
-                        {/* <p className="font-lora text-sm font-normal text-gray-500">
-                      Hair Colouring
-                    </p> */}
-                      </div>
-                      <Button
-                        onClick={() =>
-                          setOpenAccordionId((prevId) =>
-                            prevId === booking.bookingId
-                              ? null
-                              : booking.bookingId!,
-                          )
-                        }
-                        variant={"link"}
-                        className="flex h-auto gap-0 p-0 text-xs"
-                      >
-                        <Plus /> Add Addon Services
-                      </Button>
-                    </div>
-                    <div className="flex items-center  gap-2">
-                      <p className="space-x-1">
-                        <span className="font-cormorant text-2xl font-bold text-primary">
-                          ${booking?.totalPrice}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  {openAccordionId === booking.bookingId && (
-                    <div className="mt-2 space-y-3 px-3 py-4">
-                      <Input placeholder="Search Addon Services" />
-                      <div className="grid grid-cols-4 gap-4">
-                        {services.slice(0, 6).map((item) => {
-                          const isAddonBooked = booking.addons?.includes(
-                            item.id,
-                          );
-                          return (
-                            <div
-                              key={item.id}
-                              className={cn(
-                                "flex h-[130px] transition-all items-center justify-between rounded-[8px] border border-[#D9D9D9] p-6",
-                                isAddonBooked && "border-secondary",
-                              )}
-                            >
-                              <div className="space-y-4">
-                                <div>
-                                  <h6 className="font-cormorant text-xl font-semibold text-black">
-                                    {item.name}
-                                  </h6>
-                                  <p className="text-sm text-gray-400">
-                                    5 Hours
-                                  </p>
-                                </div>
-                                <p className="space-x-1">
-                                  <span className="text-sm text-gray-400">
-                                    From
-                                  </span>
-                                  <span className="text-base font-bold text-primary">
-                                    ${item.base_price}
-                                  </span>
-                                </p>
-                              </div>
-                              {isAddonBooked ? (
-                                <Checkbox
-                                  className="!size-10 rounded-[8px] !border-none shadow-none data-[state=checked]:bg-[#FFEBEE] data-[state=checked]:text-secondary"
-                                  checked={isAddonBooked ?? false}
-                                  onCheckedChange={() =>
-                                    handleToggleService(
-                                      item.id,
-                                      booking.bookingId,
-                                    )
-                                  }
-                                  checkClassName="size-[32px]"
-                                />
-                              ) : (
-                                <Button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleToggleService(
-                                      item.id,
-                                      booking.bookingId,
-                                    );
-                                  }}
-                                  variant={"link"}
-                                  className="text-secondary"
-                                >
-                                  <Plus /> Add
-                                </Button>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+
+      <AnimatePresence mode="wait">
+        {activeSection === "services" ? (
+          <motion.div
+            key="services"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-6"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="rounded-2xl border border-primary/20 bg-gradient-to-r from-[#E7FFE3] to-[#F0FFF0] px-6 py-3 text-sm font-medium text-primary shadow-sm lg:text-lg"
+            >
+              <div className="flex items-center gap-3">
+                <div className="rounded-full bg-primary/10 p-3">
+                  <Check className="size-6 text-primary" />
                 </div>
-              )
-            );
-          })}
-        </div>
-      </div>
-      <Button
-        className="h-[48px]"
-        onClick={() => {
-          if (type === "group") {
-            updateState({ step: step - 2 });
-          } else {
-            updateState({ step: step + 1 });
-          }
-        }}
-      >
-        {type === "group" ? "Continue" : "Proceed to select date"}
-      </Button>
-    </div>
+                <h3>
+                  A stylist will be automatically assigned to you and
+                  confirmation sent to your email and phone
+                </h3>
+              </div>
+            </motion.div>
+
+            <motion.div
+              ref={servicesRef}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{
+                opacity: servicesInView ? 1 : 0,
+                y: servicesInView ? 0 : 20,
+              }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="space-y-3"
+            >
+              <h2 className="flex items-center font-lora text-xl font-medium text-gray-700">
+                <span className="mr-2 inline-flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  {mappedService.length}
+                </span>
+                {mappedService.length > 1 ? "Services" : "Service"} Selected
+              </h2>
+
+              <div className="w-full space-y-4">
+                {mappedService.map((booking, index) => {
+                  const service = services.find(
+                    (s) => s.id === booking.bookingId
+                  );
+
+                  return (
+                    service && (
+                      <motion.div
+                        key={booking.bookingId}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
+                        className="w-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md"
+                      >
+                        <div className="flex w-full items-center justify-between border-b border-gray-100 p-5">
+                          <div className="flex items-center gap-3">
+                            <div className="rounded-xl bg-primary/10 p-3">
+                              <motion.div
+                                initial={{ rotate: 0 }}
+                                animate={{ rotate: 360 }}
+                                transition={{
+                                  duration: 0.8,
+                                  delay: index * 0.2,
+                                }}
+                              >
+                                {/* Icon based on service type could go here */}
+                                <Check className="size-5 text-primary" />
+                              </motion.div>
+                            </div>
+                            <div>
+                              <h3 className="font-cormorant text-2xl font-bold text-gray-800">
+                                {service?.name}
+                              </h3>
+                              <p className="font-lora text-sm font-normal text-gray-500">
+                                {booking.addons?.length || 0} add-ons selected
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-4">
+                            <p className="flex flex-col items-end">
+                              <span className="text-sm text-gray-500">
+                                Price
+                              </span>
+                              <span className="font-cormorant text-2xl font-bold text-primary">
+                                ${booking?.totalPrice}
+                              </span>
+                            </p>
+                            <motion.div
+                              whileHover={{ scale: 1.1, rotate: 90 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              <Button
+                                onClick={() =>
+                                  setOpenAccordionId((prev) =>
+                                    prev === booking.bookingId
+                                      ? null
+                                      : booking.bookingId
+                                  )
+                                }
+                                variant="outline"
+                                size="icon"
+                                className="size-10 rounded-full border-primary/30 text-primary"
+                              >
+                                {openAccordionId === booking.bookingId ? (
+                                  <X className="size-5" />
+                                ) : (
+                                  <Plus className="size-5" />
+                                )}
+                              </Button>
+                            </motion.div>
+                          </div>
+                        </div>
+
+                        <AnimatePresence>
+                          {openAccordionId === booking.bookingId && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="space-y-4 px-5 py-4">
+                                <div className="relative">
+                                  <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+                                  <Input
+                                    placeholder="Search add-on services"
+                                    className="rounded-xl border-gray-200 pl-10 focus:border-primary focus:ring-primary"
+                                    value={searchTerm}
+                                    onChange={(e) =>
+                                      setSearchTerm(e.target.value)
+                                    }
+                                  />
+                                </div>
+
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+                                  {filteredServices.map((item, addonIndex) => {
+                                    const isAddonBooked =
+                                      booking.addons?.includes(item.id);
+
+                                    return (
+                                      <motion.div
+                                        key={item.id}
+                                        initial={{ opacity: 0, y: 15 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{
+                                          duration: 0.3,
+                                          delay: addonIndex * 0.05,
+                                        }}
+                                        whileHover={{
+                                          y: -5,
+                                          boxShadow:
+                                            "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
+                                        }}
+                                        className={cn(
+                                          "flex flex-col justify-between rounded-xl border p-4 h-[160px] transition-all cursor-pointer",
+                                          isAddonBooked
+                                            ? "border-secondary/50 bg-secondary/5"
+                                            : "border-gray-200 hover:border-primary/30"
+                                        )}
+                                        onClick={() =>
+                                          handleToggleService(
+                                            item.id,
+                                            booking.bookingId
+                                          )
+                                        }
+                                      >
+                                        <div className="space-y-2">
+                                          <div className="flex items-start justify-between">
+                                            <h6 className="font-cormorant text-xl font-semibold text-gray-800">
+                                              {item.name}
+                                            </h6>
+                                            {isAddonBooked && (
+                                              <motion.div
+                                                initial={{ scale: 0 }}
+                                                animate={{ scale: 1 }}
+                                                transition={{
+                                                  type: "spring",
+                                                  stiffness: 500,
+                                                  damping: 15,
+                                                }}
+                                                className="rounded-full bg-secondary/10 p-1"
+                                              >
+                                                <Check className="size-4 text-secondary" />
+                                              </motion.div>
+                                            )}
+                                          </div>
+                                          <p className="text-sm text-gray-500">
+                                            45 min
+                                          </p>
+                                        </div>
+
+                                        <div className="flex items-center justify-between">
+                                          <p className="space-x-1">
+                                            <span className="text-xs text-gray-400">
+                                              From
+                                            </span>
+                                            <span className="text-lg font-bold text-primary">
+                                              ${item.base_price}
+                                            </span>
+                                          </p>
+
+                                          {!isAddonBooked && (
+                                            <motion.div
+                                              whileHover={{ scale: 1.1 }}
+                                              whileTap={{ scale: 0.9 }}
+                                            >
+                                              <div className="flex items-center text-sm font-medium text-secondary">
+                                                <Plus className="mr-1 size-4" />{" "}
+                                                Add
+                                              </div>
+                                            </motion.div>
+                                          )}
+                                        </div>
+                                      </motion.div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    )
+                  );
+                })}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              className="pt-4"
+            >
+              <Button
+                className="h-[56px] w-full rounded-xl text-lg font-medium shadow-lg shadow-primary/20 transition-all hover:shadow-primary/30"
+                onClick={() => {
+                  if (type === "group") {
+                    updateState({ step: step - 2 });
+                  } else {
+                    updateState({ step: step + 1 });
+                  }
+                }}
+              >
+                <motion.span
+                  initial={{ x: 0 }}
+                  whileHover={{ x: 5 }}
+                  className="flex items-center"
+                >
+                  {type === "group" ? "Continue" : "Proceed to select date"}
+                  <motion.svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="ml-2"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </motion.svg>
+                </motion.span>
+              </Button>
+            </motion.div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="stylist"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-6 rounded-2xl border border-gray-100 bg-white p-6"
+          >
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="mb-2 flex size-24 items-center justify-center rounded-full bg-primary/10">
+                <motion.div
+                  animate={{
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 2,
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40"
+                    height="40"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-primary"
+                  >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </motion.div>
+              </div>
+              <div>
+                <h3 className="font-cormorant text-2xl font-bold text-gray-800">
+                  Stylist Assignment
+                </h3>
+                <p className="mt-2 text-gray-600">
+                  We&apos;ll match you with an available stylist based on your
+                  selected services and schedule
+                </p>
+              </div>
+
+              <div className="mt-4 w-full max-w-md rounded-xl bg-gray-50 p-4 text-left">
+                <h4 className="mb-2 font-medium text-gray-800">
+                  What to expect:
+                </h4>
+                <ul className="space-y-2">
+                  <li className="flex items-center text-sm text-gray-600">
+                    <Check className="mr-2 size-4 text-primary" />
+                    Confirmation email with stylist details
+                  </li>
+                  <li className="flex items-center text-sm text-gray-600">
+                    <Check className="mr-2 size-4 text-primary" />
+                    SMS notification on the day of appointment
+                  </li>
+                  <li className="flex items-center text-sm text-gray-600">
+                    <Check className="mr-2 size-4 text-primary" />
+                    Opportunity to request a different stylist if needed
+                  </li>
+                </ul>
+              </div>
+
+              <Button
+                variant="outline"
+                className="mt-6 border-gray-200"
+                onClick={() => setActiveSection("services")}
+              >
+                Back to Services
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };

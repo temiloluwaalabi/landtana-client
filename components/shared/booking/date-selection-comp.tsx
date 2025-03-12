@@ -48,13 +48,7 @@ export default function DateSelectionStep({
       </div>
     );
   };
-  // const CustomMonths = ({ children }: { children: ReactNode }) => {
-  //   return <div className="custom-months">{children}</div>;
-  // };
 
-  // const CustomWeekNumber = ({ number }: WeekNumberProps) => {
-  //   return <div className="custom-week-number">Week {number}</div>;
-  // };
   useEffect(() => {
     const getAvailability = async () => {
       setLoading(true);
@@ -83,13 +77,6 @@ export default function DateSelectionStep({
       updateState({
         date: null,
       });
-      // Clear the previous selection
-      // updateBooking(
-      //   bookings.findIndex((b) => b.serviceId === serviceId),
-      //   {
-      //     date: null, // Clear the previous selection
-      //   }
-      // );
 
       // Set the new selected date
       updateState({
@@ -159,7 +146,7 @@ export default function DateSelectionStep({
 
   const findNextAvailableDate = (
     availabilityData: AvailabilityResponse,
-    selectedDate: Date,
+    selectedDate: Date
   ): string | null => {
     const dates = Object.keys(availabilityData.dates).sort();
 
@@ -236,7 +223,7 @@ export default function DateSelectionStep({
                   onClick={() => {
                     const nextAvailableDateStr = findNextAvailableDate(
                       availabilityData,
-                      selectedDate,
+                      selectedDate
                     );
                     if (nextAvailableDateStr) {
                       const nextAvailableDate = new Date(nextAvailableDateStr);

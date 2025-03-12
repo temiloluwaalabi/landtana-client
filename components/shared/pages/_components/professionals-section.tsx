@@ -84,7 +84,7 @@ const ProfessionalSection = ({ filteredServices }: Services) => {
   const getFilteredServices = () => {
     if (selectedTab === "all") return filteredServices;
     return filteredServices.filter(
-      (service) => service.category_id === selectedTab,
+      (service) => service.category_id === selectedTab
     );
   };
 
@@ -165,7 +165,7 @@ const ProfessionalSection = ({ filteredServices }: Services) => {
               className="flex w-full flex-col items-center gap-10 py-6"
             >
               <motion.div
-                className="grid w-full gap-4 md:grid-cols-2 xl:grid-cols-3"
+                className="grid w-full gap-4 md:grid-cols-3 xl:grid-cols-3"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -175,6 +175,7 @@ const ProfessionalSection = ({ filteredServices }: Services) => {
                   <motion.div
                     key={service.name}
                     variants={cardVariants}
+                    className=""
                     custom={index}
                     whileHover={{
                       y: -8,

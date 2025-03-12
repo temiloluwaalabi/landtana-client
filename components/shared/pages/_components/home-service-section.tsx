@@ -83,7 +83,7 @@ const ServicesSection = ({ filteredServices }: Services) => {
   const getFilteredServices = () => {
     if (selectedTab === "all") return filteredServices;
     return filteredServices.filter(
-      (service) => service.category_id === selectedTab,
+      (service) => service.category_id === selectedTab
     );
   };
 
@@ -100,10 +100,10 @@ const ServicesSection = ({ filteredServices }: Services) => {
         animate={inView ? "visible" : "hidden"}
       >
         <motion.div
-          className="flex w-full flex-col items-start justify-start space-y-4"
+          className="flex w-full  flex-col items-start justify-start space-y-4"
           variants={titleVariants}
         >
-          <h2 className="relative font-cormorant text-5xl font-bold text-accent">
+          <h2 className="relative bg-gradient-to-r from-secondary to-pink-400 bg-clip-text font-cormorant text-3xl font-bold text-accent md:text-4xl lg:text-6xl">
             Explore Our Braiding Services
             <motion.span
               className="absolute -bottom-3 left-0 h-1 rounded-full bg-gradient-to-r from-primary to-accent"
@@ -112,7 +112,7 @@ const ServicesSection = ({ filteredServices }: Services) => {
               transition={{ delay: 0.5, duration: 0.8 }}
             />
           </h2>
-          <p className="max-w-2xl text-lg text-gray-600">
+          <p className="max-w-2xl text-left text-base font-light text-[#2F201A] lg:text-2xl">
             Discover our premium braiding styles and services tailored to
             enhance your natural beauty
           </p>

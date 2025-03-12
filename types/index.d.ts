@@ -1,12 +1,3 @@
-export interface Booking {
-  id: string;
-  booking_datetime: Date;
-  status: string;
-  additional_notes: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
 export interface User {
   id: string;
   first_name: string | null;
@@ -25,7 +16,7 @@ export interface User {
   role: string;
   created_at: Date;
   updated_at: Date;
-  bookings: Booking[];
+  // bookings: Booking[];
 }
 
 export interface LoginResponse {
@@ -127,4 +118,14 @@ export interface Category {
 export type GetAllCategoriesResponse = {
   categories: Category[];
   total: number;
+};
+export type Booking = {
+  id: string;
+  booking_datetime: Date;
+  status: string;
+  additional_notes: string;
+  user: User;
+  services: Service[];
+  created_at: Date;
+  updated_at: Date;
 };
