@@ -60,7 +60,7 @@ export default function LoginForm() {
         </div>
         <form
           onSubmit={loginForm.handleSubmit(LoginSubmit)}
-          className="space-y-4"
+          className="space-y-2"
         >
           <div className="space-y-4">
             <CustomFormField

@@ -144,7 +144,7 @@ const PoliciesPage = () => {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <TabsList className="mb-8 grid grid-cols-2 gap-1 rounded-xl bg-rose-100/50 p-1 md:grid-cols-4">
+              <TabsList className="mb-8 grid h-full grid-cols-2 gap-2 rounded-xl bg-rose-100/50 p-1 md:grid-cols-4">
                 {["general", "appointments", "pricing", "children"].map(
                   (tab, index) => (
                     <TabsTrigger
@@ -163,7 +163,7 @@ const PoliciesPage = () => {
                             ? "Pricing & Payment"
                             : "Children & Guests"}
                     </TabsTrigger>
-                  ),
+                  )
                 )}
               </TabsList>
             </motion.div>
@@ -173,7 +173,7 @@ const PoliciesPage = () => {
                 key={activeTab}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                // exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
               >
                 <TabsContent value="general" className="mt-6">
