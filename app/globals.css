@@ -107,11 +107,11 @@ body {
   }
 }
 
-.custom-head-row {
+/* .custom-head-row {
   display: flex;
   justify-content: space-between;
   padding: 8px;
-}
+} */
 .custom-weekday {
   font-weight: normal;
   font-size: 14px;

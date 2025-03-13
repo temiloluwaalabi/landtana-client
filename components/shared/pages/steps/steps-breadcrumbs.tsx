@@ -15,7 +15,7 @@ const defaultFormatter = (crumb: string) => {
   return crumb
     .replace(/[-_]/g, " ")
     .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-      index === 0 ? word.toUpperCase() : word.toLowerCase(),
+      index === 0 ? word.toUpperCase() : word.toLowerCase()
     );
 };
 export const StepsBreadcrumbs = () => {
@@ -79,7 +79,7 @@ export const StepsBreadcrumbs = () => {
   // Filter steps to show only up to the current step
   const visibleSteps = steps.filter((crumb) => crumb.step <= step);
   return (
-    <Breadcrumb className="mb-10">
+    <Breadcrumb className="mb-6">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -94,7 +94,7 @@ export const StepsBreadcrumbs = () => {
               <BreadcrumbItem
                 className={cn(
                   "cursor-pointer",
-                  isLast && "font-semibold text-black",
+                  isLast && "font-semibold text-black"
                 )}
                 onClick={() => updateState({ step: crumb.step })}
               >

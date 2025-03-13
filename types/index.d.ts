@@ -109,6 +109,7 @@ export interface Category {
   created_by: string;
   updated_by: string;
   is_deleted: boolean;
+  parent_id: string | null;
   deleted_at: null;
   deleted_by: null;
   created_at: Date;

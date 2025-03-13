@@ -36,11 +36,11 @@ export default function DateSelectionStep({
     const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
     return (
-      <div className="custom-head-row flex">
+      <div className="grid grid-cols-7 w-full items-center justify-center ">
         {weekdays.map((weekday, index) => (
           <div
             key={index}
-            className="m-3 w-9 rounded-md text-[0.8rem] font-normal text-muted-foreground"
+            className="rounded-md text-[0.8rem] font-normal text-muted-foreground"
           >
             {weekday}
           </div>
@@ -146,7 +146,7 @@ export default function DateSelectionStep({
 
   const findNextAvailableDate = (
     availabilityData: AvailabilityResponse,
-    selectedDate: Date,
+    selectedDate: Date
   ): string | null => {
     const dates = Object.keys(availabilityData.dates).sort();
 
@@ -184,7 +184,7 @@ export default function DateSelectionStep({
           onBack={() => setShowTimeSelector(false)}
         />
       ) : (
-        <div className="flex w-fit flex-col items-center">
+        <div className="flex w-full flex-col items-center">
           <Calendar
             showOutsideDays={false}
             weekStartsOn={1}
@@ -194,7 +194,7 @@ export default function DateSelectionStep({
             disabled={(date) => disabledDates(date)}
             className=" rounded-md border-none "
             components={{
-              HeadRow: CustomHeadRow,
+              // HeadRow: CustomHeadRow,
               DayContent: ({ date, activeModifiers, ...props }) =>
                 dayRenderer(date, { activeModifiers, ...props }),
             }}
@@ -223,7 +223,7 @@ export default function DateSelectionStep({
                   onClick={() => {
                     const nextAvailableDateStr = findNextAvailableDate(
                       availabilityData,
-                      selectedDate,
+                      selectedDate
                     );
                     if (nextAvailableDateStr) {
                       const nextAvailableDate = new Date(nextAvailableDateStr);

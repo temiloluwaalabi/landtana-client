@@ -163,7 +163,7 @@ const PoliciesPage = () => {
                             ? "Pricing & Payment"
                             : "Children & Guests"}
                     </TabsTrigger>
-                  )
+                  ),
                 )}
               </TabsList>
             </motion.div>

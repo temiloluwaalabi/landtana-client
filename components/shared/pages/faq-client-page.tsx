@@ -147,8 +147,8 @@ const FAQPage = () => {
           faqData[category as keyof typeof faqData].filter(
             (faq) =>
               faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              faq.answer.toLowerCase().includes(searchQuery.toLowerCase()),
-          ),
+              faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
+          )
         )
       : faqData[activeTab as keyof typeof faqData];
 
@@ -342,7 +342,7 @@ const FAQPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.5 }}
                 >
-                  <TabsList className="grid h-fit grid-cols-2 gap-2 rounded-xl bg-pink-50 p-2 md:grid-cols-4">
+                  <TabsList className="grid h-fit w-full grid-cols-3 gap-2 rounded-xl bg-pink-50 p-2 md:grid-cols-4">
                     {["general", "pricing", "appointments", "aftercare"].map(
                       (category, index) => (
                         <motion.div
@@ -357,7 +357,7 @@ const FAQPage = () => {
                             {category}
                           </TabsTrigger>
                         </motion.div>
-                      ),
+                      )
                     )}
                   </TabsList>
                 </motion.div>
@@ -406,7 +406,7 @@ const FAQPage = () => {
                                     </AccordionContent>
                                   </AccordionItem>
                                 </motion.div>
-                              ),
+                              )
                             )}
                           </Accordion>
                         </motion.div>

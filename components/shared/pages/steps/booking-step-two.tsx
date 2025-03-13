@@ -4,7 +4,6 @@ import {
   ChevronRight,
   ClockIcon,
   Filter,
-  Heart,
   Plus,
   Search,
   UserCog,
@@ -134,7 +133,7 @@ const categoryVariants = {
 };
 export const BookingStepTwo = (props: Props) => {
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    "b15bd255-537b-4738-bb98-74938098599d",
+    "b15bd255-537b-4738-bb98-74938098599d"
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -147,13 +146,12 @@ export const BookingStepTwo = (props: Props) => {
   // Filter services based on search query and selected category
   const filteredServices = props.services
     .filter(
-      (service) =>
-        !selectedCategory || service.category_id === selectedCategory,
+      (service) => !selectedCategory || service.category_id === selectedCategory
     )
     .filter(
       (service) =>
         !searchQuery ||
-        service.name.toLowerCase().includes(searchQuery.toLowerCase()),
+        service.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
   const renderServiceCard = (service: Service) => {
@@ -163,7 +161,7 @@ export const BookingStepTwo = (props: Props) => {
         ? bookings.some(
             (booking) =>
               booking.serviceId === service.id &&
-              booking.guestId === currentGuestId,
+              booking.guestId === currentGuestId
           )
         : bookings.some((booking) => booking.serviceId === service.id);
     return (
@@ -182,8 +180,8 @@ export const BookingStepTwo = (props: Props) => {
             whileTap={{ scale: 0.98 }}
             key={service.id}
             className={cn(
-              "flex h-[130px] !w-full relative transition-all items-center overflow-hidden justify-between rounded-[8px] border  hover:bg-white cursor-pointer border-[#D9D9D9] p-6",
-              isBooked && "border-primary bg-white",
+              "flex h-auto !w-full relative transition-all items-center overflow-hidden justify-between rounded-[8px] border  hover:bg-white cursor-pointer border-[#D9D9D9] px-6 py-6",
+              isBooked && "border-primary bg-white"
             )}
           >
             {/* Subtle background pattern */}
@@ -204,7 +202,7 @@ export const BookingStepTwo = (props: Props) => {
 
             <div className="flex flex-col items-start space-y-4">
               <div className="flex flex-col items-start">
-                <h6 className="font-cormorant text-xl font-semibold text-black">
+                <h6 className="text-ellipsis whitespace-nowrap font-cormorant text-lg font-semibold text-black 2xl:text-xl">
                   {service.name}
                 </h6>
                 <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -264,7 +262,7 @@ export const BookingStepTwo = (props: Props) => {
   const renderCategoryButton = (category: Category) => {
     const isSelected = selectedCategory === category.id;
     const count = props.services.filter(
-      (service) => service.category_id === category.id,
+      (service) => service.category_id === category.id
     ).length;
 
     return (
@@ -276,7 +274,7 @@ export const BookingStepTwo = (props: Props) => {
           "border border-transparent transition-all !bg-transparent",
           isSelected
             ? "!bg-primary text-white"
-            : "bg-primary/10 text-primary hover:bg-primary/20",
+            : "bg-primary/10 text-primary hover:bg-primary/20"
         )}
         initial="normal"
         animate={isSelected ? "selected" : "normal"}
@@ -288,7 +286,7 @@ export const BookingStepTwo = (props: Props) => {
         <motion.div
           className={cn(
             "flex size-6 items-center justify-center rounded-full",
-            isSelected ? "bg-white text-primary" : "bg-primary/10 text-primary",
+            isSelected ? "bg-white text-primary" : "bg-primary/10 text-primary"
           )}
           whileHover={{ scale: 1.1 }}
         >
@@ -298,7 +296,7 @@ export const BookingStepTwo = (props: Props) => {
     );
   };
   return (
-    <div className="flex h-full flex-col gap-6 ">
+    <div className="relative flex h-full flex-col gap-6">
       {type === "group" && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -333,7 +331,7 @@ export const BookingStepTwo = (props: Props) => {
           </motion.div>
         </motion.div>
       )}
-      <div className="grid grid-cols-12 gap-10">
+      <div className="flex gap-10 lg:grid lg:grid-cols-12">
         <motion.aside
           className="hidden h-fit flex-col space-y-3 rounded-md p-0 lg:col-span-3 lg:flex"
           initial={{ opacity: 0, x: -20 }}
@@ -348,7 +346,7 @@ export const BookingStepTwo = (props: Props) => {
           {props.categories.map(renderCategoryButton)}
         </motion.aside>
         <motion.div
-          className="col-span-12 lg:col-span-9"
+          className="relative col-span-12 flex w-full flex-col lg:col-span-9"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -361,12 +359,12 @@ export const BookingStepTwo = (props: Props) => {
           {" "}
           {/* Search and filter bar */}
           <motion.div
-            className="mb-6 flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-2 shadow-sm"
+            className="mb-6 flex items-center justify-between gap-4 rounded-xl border border-gray-200 bg-white p-2 shadow-sm"
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="relative grow">
+            <div className="relative">
               <Input
                 placeholder="Search services..."
                 value={searchQuery}
@@ -395,12 +393,12 @@ export const BookingStepTwo = (props: Props) => {
                 Filters
               </Button>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            {/* <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button variant="ghost" size="sm" className="gap-2 text-primary">
                 <Heart className="size-4" />
                 Favorites
               </Button>
-            </motion.div>
+            </motion.div> */}
           </motion.div>
           {/* Service categories tabs */}
           <div className="space-y-4">
@@ -409,8 +407,8 @@ export const BookingStepTwo = (props: Props) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <Tabs className="w-full" defaultValue="knotless-braids">
-                <TabsList className="flex size-full flex-wrap justify-start gap-2 bg-transparent p-0 pb-2">
+              <Tabs className="" defaultValue="knotless-braids">
+                <TabsList className="custom-scrollbar flex size-full justify-start gap-2 overflow-hidden overflow-x-scroll bg-transparent p-0 pb-2">
                   {[
                     "knotless-braids",
                     "locs",
@@ -436,7 +434,7 @@ export const BookingStepTwo = (props: Props) => {
                           .split("-")
                           .map(
                             (word) =>
-                              word.charAt(0).toUpperCase() + word.slice(1),
+                              word.charAt(0).toUpperCase() + word.slice(1)
                           )
                           .join(" ")}
                       </TabsTrigger>

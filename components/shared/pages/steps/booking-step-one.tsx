@@ -10,18 +10,42 @@ import { cn } from "@/lib/utils";
 const transition = { type: "spring", damping: 25, stiffness: 120 };
 
 export const BookingStepOne = () => {
-  const { type, updateState, addGuest } = useBookingStore();
+  const { type, updateState, addGuest, bookings, updateBooking } =
+    useBookingStore();
 
   const handleSelectType = (type: "individual" | "group" | "gift-card") => {
     if (type === "group") {
-      updateState({
-        type,
-        step: 3,
-        isGroupBooking: true,
-      });
-      addGuest({
-        name: "Me",
-      });
+      if (bookings && bookings.length > 0) {
+        const currentBooking = bookings[bookings.length - 1];
+
+        const userId = addGuest({
+          name: "Me",
+        });
+
+        updateBooking(
+          bookings.findIndex(
+            (book) => book.serviceId === currentBooking.serviceId
+          ),
+          {
+            guestId: userId,
+          }
+        );
+
+        updateState({
+          type,
+          step: 2,
+          isGroupBooking: true,
+        });
+      } else {
+        updateState({
+          type,
+          step: 3,
+          isGroupBooking: true,
+        });
+        addGuest({
+          name: "Me",
+        });
+      }
     } else {
       updateState({ type, step: 2 }); // Update state and move to next step
     }
@@ -57,7 +81,7 @@ export const BookingStepOne = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={transition}
-      className="flex h-[70vh] flex-col gap-6"
+      className="flex h-full flex-col gap-6"
     >
       <motion.div
         className="grid grid-cols-1 gap-6 md:grid-cols-3"
@@ -85,7 +109,7 @@ export const BookingStepOne = () => {
                 "hover:border-primary hover:bg-white/80",
                 type === option.type
                   ? "border-secondary bg-white"
-                  : "border-[#D9D9D9] shadow-md",
+                  : "border-[#D9D9D9] shadow-md"
               )}
             >
               <motion.div

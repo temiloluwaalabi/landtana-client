@@ -108,7 +108,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
   const currentStepDetails = steps.find(
     (step) =>
       step.step === currentStep &&
-      (!step.type || (type && step.type.includes(type))),
+      (!step.type || (type && step.type.includes(type)))
   );
 
   if (!currentStepDetails) {
@@ -117,7 +117,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
 
   return (
     <motion.div
-      className="mb-6 space-y-4"
+      className="mb-8 space-y-2"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -126,7 +126,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
       {currentStep > 1 && ( // Only show the button if it's not the first step
         <button
           onClick={onGoBack}
-          className="mb-4 flex items-center text-sm text-gray-600 hover:text-gray-900"
+          className="mb-2 flex items-center text-sm text-gray-600 hover:text-gray-900"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -151,12 +151,12 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: headerInView ? 1 : 0, y: headerInView ? 0 : 20 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="mb-8 space-y-4"
+          className="mb-4 space-y-2"
         >
-          <h2 className="bg-gradient-to-r from-primary to-secondary bg-clip-text font-cormorant text-5xl font-bold text-transparent">
+          <h2 className="bg-gradient-to-r from-primary to-secondary bg-clip-text font-cormorant text-3xl font-bold text-transparent lg:text-5xl">
             {currentStepDetails.title}
           </h2>
-          <p className="max-w-md font-lora text-base font-normal text-gray-600">
+          <p className="max-w-md font-lora text-sm font-normal text-gray-600 lg:text-base">
             {currentStepDetails.description}
           </p>
         </motion.div>

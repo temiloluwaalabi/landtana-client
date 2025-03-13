@@ -59,51 +59,53 @@ const ExpertiseSection = ({ filteredCategories }: Categories) => {
           className="grid gap-8 sm:grid-cols-2 md:grid-cols-3"
           variants={containerVariants}
         >
-          {filteredCategories.map((service) => (
-            <motion.div
-              key={service.id}
-              className="group relative flex h-[300px] w-full items-center justify-center overflow-hidden rounded-[20px] md:h-[350px]"
-              variants={cardVariants}
-              whileHover="hover"
-            >
-              <Link
-                href={`/services/category/${service.id}`}
-                className="absolute left-0 top-0 z-50 size-full"
-              />
+          {filteredCategories
+            .filter((cat) => cat.parent_id === null)
+            .map((service) => (
               <motion.div
-                className="absolute inset-0 bg-black/20 transition-all duration-500 hover:bg-black/10"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.1 }}
-              />
-              <Image
-                src={
-                  "https://res.cloudinary.com/davidleo/image/upload/v1739748137/landtana/92c01e2888429b399fe39527925d03db_oveh9w.png"
-                }
-                fill
-                className="rounded-[20px] object-cover transition-transform duration-700 group-hover:scale-110"
-                alt={service.name}
-              />
-              <motion.div
-                className="absolute inset-x-0 bottom-0 mx-auto mb-6 flex h-[120px] w-3/4 items-center justify-center rounded-[10px] border border-white/20 bg-white/90 shadow-lg backdrop-blur-sm"
-                variants={labelVariants}
+                key={service.id}
+                className="group relative flex h-[300px] w-full items-center justify-center overflow-hidden rounded-[20px] md:h-[350px]"
+                variants={cardVariants}
+                whileHover="hover"
               >
-                <div className="text-center">
-                  <h4 className="font-cormorant text-2xl font-semibold text-black">
-                    {service.name}
-                  </h4>
-                  <motion.span
-                    className="mt-2 inline-block text-sm text-accent"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    Discover More
-                  </motion.span>
-                </div>
+                <Link
+                  href={`/services/category/${service.id}`}
+                  className="absolute left-0 top-0 z-50 size-full"
+                />
+                <motion.div
+                  className="absolute inset-0 bg-black/20 transition-all duration-500 hover:bg-black/10"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                />
+                <Image
+                  src={
+                    "https://res.cloudinary.com/davidleo/image/upload/v1739748137/landtana/92c01e2888429b399fe39527925d03db_oveh9w.png"
+                  }
+                  fill
+                  className="rounded-[20px] object-cover transition-transform duration-700 group-hover:scale-110"
+                  alt={service.name}
+                />
+                <motion.div
+                  className="absolute inset-x-0 bottom-0 mx-auto mb-6 flex h-[120px] w-3/4 items-center justify-center rounded-[10px] border border-white/20 bg-white/90 shadow-lg backdrop-blur-sm"
+                  variants={labelVariants}
+                >
+                  <div className="text-center">
+                    <h4 className="font-cormorant text-2xl font-semibold text-black">
+                      {service.name}
+                    </h4>
+                    <motion.span
+                      className="mt-2 inline-block text-sm text-accent"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      Discover More
+                    </motion.span>
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          ))}
+            ))}
         </motion.div>
       </motion.div>
     </MaxWidthContainer>

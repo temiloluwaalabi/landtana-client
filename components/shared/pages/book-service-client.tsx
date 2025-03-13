@@ -73,11 +73,11 @@ export const BookServiceClient = (props: Props) => {
 
   const previousStep = step - 1;
   const sortedCategories = props.categories.sort((a, b) =>
-    a.name.localeCompare(b.name),
+    a.name.localeCompare(b.name)
   );
   const sortedServices = props.services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const [animateIcon, setAnimateIcon] = React.useState(false);
 
@@ -99,7 +99,7 @@ export const BookServiceClient = (props: Props) => {
   const totalPrice = calculateBookingDetails(
     bookings,
     props.services,
-    props.services,
+    props.services
   );
   // Auto-animate icon occasionally
   React.useEffect(() => {
@@ -265,7 +265,7 @@ export const BookServiceClient = (props: Props) => {
           className="relative"
         >
           {/* Enhanced breadcrumb with decorative element */}
-          <div className="relative mb-12">
+          <div className="relative mb-3">
             <motion.div
               className="absolute -left-4 top-0 h-full w-1 rounded-full bg-gradient-to-b from-secondary/80 to-secondary/20"
               initial={{ scaleY: 0 }}
@@ -274,10 +274,16 @@ export const BookServiceClient = (props: Props) => {
             />
             <StepsBreadcrumbs />
           </div>
-          <div className="mt-3 pb-28">
+          <div className="mt-2 pb-28">
             <StepHeader
               currentStep={step}
-              onGoBack={() => updateState({ step: step - 1 })}
+              onGoBack={() => {
+                if (type === "group" && step === 5) {
+                  updateState({ step: 2 });
+                } else {
+                  updateState({ step: step - 1 });
+                }
+              }}
             />
 
             {/* Main content with staggered animations */}
@@ -286,9 +292,12 @@ export const BookServiceClient = (props: Props) => {
         </motion.div>
       </AnimatePresence>
 
-      {((step === 2 && type !== "group") || step === 3) &&
-        bookings.length > 0 && (
-          <MaxWidthContainer className="fixed bottom-0 left-0 z-50 flex h-fit w-full items-end !p-0 transition-all animate-in">
+      {step === 2 ||
+        (step === 3 && type === "group" && bookings.length > 0 && (
+          <MaxWidthContainer
+            innerClass="!px-0 lg:!px-[30px] 2xl:!px-[30px]"
+            className="fixed bottom-0 !px-0 md:!px-[30px] lg:!px-[40px] 2xl:!px-[96px] left-0 z-50 flex w-full items-end !p-0 transition-all animate-in"
+          >
             <motion.div
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -298,7 +307,7 @@ export const BookServiceClient = (props: Props) => {
                 <CardHeader
                   className={cn(
                     "flex w-full flex-row items-center justify-between pb-4 shadow-none outline-none",
-                    hideDetails && "border-b border-gray-100",
+                    hideDetails && "border-b border-gray-100"
                   )}
                 >
                   <div>
@@ -357,10 +366,10 @@ export const BookServiceClient = (props: Props) => {
                         <div className="w-full space-y-3">
                           {totalPrice.bookingDetails.map((booking) => {
                             const service = props.services.find(
-                              (s) => s.id === booking.bookingId,
+                              (s) => s.id === booking.bookingId
                             );
                             const bookingIndex = bookings.findIndex(
-                              (b) => b.serviceId === booking.bookingId,
+                              (b) => b.serviceId === booking.bookingId
                             );
                             const guest = booking.guestId
                               ? guests.find((g) => g.id === booking.guestId)
@@ -372,7 +381,7 @@ export const BookServiceClient = (props: Props) => {
                                 service={service?.name || ""}
                                 category={
                                   props.categories.find(
-                                    (cat) => cat.id === service?.category_id,
+                                    (cat) => cat.id === service?.category_id
                                   )?.name || ""
                                 }
                                 price={toCurrency(booking.totalPrice)}
@@ -435,7 +444,7 @@ export const BookServiceClient = (props: Props) => {
               </Card>
             </motion.div>
           </MaxWidthContainer>
-        )}
+        ))}
     </MaxWidthContainer>
   );
 };
