@@ -10,11 +10,11 @@ import { defaultSession, SessionData } from "@/types/main";
 export async function POST(
   request: NextRequest,
   user: User,
-  accessToken: string
+  accessToken: string,
 ) {
   const session = await getIronSession<SessionData>(
     await cookies(),
-    sessionOptions
+    sessionOptions,
   );
   //   const formData = await request.formData();
 
@@ -36,7 +36,7 @@ export async function POST(
 export async function GET(request: NextRequest) {
   const session = await getIronSession<SessionData>(
     await cookies(),
-    sessionOptions
+    sessionOptions,
   );
 
   const action = new URL(request.url).searchParams.get("action");
@@ -60,7 +60,7 @@ export async function PATCH() {
   try {
     const session = await getIronSession<SessionData>(
       await cookies(),
-      sessionOptions
+      sessionOptions,
     );
 
     // Update to a fixed expiration time (e.g., 1 hour)
@@ -81,12 +81,12 @@ export async function PATCH() {
     if (error instanceof Error) {
       return NextResponse.json(
         { error: "Failed to update session", details: error.message },
-        { status: 500 }
+        { status: 500 },
       );
     }
     return NextResponse.json(
       { error: "An unknown error occurred" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -95,7 +95,7 @@ export async function PATCH() {
 export async function DELETE() {
   const session = await getIronSession<SessionData>(
     await cookies(),
-    sessionOptions
+    sessionOptions,
   );
 
   session.destroy();
