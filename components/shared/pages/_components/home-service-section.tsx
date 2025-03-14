@@ -87,7 +87,7 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
   const getFilteredServices = () => {
     if (selectedTab === "all") return filteredServices;
     return filteredServices.filter(
-      (service) => service.category_id === selectedTab,
+      (service) => service.category_id === selectedTab
     );
   };
 
@@ -128,7 +128,7 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <TabsList className="mb-4 h-auto flex-wrap items-start justify-start gap-3 bg-transparent p-0">
+            <TabsList className="custom-scrollbar mb-4 flex size-full h-auto items-start justify-start gap-3 overflow-hidden overflow-x-scroll bg-transparent p-0">
               <TabsTrigger
                 className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white lg:text-base"
                 value={"all"}

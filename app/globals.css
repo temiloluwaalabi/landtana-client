@@ -77,7 +77,7 @@ body {
     @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
   }
   .custom-scrollbar::-webkit-scrollbar {
-    @apply !size-[3px] !max-h-2 rounded-[2px]
+    @apply !size-[2px] !max-h-1 rounded-[2px]
     /* width: 3px;
     height: 3px;
     border-radius: 2px; */;
