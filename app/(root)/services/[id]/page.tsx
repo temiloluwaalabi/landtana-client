@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 
 import {
   getAllServices,
@@ -7,6 +8,8 @@ import {
   getSubCategoriesByCategoryID,
 } from "@/app/actions/services.action";
 import { ServiceDetailsPage } from "@/components/shared/pages/service-details-page";
+import { durations } from "@/config/constants";
+import { generateServiceJsonLd } from "@/lib/jsonld";
 import { Service } from "@/types";
 
 export async function generateMetadata({
@@ -78,16 +81,37 @@ export default async function ServiceDetailsServer({
   const subCat = await getSubCategoriesByCategoryID(
     "b15bd255-537b-4738-bb98-74938098599d"
   );
+
   if (!service.success) {
     return notFound();
   }
+
+  const mainService: Service = service.service;
+  const serviceJsonLd = generateServiceJsonLd({
+    id: mainService.id,
+    name: mainService.name,
+    price: parseFloat(mainService.base_price),
+    image: mainService.featured_image || "",
+    description: mainService.description,
+    duration:
+      durations.find((dur) => dur.value === mainService.duration)?.label || "",
+  });
+
   // console.log("FETCHED SEVR SERVICE", service.service);
 
   return (
-    <ServiceDetailsPage
-      service={service.service}
-      services={services.services?.services || []}
-      subCat={subCat.category || []}
-    />
+    <>
+      <Script
+        id="service-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+
+      <ServiceDetailsPage
+        service={service.service}
+        services={services.services?.services || []}
+        subCat={subCat.category || []}
+      />
+    </>
   );
 }

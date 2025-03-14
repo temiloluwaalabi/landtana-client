@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Script from "next/script";
 import NextTopLoader from "nextjs-toploader";
 
 import { Navbar } from "@/components/navigation/navbar";
 import { Toaster } from "@/components/ui/sonner";
+import { businessJsonLd } from "@/lib/jsonld";
 import { cn } from "@/lib/utils";
 import Providers from "@/providers/tansack-provider";
 
@@ -134,6 +136,11 @@ export default async function RootLayout({
   // console.log("LAYOUT USER", user.user);
   return (
     <html lang="en">
+      <Script
+        id="business-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }}
+      />
       <body
         className={cn(
           cormorant.variable,
