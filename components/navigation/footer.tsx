@@ -385,6 +385,7 @@ export const MainFooter = () => {
                       Landtana Crown Braids
                     </span>
                     <Link
+                      target="_blank"
                       href="https://www.google.com/maps?daddr=6923+W+Loop+1604+N+suite+214,+San+Antonio,+TX+78254"
                       className="text-sm text-pink-200 transition-colors hover:text-white"
                     >
@@ -403,6 +404,7 @@ export const MainFooter = () => {
 
                   <motion.p variants={fadeInUp}>
                     <Link
+                      target="_blank"
                       href="https://www.google.com/maps?daddr=6923+W+Loop+1604+N+suite+214,+San+Antonio,+TX+78254"
                       className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-sm font-medium transition-colors hover:bg-white/20"
                     >
@@ -499,7 +501,7 @@ export const MainFooter = () => {
             className="w-full"
           >
             <Link
-              className="flex justify-end text-right text-sm text-white/70 transition-colors hover:text-white sm:text-right"
+              className="flex justify-end text-center text-sm text-white/70 transition-colors hover:text-white sm:text-right lg:text-right"
               href="https://davidleotech.com"
             >
               Designed By{" "}

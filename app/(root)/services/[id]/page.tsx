@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Script from "next/script";
 
@@ -15,10 +14,10 @@ import { Service } from "@/types";
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
-}): Promise<Metadata> {
+  params: Promise<{ id: string }>;
+}) {
   // Note: params is not a Promise, so we don't need to await it
-  const { id } = params;
+  const { id } = await params;
   const services = await getServiceById(id);
 
   const service: Service = services.service;
@@ -79,7 +78,7 @@ export default async function ServiceDetailsServer({
   const service = await getServiceById(id);
   const services = await getAllServices();
   const subCat = await getSubCategoriesByCategoryID(
-    "b15bd255-537b-4738-bb98-74938098599d",
+    "b15bd255-537b-4738-bb98-74938098599d"
   );
 
   if (!service.success) {

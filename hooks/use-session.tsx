@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 import { defaultSession, SessionData } from "@/types/main";
 
@@ -10,7 +10,7 @@ const sessionApiRoute = "/api/auth/session";
 
 export async function fetchJSON<JSON = unknown>(
   input: RequestInfo,
-  init?: RequestInit,
+  init?: RequestInit
 ): Promise<JSON> {
   return fetch(input, {
     headers: {
@@ -20,7 +20,7 @@ export async function fetchJSON<JSON = unknown>(
     ...init,
   }).then((res) => {
     if (!res.ok) {
-      toast(`Error: ${res.statusText}`);
+      // toast(`Error: ${res.statusText}`);
       throw new Error(`Error: ${res.statusText}`);
     }
 

@@ -1,7 +1,7 @@
 "use client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 // import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -25,6 +25,7 @@ import { LoginSchema, OnboardingSchema } from "../validations/user/user.schema";
 
 export const useLogin = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   return useMutation({
     mutationKey: ["auth", "login"],
@@ -40,7 +41,15 @@ export const useLogin = () => {
       logger.info("Login Successful");
       const message = data?.message || "Login successsful!";
       toast.success(message);
-      router.push(DEFAULT_LOGIN_REDIRECT);
+      // Check if there's a callbackUrl in the query parameters
+      const callbackUrl = searchParams.get("callbackUrl");
+
+      // Navigate to the callback URL if it exists, otherwise use the default
+      if (callbackUrl) {
+        router.push(callbackUrl);
+      } else {
+        router.push(DEFAULT_LOGIN_REDIRECT);
+      }
       router.refresh(); // Ensure client-side state updates
     },
     onError: handleMutationError,
