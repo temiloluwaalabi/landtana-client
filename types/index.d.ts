@@ -84,7 +84,7 @@ export interface Service {
   is_active: boolean;
   featured_image: null | string;
 
-  isAddon: boolean;
+  is_addon: boolean;
   created_by: string;
   updated_by: string;
   is_deleted: boolean;

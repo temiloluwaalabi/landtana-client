@@ -133,7 +133,7 @@ const categoryVariants = {
 };
 export const BookingStepTwo = (props: Props) => {
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    "b15bd255-537b-4738-bb98-74938098599d",
+    "b15bd255-537b-4738-bb98-74938098599d"
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -146,15 +146,17 @@ export const BookingStepTwo = (props: Props) => {
   // Filter services based on search query and selected category
   const filteredServices = props.services
     .filter(
-      (service) =>
-        !selectedCategory || service.category_id === selectedCategory,
+      (service) => !selectedCategory || service.category_id === selectedCategory
     )
     .filter(
       (service) =>
         !searchQuery ||
-        service.name.toLowerCase().includes(searchQuery.toLowerCase()),
+        service.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+  const filteredTab = props.categories.filter(
+    (cat) => cat.parent_id === selectedCategory
+  );
   const renderServiceCard = (service: Service) => {
     // const isSelected = selectedServices.includes(service.id);
     const isBooked =
@@ -162,7 +164,7 @@ export const BookingStepTwo = (props: Props) => {
         ? bookings.some(
             (booking) =>
               booking.serviceId === service.id &&
-              booking.guestId === currentGuestId,
+              booking.guestId === currentGuestId
           )
         : bookings.some((booking) => booking.serviceId === service.id);
     return (
@@ -182,7 +184,7 @@ export const BookingStepTwo = (props: Props) => {
             key={service.id}
             className={cn(
               "flex h-auto !w-full relative transition-all items-center overflow-hidden justify-between rounded-[8px] border  hover:bg-white cursor-pointer border-[#D9D9D9] px-6 py-6",
-              isBooked && "border-primary bg-white",
+              isBooked && "border-primary bg-white"
             )}
           >
             {/* Subtle background pattern */}
@@ -263,7 +265,7 @@ export const BookingStepTwo = (props: Props) => {
   const renderCategoryButton = (category: Category) => {
     const isSelected = selectedCategory === category.id;
     const count = props.services.filter(
-      (service) => service.category_id === category.id,
+      (service) => service.category_id === category.id
     ).length;
 
     return (
@@ -275,7 +277,7 @@ export const BookingStepTwo = (props: Props) => {
           "border border-transparent transition-all !bg-transparent",
           isSelected
             ? "!bg-primary text-white"
-            : "bg-primary/10 text-primary hover:bg-primary/20",
+            : "bg-primary/10 text-primary hover:bg-primary/20"
         )}
         initial="normal"
         animate={isSelected ? "selected" : "normal"}
@@ -287,7 +289,7 @@ export const BookingStepTwo = (props: Props) => {
         <motion.div
           className={cn(
             "flex size-6 items-center justify-center rounded-full",
-            isSelected ? "bg-white text-primary" : "bg-primary/10 text-primary",
+            isSelected ? "bg-white text-primary" : "bg-primary/10 text-primary"
           )}
           whileHover={{ scale: 1.1 }}
         >
@@ -344,7 +346,9 @@ export const BookingStepTwo = (props: Props) => {
             delay: 0.2,
           }}
         >
-          {props.categories.map(renderCategoryButton)}
+          {props.categories
+            .filter((cat) => cat.parent_id === null)
+            .map(renderCategoryButton)}
         </motion.aside>
         <motion.div
           className="relative col-span-12 flex w-full flex-col lg:col-span-9"
@@ -409,39 +413,33 @@ export const BookingStepTwo = (props: Props) => {
               transition={{ delay: 0.5 }}
             >
               <Tabs className="" defaultValue="knotless-braids">
-                <TabsList className="custom-scrollbar flex size-full justify-start gap-2 overflow-hidden overflow-x-scroll bg-transparent p-0 pb-2">
-                  {[
-                    "knotless-braids",
-                    "locs",
-                    "twist",
-                    "box-braids",
-                    "other-braids",
-                    "corn-rows",
-                    "other-services",
-                  ].map((category, index) => (
-                    <motion.div
-                      key={category}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 + index * 0.1 }}
-                      whileHover={{ y: -2 }}
-                      whileTap={{ y: 0 }}
-                    >
-                      <TabsTrigger
-                        value={category}
-                        className="border border-gray-200 bg-white px-4 py-2 data-[state=active]:border-primary/50 data-[state=active]:bg-primary data-[state=active]:text-white"
+                {filteredTab.length > 0 && (
+                  <TabsList className="custom-scrollbar flex size-full justify-start gap-2 overflow-hidden overflow-x-scroll bg-transparent  p-0 pb-2">
+                    {filteredTab.map((category, index) => (
+                      <motion.div
+                        key={category.id}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 + index * 0.1 }}
+                        whileHover={{ y: -2 }}
+                        whileTap={{ y: 0 }}
                       >
-                        {category
-                          .split("-")
-                          .map(
-                            (word) =>
-                              word.charAt(0).toUpperCase() + word.slice(1),
-                          )
-                          .join(" ")}
-                      </TabsTrigger>
-                    </motion.div>
-                  ))}
-                </TabsList>
+                        <TabsTrigger
+                          value={category.id}
+                          className="border border-gray-200 bg-white px-4 py-2 data-[state=active]:border-primary/50 data-[state=active]:bg-primary data-[state=active]:text-white"
+                        >
+                          {category.name
+                            .split("-")
+                            .map(
+                              (word) =>
+                                word.charAt(0).toUpperCase() + word.slice(1)
+                            )
+                            .join(" ")}
+                        </TabsTrigger>
+                      </motion.div>
+                    ))}
+                  </TabsList>
+                )}
               </Tabs>
             </motion.div>
 
