@@ -32,6 +32,7 @@ export type Stylist = {
 export type Guest = {
   id: string; // Unique identifier for each guest
   name: string;
+  userId?: string;
   bookingIndex: number; // Index in the bookings array
 };
 export type Booking = {
@@ -73,7 +74,7 @@ type BookingActions = {
   addGuest: (guest: Omit<Guest, "id" | "bookingIndex">) => string; // Returns the new guest ID
   updateGuest: (
     guestId: string,
-    updates: Partial<Omit<Guest, "id" | "bookingIndex">>,
+    updates: Partial<Omit<Guest, "id" | "bookingIndex">>
   ) => void;
   removeGuest: (guestId: string) => void;
   setCurrentGuest: (guestId: string | undefined) => void;
@@ -121,7 +122,9 @@ export const useBookingStore = create<BookingState & BookingActions>(
       })),
 
     addGuest: (guest) => {
-      const guestId = `guest-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+      const guestId =
+        guest.userId ||
+        `guest-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
       const bookingIndex = get().bookings.length; // Use the current length as the index
       const currentGuests = get().guests;
       const isPrimaryGuest = currentGuests.length === 0;
@@ -136,7 +139,7 @@ export const useBookingStore = create<BookingState & BookingActions>(
     updateGuest: (guestId, updates) => {
       set((state) => ({
         guests: state.guests.map((guest) =>
-          guest.id === guestId ? { ...guest, ...updates } : guest,
+          guest.id === guestId ? { ...guest, ...updates } : guest
         ),
       }));
     },
@@ -203,12 +206,12 @@ export const useBookingStore = create<BookingState & BookingActions>(
 
       const currentGuestId = getQueryParam(
         searchParamsString,
-        "currentGuestId",
+        "currentGuestId"
       ) as string;
 
       const urlPrimaryGuestId = getQueryParam(
         searchParamsString,
-        "primaryGuestId",
+        "primaryGuestId"
       ) as string;
 
       const urlPreview =
@@ -324,5 +327,5 @@ export const useBookingStore = create<BookingState & BookingActions>(
       });
     },
     reset: () => set(initialState),
-  }),
+  })
 );

@@ -10,45 +10,47 @@ import { cn } from "@/lib/utils";
 const transition = { type: "spring", damping: 25, stiffness: 120 };
 
 export const BookingStepOne = () => {
-  const { type, updateState, addGuest, guests, bookings, updateBooking } =
-    useBookingStore();
+  const {
+    type,
+    updateState,
+    addGuest,
+    guests,
+    bookings,
+    updateBooking,
+    primaryGuestId,
+  } = useBookingStore();
 
   const handleSelectType = (type: "individual" | "group" | "gift-card") => {
+    let primaryId = primaryGuestId;
+    if (!primaryGuestId) {
+      if (guests.length > 0) {
+        primaryId = guests[0].id;
+      } else {
+        primaryId = addGuest({
+          name: "Me",
+        });
+      }
+      updateState({
+        primaryGuestId: primaryId,
+      });
+    }
     if (type === "group") {
-      // Check if we already have a "Me" guest
-      const meGuestExists = guests.some((guest) => guest.name === "Me");
+      // Add "Me" guest if they don't exist yet
 
       if (bookings && bookings.length > 0) {
-        const currentBooking = bookings[bookings.length - 1];
-
-        if (!meGuestExists) {
-          const userId = addGuest({
-            name: "Me",
-          });
-
-          updateBooking(
-            bookings.findIndex(
-              (book) => book.serviceId === currentBooking.serviceId,
-            ),
-            {
-              guestId: userId,
-            },
-          );
-        }
-
+        bookings.forEach((booking, index) => {
+          if (!booking.guestId) {
+            updateBooking(index, {
+              guestId: primaryId,
+            });
+          }
+        });
         updateState({
           type,
           step: 2,
           isGroupBooking: true,
         });
       } else {
-        // Only add the "Me" guest if it doesn't exist yet
-        if (!meGuestExists) {
-          addGuest({
-            name: "Me",
-          });
-        }
-
         updateState({
           type,
           step: 3,
@@ -56,7 +58,12 @@ export const BookingStepOne = () => {
         });
       }
     } else {
-      updateState({ type, step: 2 }); // Update state and move to next step
+      // For individual or gift-card types, explicitly set isGroupBooking to false
+      updateState({
+        type,
+        step: 2,
+        isGroupBooking: false,
+      });
     }
   };
   const bookingOptions: {
@@ -118,7 +125,7 @@ export const BookingStepOne = () => {
                 "hover:border-primary hover:bg-white/80",
                 type === option.type
                   ? "border-secondary bg-white"
-                  : "border-[#D9D9D9] shadow-md",
+                  : "border-[#D9D9D9] shadow-md"
               )}
             >
               <motion.div

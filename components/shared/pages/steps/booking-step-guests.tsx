@@ -112,7 +112,7 @@ export const BookingGroupStep = ({ services }: Props) => {
 
   const onSubmit = (values: z.infer<typeof GuestFormSchema>) => {
     const validGuests = values.guests.filter(
-      (guest) => guest.name.trim() !== "",
+      (guest) => guest.name.trim() !== ""
     );
 
     validGuests.forEach((guest) => {
@@ -177,10 +177,10 @@ export const BookingGroupStep = ({ services }: Props) => {
               <Users className="size-6 text-primary" />
             </div>
             <div>
-              <h2 className="font-lora text-2xl font-medium text-gray-800">
+              <h2 className="font-lora text-lg font-medium text-gray-800 lg:text-2xl">
                 Your Party
               </h2>
-              <p className="text-gray-500">
+              <p className="text-xs text-gray-500 lg:text-base">
                 Manage guests and their services. Book a group appointment for
                 up to 4 guests. Select the services you need for each guest.
               </p>
@@ -219,13 +219,13 @@ export const BookingGroupStep = ({ services }: Props) => {
                           ? "bg-primary"
                           : index % 3 === 1
                             ? "bg-secondary"
-                            : "bg-violet-500",
+                            : "bg-violet-500"
                       )}
                     />
 
-                    <div className="flex items-center justify-between p-5 pl-6">
+                    <div className="flex flex-col items-start justify-between gap-4 p-5 pl-6 lg:flex-row lg:items-center">
                       <div className="flex items-center gap-4">
-                        <Avatar className="size-16 border-2 border-primary/10 shadow-md">
+                        <Avatar className="size-12 border-2 border-primary/10 shadow-md lg:size-16">
                           <AvatarFallback
                             className={cn(
                               "bg-gradient-to-br text-white",
@@ -233,7 +233,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                                 ? "from-primary to-blue-500"
                                 : index % 3 === 1
                                   ? "from-secondary to-pink-400"
-                                  : "from-violet-500 to-purple-700",
+                                  : "from-violet-500 to-purple-700"
                             )}
                           >
                             {guest.id === primaryGuestId
@@ -241,7 +241,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                               : guest.name.substring(0, 2).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
+                        <div className="flex-col lg:flex-row">
                           <h3 className="flex items-center text-xl font-bold text-gray-800">
                             {guest.id === primaryGuestId ? "Me" : guest.name}
                             {guest.id === primaryGuestId && (
@@ -315,7 +315,7 @@ export const BookingGroupStep = ({ services }: Props) => {
               onClick={() => {
                 setShowForm(true);
               }}
-              className="group h-auto rounded-full border-2 border-primary/20 px-6 py-3 font-medium text-primary transition-all duration-300 hover:border-primary/50 hover:bg-primary/5"
+              className="group h-auto rounded-full border-2 border-primary/20 px-6 py-3 font-medium text-primary transition-all duration-300 hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
             >
               <div className="flex items-center gap-2">
                 <div className="rounded-full bg-primary/10 p-2 transition-all duration-300 group-hover:bg-primary/20">
@@ -365,7 +365,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                                 <X className="mr-1 size-4" /> Remove
                               </Button>
                             )}
-                            <div className="flex items-end gap-4">
+                            <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
                               <div className="flex-1">
                                 <CustomFormField
                                   control={form.control}
@@ -446,7 +446,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                         transition={{ delay: 0.3 + i * 0.1 }}
                         className={cn(
                           "space-y-2 border-b pb-3",
-                          guests.length - 1 === i && "!border-none !pb-0",
+                          guests.length - 1 === i && "!border-none !pb-0"
                         )}
                       >
                         <div className="flex items-center gap-2">
@@ -458,7 +458,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                                   ? "from-primary to-blue-500"
                                   : i % 3 === 1
                                     ? "from-secondary to-pink-400"
-                                    : "from-violet-500 to-purple-700",
+                                    : "from-violet-500 to-purple-700"
                               )}
                             >
                               {guest.id === primaryGuestId
@@ -473,7 +473,7 @@ export const BookingGroupStep = ({ services }: Props) => {
 
                         <div>
                           {totalPrice.bookingDetails.filter(
-                            (book) => book.guestId === guest.id,
+                            (book) => book.guestId === guest.id
                           ).length === 0 && (
                             <p className="text-sm text-gray-300">
                               No services selected
@@ -495,7 +495,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                                     {
                                       services.find(
                                         (servicee) =>
-                                          servicee.id === service.bookingId,
+                                          servicee.id === service.bookingId
                                       )?.name
                                     }
                                   </h3>
@@ -503,7 +503,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                                     {
                                       durations.find(
                                         (dur) =>
-                                          dur.value === service.totalDuration,
+                                          dur.value === service.totalDuration
                                       )?.label
                                     }
                                   </p>
