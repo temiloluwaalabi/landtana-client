@@ -64,7 +64,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
     return [
       {
         step: 1,
-        title: "Brading Services",
+        title: "Braiding Services",
         description: "Start by selecting the type of service you need.",
       },
       {

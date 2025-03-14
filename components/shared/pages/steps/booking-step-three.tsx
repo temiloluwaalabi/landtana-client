@@ -20,7 +20,7 @@ type Props = {
 
 export const BookingStepThree = ({ services }: Props) => {
   const [openAccordionId, setOpenAccordionId] = React.useState<string | null>(
-    null,
+    null
   );
   const [searchTerm, setSearchTerm] = React.useState("");
 
@@ -34,18 +34,18 @@ export const BookingStepThree = ({ services }: Props) => {
   const totalPrice = calculateBookingDetails(
     bookings,
     services,
-    services.filter((serv) => serv.is_addon === true),
+    services.filter((serv) => serv.is_addon === true)
   );
 
   const mappedService =
     type === "group"
       ? totalPrice.bookingDetails.filter(
-          (book) => book.guestId === currentGuestId,
+          (book) => book.guestId === currentGuestId
         )
       : totalPrice.bookingDetails;
 
   const filteredServices = services.filter((service) =>
-    service.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    service.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -56,11 +56,11 @@ export const BookingStepThree = ({ services }: Props) => {
       className="flex h-full flex-col"
     >
       <Tabs defaultValue="services">
-        <TabsList className="mb-8 flex h-full justify-start space-x-6">
+        <TabsList className="mb-4 flex h-full justify-start space-x-6 lg:mb-8">
           <TabsTrigger
             value="services"
             asChild
-            className="relative h-full rounded-full bg-gray-100 px-6 py-3 text-base font-medium text-gray-600 data-[state=active]:bg-primary data-[state=active]:text-white"
+            className="relative h-full rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:bg-primary data-[state=active]:text-white lg:px-6 lg:py-3 lg:text-base"
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -80,7 +80,7 @@ export const BookingStepThree = ({ services }: Props) => {
           <TabsTrigger
             value="stylist"
             asChild
-            className="relative h-full rounded-full bg-gray-100 px-6 py-3 text-base font-medium text-gray-600 data-[state=active]:bg-primary data-[state=active]:text-white"
+            className="relative h-full rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:bg-primary data-[state=active]:text-white lg:px-6 lg:py-3 lg:text-base"
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -114,9 +114,9 @@ export const BookingStepThree = ({ services }: Props) => {
               >
                 <div className="flex items-center gap-3">
                   <div className="rounded-full bg-primary/10 p-3">
-                    <Check className="size-6 text-primary" />
+                    <Check className="size-4 text-primary lg:size-6" />
                   </div>
-                  <h3>
+                  <h3 className="text-xs lg:text-sm 2xl:text-base">
                     A stylist will be automatically assigned to you and
                     confirmation sent to your email and phone
                   </h3>
@@ -133,7 +133,7 @@ export const BookingStepThree = ({ services }: Props) => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="space-y-3"
               >
-                <h2 className="flex items-center font-lora text-xl font-medium text-gray-700">
+                <h2 className="flex items-center font-lora text-lg font-medium text-gray-700 lg:text-xl">
                   <span className="mr-2 inline-flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
                     {mappedService.length}
                   </span>
@@ -143,7 +143,7 @@ export const BookingStepThree = ({ services }: Props) => {
                 <div className="w-full space-y-4">
                   {mappedService.map((booking, index) => {
                     const service = services.find(
-                      (s) => s.id === booking.bookingId,
+                      (s) => s.id === booking.bookingId
                     );
 
                     return (
@@ -155,7 +155,7 @@ export const BookingStepThree = ({ services }: Props) => {
                           transition={{ duration: 0.4, delay: index * 0.1 }}
                           className="w-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md"
                         >
-                          <div className="flex w-full items-center justify-between border-b border-gray-100 p-5">
+                          <div className="flex w-full items-center justify-between border-b border-gray-100 p-3 lg:p-5">
                             <div className="flex items-center gap-3">
                               <div className="rounded-xl bg-primary/10 p-3">
                                 <motion.div
@@ -167,11 +167,11 @@ export const BookingStepThree = ({ services }: Props) => {
                                   }}
                                 >
                                   {/* Icon based on service type could go here */}
-                                  <Check className="size-5 text-primary" />
+                                  <Check className="size-4 text-primary lg:size-5" />
                                 </motion.div>
                               </div>
                               <div>
-                                <h3 className="font-cormorant text-2xl font-bold text-gray-800">
+                                <h3 className="font-cormorant text-base font-bold text-gray-800 md:text-lg lg:text-2xl">
                                   {service?.name}
                                 </h3>
                                 <p className="font-lora text-sm font-normal text-gray-500">
@@ -185,7 +185,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                 <span className="text-sm text-gray-500">
                                   Price
                                 </span>
-                                <span className="font-cormorant text-2xl font-bold text-primary">
+                                <span className="font-cormorant text-lg font-bold text-primary lg:text-2xl">
                                   ${booking?.totalPrice}
                                 </span>
                               </p>
@@ -198,7 +198,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                     setOpenAccordionId((prev) =>
                                       prev === booking.bookingId
                                         ? null
-                                        : booking.bookingId,
+                                        : booking.bookingId
                                     )
                                   }
                                   variant="outline"
@@ -242,12 +242,12 @@ export const BookingStepThree = ({ services }: Props) => {
                                       .filter(
                                         (serv) =>
                                           serv.is_addon === true &&
-                                          serv.id !== booking.bookingId,
+                                          serv.id !== booking.bookingId
                                       )
                                       .map((item, addonIndex) => {
                                         const parentService = services.find(
                                           (service) =>
-                                            service.id === booking.bookingId,
+                                            service.id === booking.bookingId
                                         );
 
                                         const isAddonBooked =
@@ -256,13 +256,13 @@ export const BookingStepThree = ({ services }: Props) => {
                                                 .filter(
                                                   (book) =>
                                                     book.guestId ===
-                                                    currentGuestId,
+                                                    currentGuestId
                                                 )
                                                 .some((book) => {
                                                   // Check if the service ID is in the addons array
                                                   if (
                                                     book.addons?.includes(
-                                                      item.id,
+                                                      item.id
                                                     )
                                                   ) {
                                                     return true;
@@ -273,15 +273,15 @@ export const BookingStepThree = ({ services }: Props) => {
                                                     item.style_options.some(
                                                       (option) =>
                                                         book.addons?.includes(
-                                                          option.id,
-                                                        ),
+                                                          option.id
+                                                        )
                                                     );
                                                   const hasVariationInAddons =
                                                     item.variations.some(
                                                       (variation) =>
                                                         book.addons?.includes(
-                                                          variation.id,
-                                                        ),
+                                                          variation.id
+                                                        )
                                                     );
 
                                                   return (
@@ -302,15 +302,15 @@ export const BookingStepThree = ({ services }: Props) => {
                                                   item.style_options.some(
                                                     (option) =>
                                                       book.addons?.includes(
-                                                        option.id,
-                                                      ),
+                                                        option.id
+                                                      )
                                                   );
                                                 const hasVariationInAddons =
                                                   item.variations.some(
                                                     (variation) =>
                                                       book.addons?.includes(
-                                                        variation.id,
-                                                      ),
+                                                        variation.id
+                                                      )
                                                   );
 
                                                 return (
@@ -344,7 +344,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                                   "flex flex-col justify-between rounded-xl border p-4 h-[120px] transition-all cursor-pointer",
                                                   isAddonBooked
                                                     ? "border-secondary/50 bg-secondary/5"
-                                                    : "border-gray-200 hover:border-primary/30",
+                                                    : "border-gray-200 hover:border-primary/30"
                                                 )}
                                                 // onClick={() =>
                                                 //   handleToggleService(
@@ -355,7 +355,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                               >
                                                 <div className="space-y-2">
                                                   <div className="flex items-start justify-between">
-                                                    <h6 className="font-cormorant text-lg font-semibold text-gray-800 2xl:text-xl">
+                                                    <h6 className="font-cormorant text-base font-semibold text-gray-800 lg:text-lg 2xl:text-xl">
                                                       {item.name}
                                                     </h6>
                                                     {isAddonBooked && (
@@ -373,12 +373,12 @@ export const BookingStepThree = ({ services }: Props) => {
                                                       </motion.div>
                                                     )}
                                                   </div>
-                                                  <p className="text-sm text-gray-500">
+                                                  <p className="text-left text-sm text-gray-500">
                                                     {
                                                       durations.find(
                                                         (dur) =>
                                                           dur.value ===
-                                                          item.duration,
+                                                          item.duration
                                                       )?.label
                                                     }
                                                   </p>
@@ -432,7 +432,7 @@ export const BookingStepThree = ({ services }: Props) => {
                 className="pt-4"
               >
                 <Button
-                  className="h-[56px] w-full rounded-xl text-lg font-medium shadow-lg shadow-primary/20 transition-all hover:shadow-primary/30"
+                  className="h-[56px] w-full rounded-xl text-sm font-medium shadow-lg shadow-primary/20 transition-all hover:shadow-primary/30 md:text-base lg:text-lg"
                   onClick={() => {
                     if (type === "group") {
                       updateState({ step: step - 2 });

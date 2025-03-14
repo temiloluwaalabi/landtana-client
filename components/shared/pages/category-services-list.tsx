@@ -16,7 +16,7 @@ type Props = {
 export const CategoryServiceList = ({ services, category }: Props) => {
   const filteredServices = services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   return (
     <MaxWidthContainer className="!py-[40px]">
@@ -31,9 +31,10 @@ export const CategoryServiceList = ({ services, category }: Props) => {
           <h2 className="p-0 text-left font-cormorant text-4xl font-bold text-accent">
             Explore Our {category.name} Services
           </h2>
+          <div className="h-1 w-20 rounded-full bg-gradient-to-r from-accent to-pink-400" />
         </div>
         <Tabs defaultValue="all">
-          <TabsList className="h-auto flex-wrap gap-3 bg-transparent p-0">
+          <TabsList className="custom-scrollbar mb-2 flex size-full h-auto items-start justify-start gap-3 overflow-hidden overflow-x-scroll bg-transparent p-0 lg:mb-4">
             <TabsTrigger
               className="rounded-[60px] text-sm data-[state=active]:bg-primary   data-[state=active]:text-white lg:text-base"
               value="all"

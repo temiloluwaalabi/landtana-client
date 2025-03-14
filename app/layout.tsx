@@ -147,7 +147,7 @@ export default async function RootLayout({
           cormorant.variable,
           lora.variable,
           iSans.variable,
-          "font-lora antialiased"
+          "font-lora antialiased",
         )}
       >
         <Providers>

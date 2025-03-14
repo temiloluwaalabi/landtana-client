@@ -73,11 +73,11 @@ export const BookServiceClient = (props: Props) => {
 
   const previousStep = step - 1;
   const sortedCategories = props.categories.sort((a, b) =>
-    a.name.localeCompare(b.name),
+    a.name.localeCompare(b.name)
   );
   const sortedServices = props.services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const [animateIcon, setAnimateIcon] = React.useState(false);
 
@@ -99,7 +99,7 @@ export const BookServiceClient = (props: Props) => {
   const totalPrice = calculateBookingDetails(
     bookings,
     props.services,
-    props.services,
+    props.services
   );
   // Auto-animate icon occasionally
   React.useEffect(() => {
@@ -170,19 +170,19 @@ export const BookServiceClient = (props: Props) => {
 
         <div className="flex justify-between">
           <div className="relative z-10">
-            <h3 className="font-cormorant text-2xl font-bold tracking-tight text-gray-900">
+            <h3 className="font-cormorant text-lg font-bold tracking-tight text-gray-900 lg:text-2xl">
               {service}
             </h3>
             <p className="font-lora text-sm text-gray-500">{category}</p>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="font-cormorant text-2xl font-bold text-primary">
+            <span className="font-cormorant text-lg font-bold text-primary lg:text-2xl">
               {price}
             </span>
             <motion.div whileTap={{ scale: 0.9 }}>
               <Button
-                className="z-50 flex size-8 cursor-pointer items-center justify-center rounded-full border border-secondary bg-white text-secondary transition-colors hover:bg-secondary hover:text-white"
+                className="z-50 flex size-6 cursor-pointer items-center justify-center rounded-full border border-secondary bg-white text-secondary transition-colors hover:bg-secondary hover:text-white lg:size-8"
                 onClick={onRemove}
               >
                 <Minus className="size-3" />
@@ -308,7 +308,7 @@ export const BookServiceClient = (props: Props) => {
                 <CardHeader
                   className={cn(
                     "flex w-full flex-row items-center justify-between pb-4 shadow-none outline-none",
-                    hideDetails && "border-b border-gray-100",
+                    hideDetails && "border-b border-gray-100"
                   )}
                 >
                   <div>
@@ -317,17 +317,17 @@ export const BookServiceClient = (props: Props) => {
                       whileHover={{ x: 3 }}
                     >
                       <Sparkles className="size-5 text-primary" />
-                      <h2 className="font-lora text-xl font-bold text-gray-800">
+                      <h2 className="font-lora text-lg font-bold text-gray-800 lg:text-xl">
                         {bookings.length}{" "}
                         {bookings.length > 1 ? "services" : "service"} selected
                       </h2>
                     </motion.div>
-                    <p className="mt-1 flex items-baseline gap-1">
+                    <p className="flex items-baseline gap-1">
                       <span className="font-lora text-sm font-normal text-gray-500">
                         from
                       </span>
                       <motion.span
-                        className="font-cormorant text-2xl font-bold text-primary"
+                        className="font-cormorant text-xl font-bold text-primary lg:text-2xl"
                         // animate={{
                         //   scale: animateIcon ? [1, 1.1, 1] : 1,
                         // }}
@@ -367,10 +367,10 @@ export const BookServiceClient = (props: Props) => {
                         <div className="w-full space-y-3">
                           {totalPrice.bookingDetails.map((booking) => {
                             const service = props.services.find(
-                              (s) => s.id === booking.bookingId,
+                              (s) => s.id === booking.bookingId
                             );
                             const bookingIndex = bookings.findIndex(
-                              (b) => b.serviceId === booking.bookingId,
+                              (b) => b.serviceId === booking.bookingId
                             );
                             const guest = booking.guestId
                               ? guests.find((g) => g.id === booking.guestId)
@@ -382,7 +382,7 @@ export const BookServiceClient = (props: Props) => {
                                 service={service?.name || ""}
                                 category={
                                   props.categories.find(
-                                    (cat) => cat.id === service?.category_id,
+                                    (cat) => cat.id === service?.category_id
                                   )?.name || ""
                                 }
                                 price={toCurrency(booking.totalPrice)}

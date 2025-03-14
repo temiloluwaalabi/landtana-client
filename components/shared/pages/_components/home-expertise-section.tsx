@@ -63,7 +63,7 @@ const ExpertiseSection = ({ filteredCategories, services }: Categories) => {
           {filteredCategories
             .filter((cat) => cat.parent_id === null)
             .filter((cat) =>
-              services.some((service) => service.category_id === cat.id)
+              services.some((service) => service.category_id === cat.id),
             )
             .map((service) => (
               <motion.div

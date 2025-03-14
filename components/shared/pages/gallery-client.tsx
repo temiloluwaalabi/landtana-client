@@ -252,10 +252,9 @@ const FadeInSection = ({
       animate={controls}
       initial="hidden"
       variants={{
-        hidden: { opacity: 0, y: 30 },
+        hidden: { opacity: 0 },
         visible: {
           opacity: 1,
-          y: 0,
           transition: {
             duration: 0.6,
             ease: "easeOut",
@@ -425,7 +424,7 @@ const GalleryPage = () => {
       caption: string;
       likes: number;
     },
-    index: number,
+    index: number
   ) => {
     setOpenImage(image);
     setCurrentIndex(index);
@@ -438,7 +437,7 @@ const GalleryPage = () => {
 
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     setOpenImage(
-      images[currentIndex === 0 ? images.length - 1 : currentIndex - 1],
+      images[currentIndex === 0 ? images.length - 1 : currentIndex - 1]
     );
   }, [currentIndex, getCurrentImages]);
 
@@ -449,7 +448,7 @@ const GalleryPage = () => {
 
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     setOpenImage(
-      images[currentIndex === images.length - 1 ? 0 : currentIndex + 1],
+      images[currentIndex === images.length - 1 ? 0 : currentIndex + 1]
     );
   }, [currentIndex, getCurrentImages]);
 
@@ -528,7 +527,7 @@ const GalleryPage = () => {
               },
             },
           }}
-          className="relative mb-16 text-center"
+          className="relative mb-8 text-center lg:mb-16"
         >
           <motion.div
             variants={{
@@ -548,7 +547,7 @@ const GalleryPage = () => {
               hidden: { opacity: 0 },
               visible: { opacity: 1 },
             }}
-            className="mb-4 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-5xl font-extrabold text-transparent md:text-6xl"
+            className="mb-4 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-3xl font-extrabold text-transparent md:text-6xl"
           >
             Our Hair Gallery
           </motion.h1>
@@ -558,7 +557,7 @@ const GalleryPage = () => {
               hidden: { opacity: 0 },
               visible: { opacity: 1 },
             }}
-            className="mx-auto max-w-3xl text-center text-lg"
+            className="mx-auto max-w-3xl text-center text-base lg:text-lg"
             style={{ color: theme.textDark }}
           >
             Explore our portfolio of stunning braiding styles created by our
@@ -577,7 +576,7 @@ const GalleryPage = () => {
           >
             <div className="mb-8 flex justify-center">
               <TabsList
-                className="grid h-fit grid-cols-2 gap-1 rounded-xl p-1.5 md:grid-cols-5"
+                className="custom-scrollbar mb-2 flex size-full h-auto items-start justify-start gap-3 overflow-hidden overflow-x-scroll bg-transparent p-2 lg:mb-4"
                 style={{
                   background: `rgba(255, 255, 255, 0.6)`,
                   backdropFilter: "blur(10px)",
@@ -626,7 +625,7 @@ const GalleryPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="mt-8"
+                className="mt-3 lg:mt-8"
               >
                 {loading ? (
                   <div className="py-20 text-center">
@@ -658,7 +657,7 @@ const GalleryPage = () => {
                           caption: string;
                           likes: number;
                         },
-                        index: number,
+                        index: number
                       ) => (
                         <motion.div
                           key={image.id}
@@ -719,7 +718,7 @@ const GalleryPage = () => {
                             <Heart size={16} />
                           </motion.div>
                         </motion.div>
-                      ),
+                      )
                     )}
                   </div>
                 )}
