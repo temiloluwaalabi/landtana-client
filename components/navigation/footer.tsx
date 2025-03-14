@@ -501,11 +501,13 @@ export const MainFooter = () => {
             className="w-full"
           >
             <Link
-              className="flex justify-end text-center text-sm text-white/70 transition-colors hover:text-white sm:text-right lg:text-right"
+              className="flex justify-center text-center text-sm text-white/70 transition-colors hover:text-white sm:text-right lg:justify-end lg:text-right"
               href="https://davidleotech.com"
             >
               Designed By{" "}
-              <span className="font-medium text-pink-300">DavidLeoTech</span>
+              <span className="ms-2 font-medium text-pink-300">
+                DavidLeoTech
+              </span>
             </Link>
           </motion.div>
         </motion.div>

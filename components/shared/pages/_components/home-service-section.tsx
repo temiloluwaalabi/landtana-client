@@ -87,7 +87,7 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
   const getFilteredServices = () => {
     if (selectedTab === "all") return filteredServices;
     return filteredServices.filter(
-      (service) => service.category_id === selectedTab,
+      (service) => service.category_id === selectedTab
     );
   };
 
@@ -95,10 +95,10 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
   const hasMoreServices = getFilteredServices().length > visibleServices;
 
   return (
-    <MaxWidthContainer className="py-16">
+    <MaxWidthContainer className="py-8 lg:py-16">
       <motion.div
         ref={ref}
-        className="relative flex flex-col justify-center space-y-12"
+        className="relative flex flex-col justify-center space-y-7 lg:space-y-12"
         variants={containerVariants}
         initial="hidden"
         animate={inView ? "visible" : "hidden"}
@@ -128,7 +128,7 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <TabsList className="custom-scrollbar mb-4 flex size-full h-auto items-start justify-start gap-3 overflow-hidden overflow-x-scroll bg-transparent p-0">
+            <TabsList className="custom-scrollbar mb-2 flex size-full h-auto items-start justify-start gap-3 overflow-hidden overflow-x-scroll bg-transparent p-0 lg:mb-4">
               <TabsTrigger
                 className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white lg:text-base"
                 value={"all"}
@@ -198,7 +198,7 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
                   >
                     <Button
                       onClick={loadMore}
-                      className="mt-8 flex items-center gap-2 rounded-md border border-secondary bg-white/80 px-8 py-6 text-base font-medium text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-secondary hover:text-white"
+                      className="mt-4 flex items-center gap-2 rounded-md border border-secondary bg-white/80 px-8 py-6 text-base font-medium text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-secondary hover:text-white lg:mt-8"
                     >
                       View More Services
                       <motion.svg

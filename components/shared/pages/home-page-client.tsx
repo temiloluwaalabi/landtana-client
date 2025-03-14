@@ -255,11 +255,11 @@ export const HomePageClient = (props: Props) => {
 
   const filteredServices = props.services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const filteredCategories = props.categories.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const cards = data.map((card) => (
     <motion.div
@@ -329,7 +329,7 @@ export const HomePageClient = (props: Props) => {
     <>
       {/* HERO SECTION */} <HeroSection heroVariant="GREEN" />
       {/* WHAT WE DO SECTION */}
-      <MaxWidthContainer className="!py-[80px]">
+      <MaxWidthContainer className="py-[40px] lg:!py-[80px]">
         <motion.div
           initial="hidden"
           animate={controls}
@@ -373,7 +373,9 @@ export const HomePageClient = (props: Props) => {
                   className="p-0 text-base text-secondary underline"
                   variant={"link"}
                 >
-                  Book Today{" "}
+                  <Link className="" href={"/book-service"}>
+                    Book Today
+                  </Link>
                   <ArrowRight className="ml-1 transition-transform duration-300 group-hover:translate-x-1" />
                 </Button>
               </motion.div>

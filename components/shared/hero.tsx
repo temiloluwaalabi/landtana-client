@@ -181,7 +181,9 @@ const GreenVariant = () => {
               className="inline-block"
             >
               <Button className="bg-white font-lora text-base font-semibold text-secondary hover:bg-accent hover:text-white">
-                Explore Our Services
+                <Link className="" href={"/services"}>
+                  Explore Our Services
+                </Link>{" "}
               </Button>
             </motion.div>
 

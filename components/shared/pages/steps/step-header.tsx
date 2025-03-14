@@ -29,7 +29,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
       return [
         {
           step: 1,
-          title: "Brading Services",
+          title: "Braiding Services",
           description: "Start by selecting the type of service you need.",
         },
         {
@@ -108,7 +108,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
   const currentStepDetails = steps.find(
     (step) =>
       step.step === currentStep &&
-      (!step.type || (type && step.type.includes(type))),
+      (!step.type || (type && step.type.includes(type)))
   );
 
   if (!currentStepDetails) {

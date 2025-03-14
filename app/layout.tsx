@@ -4,6 +4,7 @@ import Script from "next/script";
 import NextTopLoader from "nextjs-toploader";
 
 import { Navbar } from "@/components/navigation/navbar";
+import ScrollToTop from "@/components/navigation/scroll-to-top";
 import { Toaster } from "@/components/ui/sonner";
 import { businessJsonLd } from "@/lib/jsonld";
 import { cn } from "@/lib/utils";
@@ -146,7 +147,7 @@ export default async function RootLayout({
           cormorant.variable,
           lora.variable,
           iSans.variable,
-          "font-lora antialiased",
+          "font-lora antialiased"
         )}
       >
         <Providers>
@@ -156,6 +157,8 @@ export default async function RootLayout({
           <Navbar type="CENTER" isLogeedIn={session.isLoggedIn || false} />
           {children}
         </Providers>
+        <ScrollToTop />
+
         {/* <BeforeFooter /> */}
       </body>
     </html>
