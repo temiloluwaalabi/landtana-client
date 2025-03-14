@@ -84,7 +84,7 @@ const ProfessionalSection = ({ filteredServices }: Services) => {
   const getFilteredServices = () => {
     if (selectedTab === "all") return filteredServices;
     return filteredServices.filter(
-      (service) => service.category_id === selectedTab,
+      (service) => service.category_id === selectedTab
     );
   };
 
@@ -124,7 +124,7 @@ const ProfessionalSection = ({ filteredServices }: Services) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <TabsList className=" h-auto flex-wrap gap-3 bg-transparent p-0">
+            <TabsList className="custom-scrollbar mb-4 flex size-full h-auto items-start justify-start gap-3 overflow-hidden overflow-x-scroll bg-transparent p-0">
               {[
                 "all",
                 "box-braid",

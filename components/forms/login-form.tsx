@@ -40,7 +40,7 @@ export default function LoginForm() {
               className="relative h-[42px] w-full"
             >
               <Link
-                href={`${process.env.NEXT_PUBLIC_BASE_URL}/v1/auth/google`}
+                href={`${process.env.NEXT_PUBLIC_BASE_URL}/auth/google`}
                 className="absolute left-0 top-0 z-50 size-full"
               />
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

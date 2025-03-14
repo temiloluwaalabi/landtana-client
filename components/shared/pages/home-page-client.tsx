@@ -53,7 +53,15 @@ export const buttonHover = {
   rest: { scale: 1 },
   hover: { scale: 1.05, transition: { duration: 0.2 } },
 };
-
+const buttonVariants = {
+  initial: { scale: 1 },
+  hover: {
+    scale: 1.05,
+    boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+    transition: { duration: 0.3, yoyo: Infinity },
+  },
+  tap: { scale: 0.95 },
+};
 // Instagram Feed Component
 export const InstagramFeed = () => {
   const controls = useAnimation();
@@ -247,11 +255,11 @@ export const HomePageClient = (props: Props) => {
 
   const filteredServices = props.services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const filteredCategories = props.categories.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const cards = data.map((card) => (
     <motion.div
@@ -526,12 +534,12 @@ export const HomePageClient = (props: Props) => {
                 onValueChange={setActiveTab}
               >
                 <motion.div
-                  className="mb-10 flex justify-center"
+                  className="flex justify-center"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.5 }}
                 >
-                  <TabsList className="h-auto w-full flex-wrap gap-3 rounded-xl bg-white p-2 md:grid-cols-4">
+                  <TabsList className="custom-scrollbar flex size-full h-auto items-start justify-start gap-3 overflow-hidden overflow-x-scroll bg-white p-2">
                     {faqData.map((data) => (
                       <motion.div
                         key={data.category}
@@ -554,7 +562,7 @@ export const HomePageClient = (props: Props) => {
                     <TabsContent
                       key={`${i}dpd${data.category}`}
                       value={data.category.toLowerCase()}
-                      className="mt-4"
+                      className=""
                     >
                       <motion.div
                         variants={containerVariants}
@@ -592,6 +600,49 @@ export const HomePageClient = (props: Props) => {
                       </motion.div>
                     </TabsContent>
                   ))}
+
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.6, duration: 0.5 }}
+                    className="flex items-center justify-center"
+                  >
+                    <motion.div
+                      variants={buttonVariants}
+                      initial="initial"
+                      whileHover="hover"
+                      whileTap="tap"
+                    >
+                      <Button className="relative flex items-center gap-2 rounded-md border border-secondary bg-white/80 px-8 py-6 text-base font-medium text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-secondary hover:text-white">
+                        <Link
+                          href={"/faq"}
+                          className="absolute left-0 top-0 z-10 size-full"
+                        />
+                        View More FAQs
+                        <motion.svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="ml-1"
+                          animate={{ x: [0, 5, 0] }}
+                          transition={{
+                            repeat: Infinity,
+                            duration: 1.5,
+                            ease: "easeInOut",
+                          }}
+                        >
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </motion.svg>
+                      </Button>
+                    </motion.div>
+                  </motion.div>
                 </AnimatePresence>
 
                 {/* 

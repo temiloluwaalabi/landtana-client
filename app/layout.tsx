@@ -14,6 +14,7 @@ import { cormorant, iSans, lora } from "./fonts";
 // You're attempting to animate multiple children within AnimatePresence, but its mode is set to "wait". This will lead to odd visual behaviour.
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://landtanacrownbraids.com"),
   title: "Landtana Crown Braids | Premium Braiding Salon in San Antonio",
   description:
     "San Antonio's premier braiding salon specializing in protective styles, crown braids, and natural hair care. Book your appointment today!",
@@ -65,9 +66,6 @@ export const metadata: Metadata = {
     },
   },
 
-  // Viewport settings
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
-
   // Comprehensive icons
   icons: {
     icon: [
@@ -99,10 +97,6 @@ export const metadata: Metadata = {
     { name: "Landtana Crown Braids", url: "https://landtanacrownbraids.com" },
   ],
   generator: "Next.js",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#222222" },
-  ],
 
   // Android-specific
   manifest: "/site.webmanifest",
@@ -145,7 +139,7 @@ export default async function RootLayout({
           cormorant.variable,
           lora.variable,
           iSans.variable,
-          "font-lora antialiased",
+          "font-lora antialiased"
         )}
       >
         <Providers>
