@@ -74,7 +74,6 @@ export const AddonServiceCard = (props: Props) => {
     },
   };
 
-  console.log("step", step);
   const bookingExists =
     type === "group"
       ? bookings
@@ -87,10 +86,10 @@ export const AddonServiceCard = (props: Props) => {
 
             // Check if any style_option or variation ID is in the addons array
             const hasStyleOptionInAddons = props.service.style_options.some(
-              (option) => book.addons?.includes(option.id),
+              (option) => book.addons?.includes(option.id)
             );
             const hasVariationInAddons = props.service.variations.some(
-              (variation) => book.addons?.includes(variation.id),
+              (variation) => book.addons?.includes(variation.id)
             );
 
             return hasStyleOptionInAddons || hasVariationInAddons;
@@ -103,10 +102,10 @@ export const AddonServiceCard = (props: Props) => {
 
           // Check if any style_option or variation ID is in the addons array
           const hasStyleOptionInAddons = props.service.style_options.some(
-            (option) => book.addons?.includes(option.id),
+            (option) => book.addons?.includes(option.id)
           );
           const hasVariationInAddons = props.service.variations.some(
-            (variation) => book.addons?.includes(variation.id),
+            (variation) => book.addons?.includes(variation.id)
           );
 
           return hasStyleOptionInAddons || hasVariationInAddons;
@@ -114,16 +113,16 @@ export const AddonServiceCard = (props: Props) => {
 
   // Find the booked service
   const bookedService = bookings.find(
-    (book) => book.serviceId === props.parentService.id,
+    (book) => book.serviceId === props.parentService.id
   );
   useEffect(() => {
     if (bookingExists && bookedService?.addons) {
       // Initialize selectedStyleOption and selectedVariations based on the addons array
       const styleOptionInAddons = props.service.style_options.find((option) =>
-        bookedService.addons?.includes(option.id),
+        bookedService.addons?.includes(option.id)
       );
       const variationsInAddons = props.service.variations.filter((variation) =>
-        bookedService.addons?.includes(variation.id),
+        bookedService.addons?.includes(variation.id)
       );
 
       if (styleOptionInAddons) {
@@ -173,7 +172,7 @@ export const AddonServiceCard = (props: Props) => {
     setAnimateIn(false);
     setTimeout(() => {
       const parentBookingIndex = bookings.findIndex(
-        (booking) => booking.serviceId === bookedService?.serviceId,
+        (booking) => booking.serviceId === bookedService?.serviceId
       );
 
       if (parentBookingIndex === -1) return;
@@ -189,7 +188,7 @@ export const AddonServiceCard = (props: Props) => {
           (id) =>
             id !== props.service.id &&
             !props.service.style_options.some((option) => option.id === id) &&
-            !props.service.variations.some((variation) => variation.id === id),
+            !props.service.variations.some((variation) => variation.id === id)
         );
       } else {
         // Add the service.id, selectedStyleOption, and selectedVariations to addons
@@ -214,13 +213,33 @@ export const AddonServiceCard = (props: Props) => {
       setOpenDialog(false);
     }, 500);
   };
+  const clearStyles = (styleId: string) => {
+    setAnimateIn(false);
+    setTimeout(() => {
+      const parentBookingIndex = bookings.findIndex(
+        (booking) => booking.serviceId === bookedService?.serviceId
+      );
 
-  const handleVariationChange = (option: string) => {
+      if (parentBookingIndex === -1) return;
+      const parentBooking = bookings[parentBookingIndex];
+      // Create an updated addons array
+      let updatedAddons = [...(parentBooking.addons ?? [])];
+      if (bookingExists) {
+        // Remove the service.id, style_option.id, and variation.id(s) from addons
+        updatedAddons = updatedAddons.filter((id) => id !== styleId);
+        setSelectedStyleOption("");
+        updateBooking(parentBookingIndex, { addons: updatedAddons });
+        setOpenDialog(false);
+      }
+    }, 500);
+  };
+
+  const handleVariationChange = (variationId: string) => {
     setSelectedVariations(
       (prev) =>
-        prev.includes(option)
-          ? prev.filter((id) => id !== option) // Remove if already selected
-          : [...prev, option], // Add if not selected
+        prev.includes(variationId)
+          ? prev.filter((id) => id !== variationId) // Remove if already selected
+          : [...prev, variationId] // Add if not selected
     );
   };
 
@@ -285,14 +304,25 @@ export const AddonServiceCard = (props: Props) => {
                         transition={{ duration: 0.3 }}
                         className="space-y-4 pb-14"
                       >
-                        <motion.div className="mb-3" variants={titleVariants}>
-                          <h3 className="text-lg font-semibold text-slate-800">
-                            Select Your Perfect Style
-                          </h3>
-                          <p className="text-sm text-slate-500">
-                            Choose the option that best suits your desired look
-                          </p>
-                        </motion.div>
+                        <div>
+                          <motion.div className="mb-3" variants={titleVariants}>
+                            <h3 className="text-lg font-semibold text-slate-800">
+                              Select Your Perfect Style
+                            </h3>
+                            <p className="text-sm text-slate-500">
+                              Choose the option that best suits your desired
+                              look
+                            </p>
+                          </motion.div>
+                          {selectedStyleOption &&
+                            selectedVariations.length === 0 && (
+                              <Button
+                                onClick={() => clearStyles(selectedStyleOption)}
+                              >
+                                Clear Selection
+                              </Button>
+                            )}
+                        </div>
 
                         {step === 1 &&
                           props.service.style_options.length > 0 && (
@@ -317,7 +347,7 @@ export const AddonServiceCard = (props: Props) => {
                                     className={cn(
                                       "group relative overflow-hidden cursor-pointer rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-pink-100 hover:shadow-md",
                                       selectedStyleOption.includes(item.id) &&
-                                        "border-pink-200 bg-pink-50/30 shadow-md",
+                                        "border-pink-200 bg-pink-50/30 shadow-md"
                                     )}
                                   >
                                     {/* Decorative gradient overlay when selected */}
@@ -354,7 +384,7 @@ export const AddonServiceCard = (props: Props) => {
                                               {
                                                 durations.find(
                                                   (tr) =>
-                                                    tr.value === item.duration,
+                                                    tr.value === item.duration
                                                 )?.label
                                               }
                                             </motion.div>
@@ -379,27 +409,28 @@ export const AddonServiceCard = (props: Props) => {
                                 variants={itemVariants}
                                 custom={i}
                                 whileHover={{ scale: 1.01 }}
+                                onClick={() => handleVariationChange(item.id)}
                                 className={cn(
-                                  "group relative overflow-hidden rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-purple-100 hover:shadow-md",
+                                  "group relative cursor-pointer overflow-hidden rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-purple-100 hover:shadow-md",
                                   selectedVariations.includes(item.id) &&
-                                    "border-purple-200 bg-purple-50/30 shadow-md",
+                                    "border-purple-200 bg-purple-50/30 shadow-md"
                                 )}
                               >
                                 {selectedVariations.includes(item.id) && (
                                   <motion.div
-                                    className="absolute inset-0 bg-gradient-to-r from-purple-100/20 to-blue-100/20 opacity-60"
+                                    className="absolute inset-0 z-10 bg-gradient-to-r from-purple-100/20 to-blue-100/20 opacity-60"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 0.6 }}
                                     transition={{ duration: 0.8 }}
                                   />
                                 )}
 
-                                <div className="flex cursor-pointer items-center space-x-3">
+                                <div className="relative z-50 flex cursor-pointer items-center space-x-3">
                                   <Checkbox
                                     checked={selectedVariations.includes(
-                                      item.id,
+                                      item.id
                                     )}
-                                    onChange={() =>
+                                    onCheckedChange={() =>
                                       handleVariationChange(item.id)
                                     }
                                     className="size-5 border-purple-400 text-purple-500"
@@ -422,8 +453,7 @@ export const AddonServiceCard = (props: Props) => {
                                           </span>
                                           {
                                             durations.find(
-                                              (tr) =>
-                                                tr.value === item.duration,
+                                              (tr) => tr.value === item.duration
                                             )?.label
                                           }
                                         </motion.div>
@@ -531,6 +561,14 @@ export const AddonServiceCard = (props: Props) => {
                           Choose the option that best suits your desired look
                         </p>
                       </motion.div>
+                      {selectedStyleOption &&
+                        selectedVariations.length === 0 && (
+                          <Button
+                            onClick={() => clearStyles(selectedStyleOption)}
+                          >
+                            Clear Selection
+                          </Button>
+                        )}
 
                       {step === 1 && props.service.style_options.length > 0 && (
                         <RadioGroup
@@ -552,7 +590,7 @@ export const AddonServiceCard = (props: Props) => {
                                 className={cn(
                                   "group relative overflow-hidden cursor-pointer rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-pink-100 hover:shadow-md",
                                   selectedStyleOption.includes(item.id) &&
-                                    "border-pink-200 bg-pink-50/30 shadow-md",
+                                    "border-pink-200 bg-pink-50/30 shadow-md"
                                 )}
                               >
                                 {/* Decorative gradient overlay when selected */}
@@ -588,8 +626,7 @@ export const AddonServiceCard = (props: Props) => {
                                           </span>
                                           {
                                             durations.find(
-                                              (tr) =>
-                                                tr.value === item.duration,
+                                              (tr) => tr.value === item.duration
                                             )?.label
                                           }
                                         </motion.div>
@@ -612,30 +649,31 @@ export const AddonServiceCard = (props: Props) => {
                             <motion.div
                               key={item.id}
                               variants={itemVariants}
+                              onClick={() => handleVariationChange(item.id)}
                               custom={i}
                               whileHover={{ scale: 1.01 }}
                               className={cn(
-                                "group relative overflow-hidden rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-purple-100 hover:shadow-md",
+                                "group relative cursor-pointer overflow-hidden rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-purple-100 hover:shadow-md",
                                 selectedVariations.includes(item.id) &&
-                                  "border-purple-200 bg-purple-50/30 shadow-md",
+                                  "border-purple-200 bg-purple-50/30 shadow-md"
                               )}
                             >
                               {selectedVariations.includes(item.id) && (
                                 <motion.div
-                                  className="absolute inset-0 bg-gradient-to-r from-purple-100/20 to-blue-100/20 opacity-60"
+                                  className="absolute inset-0 z-10 bg-gradient-to-r from-purple-100/20 to-blue-100/20 opacity-60"
                                   initial={{ opacity: 0 }}
                                   animate={{ opacity: 0.6 }}
                                   transition={{ duration: 0.8 }}
                                 />
                               )}
 
-                              <div className="flex cursor-pointer items-center space-x-3">
+                              <div className="relative !z-50 flex cursor-pointer items-center space-x-3">
                                 <Checkbox
                                   checked={selectedVariations.includes(item.id)}
                                   onChange={() =>
                                     handleVariationChange(item.id)
                                   }
-                                  className="size-5 border-purple-400 text-purple-500"
+                                  className="z-50 size-5 border-purple-400 text-purple-500"
                                 />
                                 <div className="flex w-full items-center justify-between">
                                   <div className="flex flex-col gap-0.5">
@@ -655,7 +693,7 @@ export const AddonServiceCard = (props: Props) => {
                                         </span>
                                         {
                                           durations.find(
-                                            (tr) => tr.value === item.duration,
+                                            (tr) => tr.value === item.duration
                                           )?.label
                                         }
                                       </motion.div>
