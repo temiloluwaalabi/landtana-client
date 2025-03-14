@@ -108,7 +108,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
   const currentStepDetails = steps.find(
     (step) =>
       step.step === currentStep &&
-      (!step.type || (type && step.type.includes(type)))
+      (!step.type || (type && step.type.includes(type))),
   );
 
   if (!currentStepDetails) {
