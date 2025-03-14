@@ -10,26 +10,31 @@ import { cn } from "@/lib/utils";
 const transition = { type: "spring", damping: 25, stiffness: 120 };
 
 export const BookingStepOne = () => {
-  const { type, updateState, addGuest, bookings, updateBooking } =
+  const { type, updateState, addGuest, guests, bookings, updateBooking } =
     useBookingStore();
 
   const handleSelectType = (type: "individual" | "group" | "gift-card") => {
     if (type === "group") {
+      // Check if we already have a "Me" guest
+      const meGuestExists = guests.some((guest) => guest.name === "Me");
+
       if (bookings && bookings.length > 0) {
         const currentBooking = bookings[bookings.length - 1];
 
-        const userId = addGuest({
-          name: "Me",
-        });
+        if (!meGuestExists) {
+          const userId = addGuest({
+            name: "Me",
+          });
 
-        updateBooking(
-          bookings.findIndex(
-            (book) => book.serviceId === currentBooking.serviceId,
-          ),
-          {
-            guestId: userId,
-          },
-        );
+          updateBooking(
+            bookings.findIndex(
+              (book) => book.serviceId === currentBooking.serviceId
+            ),
+            {
+              guestId: userId,
+            }
+          );
+        }
 
         updateState({
           type,
@@ -37,13 +42,17 @@ export const BookingStepOne = () => {
           isGroupBooking: true,
         });
       } else {
+        // Only add the "Me" guest if it doesn't exist yet
+        if (!meGuestExists) {
+          addGuest({
+            name: "Me",
+          });
+        }
+
         updateState({
           type,
           step: 3,
           isGroupBooking: true,
-        });
-        addGuest({
-          name: "Me",
         });
       }
     } else {
@@ -109,7 +118,7 @@ export const BookingStepOne = () => {
                 "hover:border-primary hover:bg-white/80",
                 type === option.type
                   ? "border-secondary bg-white"
-                  : "border-[#D9D9D9] shadow-md",
+                  : "border-[#D9D9D9] shadow-md"
               )}
             >
               <motion.div

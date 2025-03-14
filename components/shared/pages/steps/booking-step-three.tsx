@@ -239,44 +239,85 @@ export const BookingStepThree = ({ services }: Props) => {
 
                                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                                     {filteredServices
-                                      .filter((serv) => serv.is_addon === true)
+                                      .filter(
+                                        (serv) =>
+                                          serv.is_addon === true &&
+                                          serv.id !== booking.bookingId
+                                      )
                                       .map((item, addonIndex) => {
                                         const parentService = services.find(
                                           (service) =>
                                             service.id === booking.bookingId
                                         );
 
-                                        const isAddonBooked = bookings.some(
-                                          (book) => {
-                                            // Check if the service ID is in the addons array
-                                            if (
-                                              book.addons?.includes(item.id)
-                                            ) {
-                                              return true;
-                                            }
+                                        const isAddonBooked =
+                                          type === "group"
+                                            ? bookings
+                                                .filter(
+                                                  (book) =>
+                                                    book.guestId ===
+                                                    currentGuestId
+                                                )
+                                                .some((book) => {
+                                                  // Check if the service ID is in the addons array
+                                                  if (
+                                                    book.addons?.includes(
+                                                      item.id
+                                                    )
+                                                  ) {
+                                                    return true;
+                                                  }
 
-                                            // Check if any style_option or variation ID is in the addons array
-                                            const hasStyleOptionInAddons =
-                                              item.style_options.some(
-                                                (option) =>
-                                                  book.addons?.includes(
-                                                    option.id
-                                                  )
-                                              );
-                                            const hasVariationInAddons =
-                                              item.variations.some(
-                                                (variation) =>
-                                                  book.addons?.includes(
-                                                    variation.id
-                                                  )
-                                              );
+                                                  // Check if any style_option or variation ID is in the addons array
+                                                  const hasStyleOptionInAddons =
+                                                    item.style_options.some(
+                                                      (option) =>
+                                                        book.addons?.includes(
+                                                          option.id
+                                                        )
+                                                    );
+                                                  const hasVariationInAddons =
+                                                    item.variations.some(
+                                                      (variation) =>
+                                                        book.addons?.includes(
+                                                          variation.id
+                                                        )
+                                                    );
 
-                                            return (
-                                              hasStyleOptionInAddons ||
-                                              hasVariationInAddons
-                                            );
-                                          }
-                                        );
+                                                  return (
+                                                    hasStyleOptionInAddons ||
+                                                    hasVariationInAddons
+                                                  );
+                                                })
+                                            : bookings.some((book) => {
+                                                // Check if the service ID is in the addons array
+                                                if (
+                                                  book.addons?.includes(item.id)
+                                                ) {
+                                                  return true;
+                                                }
+
+                                                // Check if any style_option or variation ID is in the addons array
+                                                const hasStyleOptionInAddons =
+                                                  item.style_options.some(
+                                                    (option) =>
+                                                      book.addons?.includes(
+                                                        option.id
+                                                      )
+                                                  );
+                                                const hasVariationInAddons =
+                                                  item.variations.some(
+                                                    (variation) =>
+                                                      book.addons?.includes(
+                                                        variation.id
+                                                      )
+                                                  );
+
+                                                return (
+                                                  hasStyleOptionInAddons ||
+                                                  hasVariationInAddons
+                                                );
+                                              });
 
                                         return (
                                           <AddonServiceCard

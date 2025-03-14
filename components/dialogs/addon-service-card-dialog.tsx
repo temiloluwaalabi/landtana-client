@@ -86,10 +86,10 @@ export const AddonServiceCard = (props: Props) => {
 
             // Check if any style_option or variation ID is in the addons array
             const hasStyleOptionInAddons = props.service.style_options.some(
-              (option) => book.addons?.includes(option.id)
+              (option) => book.addons?.includes(option.id),
             );
             const hasVariationInAddons = props.service.variations.some(
-              (variation) => book.addons?.includes(variation.id)
+              (variation) => book.addons?.includes(variation.id),
             );
 
             return hasStyleOptionInAddons || hasVariationInAddons;
@@ -102,10 +102,10 @@ export const AddonServiceCard = (props: Props) => {
 
           // Check if any style_option or variation ID is in the addons array
           const hasStyleOptionInAddons = props.service.style_options.some(
-            (option) => book.addons?.includes(option.id)
+            (option) => book.addons?.includes(option.id),
           );
           const hasVariationInAddons = props.service.variations.some(
-            (variation) => book.addons?.includes(variation.id)
+            (variation) => book.addons?.includes(variation.id),
           );
 
           return hasStyleOptionInAddons || hasVariationInAddons;
@@ -113,16 +113,16 @@ export const AddonServiceCard = (props: Props) => {
 
   // Find the booked service
   const bookedService = bookings.find(
-    (book) => book.serviceId === props.parentService.id
+    (book) => book.serviceId === props.parentService.id,
   );
   useEffect(() => {
     if (bookingExists && bookedService?.addons) {
       // Initialize selectedStyleOption and selectedVariations based on the addons array
       const styleOptionInAddons = props.service.style_options.find((option) =>
-        bookedService.addons?.includes(option.id)
+        bookedService.addons?.includes(option.id),
       );
       const variationsInAddons = props.service.variations.filter((variation) =>
-        bookedService.addons?.includes(variation.id)
+        bookedService.addons?.includes(variation.id),
       );
 
       if (styleOptionInAddons) {
@@ -172,7 +172,7 @@ export const AddonServiceCard = (props: Props) => {
     setAnimateIn(false);
     setTimeout(() => {
       const parentBookingIndex = bookings.findIndex(
-        (booking) => booking.serviceId === bookedService?.serviceId
+        (booking) => booking.serviceId === bookedService?.serviceId,
       );
 
       if (parentBookingIndex === -1) return;
@@ -188,7 +188,7 @@ export const AddonServiceCard = (props: Props) => {
           (id) =>
             id !== props.service.id &&
             !props.service.style_options.some((option) => option.id === id) &&
-            !props.service.variations.some((variation) => variation.id === id)
+            !props.service.variations.some((variation) => variation.id === id),
         );
       } else {
         // Add the service.id, selectedStyleOption, and selectedVariations to addons
@@ -217,7 +217,7 @@ export const AddonServiceCard = (props: Props) => {
     setAnimateIn(false);
     setTimeout(() => {
       const parentBookingIndex = bookings.findIndex(
-        (booking) => booking.serviceId === bookedService?.serviceId
+        (booking) => booking.serviceId === bookedService?.serviceId,
       );
 
       if (parentBookingIndex === -1) return;
@@ -239,7 +239,7 @@ export const AddonServiceCard = (props: Props) => {
       (prev) =>
         prev.includes(variationId)
           ? prev.filter((id) => id !== variationId) // Remove if already selected
-          : [...prev, variationId] // Add if not selected
+          : [...prev, variationId], // Add if not selected
     );
   };
 
@@ -347,7 +347,7 @@ export const AddonServiceCard = (props: Props) => {
                                     className={cn(
                                       "group relative overflow-hidden cursor-pointer rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-pink-100 hover:shadow-md",
                                       selectedStyleOption.includes(item.id) &&
-                                        "border-pink-200 bg-pink-50/30 shadow-md"
+                                        "border-pink-200 bg-pink-50/30 shadow-md",
                                     )}
                                   >
                                     {/* Decorative gradient overlay when selected */}
@@ -384,7 +384,7 @@ export const AddonServiceCard = (props: Props) => {
                                               {
                                                 durations.find(
                                                   (tr) =>
-                                                    tr.value === item.duration
+                                                    tr.value === item.duration,
                                                 )?.label
                                               }
                                             </motion.div>
@@ -413,7 +413,7 @@ export const AddonServiceCard = (props: Props) => {
                                 className={cn(
                                   "group relative cursor-pointer overflow-hidden rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-purple-100 hover:shadow-md",
                                   selectedVariations.includes(item.id) &&
-                                    "border-purple-200 bg-purple-50/30 shadow-md"
+                                    "border-purple-200 bg-purple-50/30 shadow-md",
                                 )}
                               >
                                 {selectedVariations.includes(item.id) && (
@@ -428,7 +428,7 @@ export const AddonServiceCard = (props: Props) => {
                                 <div className="relative z-50 flex cursor-pointer items-center space-x-3">
                                   <Checkbox
                                     checked={selectedVariations.includes(
-                                      item.id
+                                      item.id,
                                     )}
                                     onCheckedChange={() =>
                                       handleVariationChange(item.id)
@@ -453,7 +453,8 @@ export const AddonServiceCard = (props: Props) => {
                                           </span>
                                           {
                                             durations.find(
-                                              (tr) => tr.value === item.duration
+                                              (tr) =>
+                                                tr.value === item.duration,
                                             )?.label
                                           }
                                         </motion.div>
@@ -590,7 +591,7 @@ export const AddonServiceCard = (props: Props) => {
                                 className={cn(
                                   "group relative overflow-hidden cursor-pointer rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-pink-100 hover:shadow-md",
                                   selectedStyleOption.includes(item.id) &&
-                                    "border-pink-200 bg-pink-50/30 shadow-md"
+                                    "border-pink-200 bg-pink-50/30 shadow-md",
                                 )}
                               >
                                 {/* Decorative gradient overlay when selected */}
@@ -626,7 +627,8 @@ export const AddonServiceCard = (props: Props) => {
                                           </span>
                                           {
                                             durations.find(
-                                              (tr) => tr.value === item.duration
+                                              (tr) =>
+                                                tr.value === item.duration,
                                             )?.label
                                           }
                                         </motion.div>
@@ -655,7 +657,7 @@ export const AddonServiceCard = (props: Props) => {
                               className={cn(
                                 "group relative cursor-pointer overflow-hidden rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-purple-100 hover:shadow-md",
                                 selectedVariations.includes(item.id) &&
-                                  "border-purple-200 bg-purple-50/30 shadow-md"
+                                  "border-purple-200 bg-purple-50/30 shadow-md",
                               )}
                             >
                               {selectedVariations.includes(item.id) && (
@@ -693,7 +695,7 @@ export const AddonServiceCard = (props: Props) => {
                                         </span>
                                         {
                                           durations.find(
-                                            (tr) => tr.value === item.duration
+                                            (tr) => tr.value === item.duration,
                                           )?.label
                                         }
                                       </motion.div>
