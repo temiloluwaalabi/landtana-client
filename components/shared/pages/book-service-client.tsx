@@ -17,6 +17,7 @@ import { calculateBookingDetails, cn, toCurrency } from "@/lib/utils";
 import { Category, Service } from "@/types";
 
 import MaxWidthContainer from "../max-width-container";
+import ConfirmationPage from "./steps/booking-step-five";
 import { BookingStepFour } from "./steps/booking-step-four";
 import { BookingGroupStep } from "./steps/booking-step-guests";
 import { BookingStepOne } from "./steps/booking-step-one";
@@ -73,11 +74,11 @@ export const BookServiceClient = (props: Props) => {
 
   const previousStep = step - 1;
   const sortedCategories = props.categories.sort((a, b) =>
-    a.name.localeCompare(b.name),
+    a.name.localeCompare(b.name)
   );
   const sortedServices = props.services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const [animateIcon, setAnimateIcon] = React.useState(false);
 
@@ -99,7 +100,7 @@ export const BookServiceClient = (props: Props) => {
   const totalPrice = calculateBookingDetails(
     bookings,
     props.services,
-    props.services,
+    props.services
   );
   // Auto-animate icon occasionally
   React.useEffect(() => {
@@ -210,6 +211,8 @@ export const BookServiceClient = (props: Props) => {
           return <BookingStepThree services={sortedServices} />;
         case 4:
           return <BookingStepFour services={sortedServices} />;
+        case 5:
+          return <ConfirmationPage />;
         default:
           return null;
       }
@@ -239,6 +242,8 @@ export const BookServiceClient = (props: Props) => {
           return <BookingStepThree services={sortedServices} />;
         case 5:
           return <BookingStepFour services={sortedServices} />;
+        case 6:
+          return <ConfirmationPage />;
         default:
           return null;
       }
@@ -308,7 +313,7 @@ export const BookServiceClient = (props: Props) => {
                 <CardHeader
                   className={cn(
                     "flex w-full flex-row items-center justify-between pb-4 shadow-none outline-none",
-                    hideDetails && "border-b border-gray-100",
+                    hideDetails && "border-b border-gray-100"
                   )}
                 >
                   <div>
@@ -367,10 +372,10 @@ export const BookServiceClient = (props: Props) => {
                         <div className="w-full space-y-3">
                           {totalPrice.bookingDetails.map((booking) => {
                             const service = props.services.find(
-                              (s) => s.id === booking.bookingId,
+                              (s) => s.id === booking.bookingId
                             );
                             const bookingIndex = bookings.findIndex(
-                              (b) => b.serviceId === booking.bookingId,
+                              (b) => b.serviceId === booking.bookingId
                             );
                             const guest = booking.guestId
                               ? guests.find((g) => g.id === booking.guestId)
@@ -382,7 +387,7 @@ export const BookServiceClient = (props: Props) => {
                                 service={service?.name || ""}
                                 category={
                                   props.categories.find(
-                                    (cat) => cat.id === service?.category_id,
+                                    (cat) => cat.id === service?.category_id
                                   )?.name || ""
                                 }
                                 price={toCurrency(booking.totalPrice)}

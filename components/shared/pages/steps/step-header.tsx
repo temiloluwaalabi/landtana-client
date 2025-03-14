@@ -40,20 +40,20 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
           type: ["individual", "group"], // Specify types for this step
         },
         {
-          step: 4,
+          step: 3,
           title: "Customize Your Experience",
           description:
             " Enhance your salon experience with our premium add-on services",
           type: ["individual", "group"], // Applies to both types
         },
         {
-          step: 5,
+          step: 4,
           title: "Select Date & Time",
           description: "Pick a convenient date and time for your appointment.",
           type: ["individual", "group"],
         },
         {
-          step: 6,
+          step: 5,
           title: "Confirmation",
           description: "Review and confirm your booking details.",
           type: ["individual", "group"],
@@ -108,7 +108,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
   const currentStepDetails = steps.find(
     (step) =>
       step.step === currentStep &&
-      (!step.type || (type && step.type.includes(type))),
+      (!step.type || (type && step.type.includes(type)))
   );
 
   if (!currentStepDetails) {
