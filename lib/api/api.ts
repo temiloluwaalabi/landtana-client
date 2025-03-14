@@ -1,4 +1,8 @@
-import { GetAllCategoriesResponse, GetAllServicesResponse } from "@/types";
+import {
+  GetAllCategoriesResponse,
+  GetAllServicesResponse,
+  GetAllSubCatResponse,
+} from "@/types";
 
 import { ApiError, authClient } from "../api/client";
 import logger from "../logger";
@@ -12,12 +16,12 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/v1/auth/signin`,
+        `${authClient.defaults.baseURL}/auth/signin`
       );
       console.log("Login Credentials:", credentials);
     }
 
-    const response = await authClient.post("/v1/auth/signin", credentials);
+    const response = await authClient.post("/auth/signin", credentials);
 
     if (process.env.NODE_ENV === "development") {
       console.log("Login Response:", response.data);
@@ -29,7 +33,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/v1/users`,
+        `${authClient.defaults.baseURL}/users`
       );
     }
 
@@ -37,7 +41,7 @@ export const authService = {
       // ✅ Log headers before making the request
       const headers = authClient.defaults.headers.common;
       console.log("Request Headers:", headers);
-      const response = await authClient.get(`/v1/users/${id}`, {
+      const response = await authClient.get(`/users/${id}`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -70,7 +74,7 @@ export const authService = {
     // ✅ Log headers before making the request
     const headers = authClient.defaults.headers.common;
     console.log("Request Headers:", headers);
-    const response = await authClient.post("/v1/auth/confirm-email", {
+    const response = await authClient.post("/auth/confirm-email", {
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -91,15 +95,12 @@ export const authService = {
     // ✅ Log headers before making the request
     const headers = authClient.defaults.headers.common;
     console.log("Request Headers:", headers);
-    const response = await authClient.post(
-      "/v1/auth/resend-confirmation-link",
-      {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await authClient.post("/auth/resend-confirmation-link", {
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    );
+    });
     // ✅ Check response status manually like `fetch`
 
     if (process.env.NODE_ENV === "development") {
@@ -112,7 +113,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/v1/auth/reset-password-link`,
+        `${authClient.defaults.baseURL}/auth/reset-password-link`
       );
       console.log("Payload:", values);
     }
@@ -122,14 +123,14 @@ export const authService = {
       const headers = authClient.defaults.headers.common;
       console.log("Request Headers:", headers);
       const response = await authClient.post(
-        "/v1/auth/reset-password-link",
+        "/auth/reset-password-link",
         values,
         {
           withCredentials: true,
           // headers: {
           //   Authorization: `Bearer ${token}`,
           // },
-        },
+        }
       );
       // ✅ Check response status manually like `fetch`
 
@@ -151,7 +152,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/v1/auth/reset-password`,
+        `${authClient.defaults.baseURL}/auth/reset-password`
       );
       console.log("Payload:", values);
     }
@@ -161,7 +162,7 @@ export const authService = {
       const headers = authClient.defaults.headers.common;
       console.log("Request Headers:", headers);
       const response = await authClient.post(
-        "/v1/auth/reset-password",
+        "/auth/reset-password",
         values.password,
         {
           withCredentials: true,
@@ -171,7 +172,7 @@ export const authService = {
           params: {
             token,
           },
-        },
+        }
       );
       // ✅ Check response status manually like `fetch`
 
@@ -193,12 +194,12 @@ export const authService = {
 export const servService = {
   getAllServices: async (
     page: number = 1,
-    limit: number = 35,
+    limit: number = 35
   ): Promise<GetAllServicesResponse> => {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/v1/services`,
+        `${authClient.defaults.baseURL}/services`
       );
     }
 
@@ -206,7 +207,7 @@ export const servService = {
       // ✅ Log headers before making the request
       const headers = authClient.defaults.headers.common;
       console.log("Request Headers:", headers);
-      const response = await authClient.get("/v1/services", {
+      const response = await authClient.get("/services", {
         withCredentials: true,
 
         params: {
@@ -241,8 +242,8 @@ export const servService = {
   getServicesByCategory: async (categoryId: string) => {
     try {
       const response = await authClient.get(
-        `/v1/services/category/${categoryId}`,
-        {},
+        `/services/category/${categoryId}`,
+        {}
       );
 
       if (!response.data) {
@@ -261,7 +262,7 @@ export const servService = {
   // ✅ Get service by ID
   getServiceByID: async (serviceId: string) => {
     try {
-      const response = await authClient.get(`/v1/services/${serviceId}`, {});
+      const response = await authClient.get(`/services/${serviceId}`, {});
       if (!response.data) {
         throw new ApiError({
           statusCode: 500,
@@ -279,12 +280,12 @@ export const servService = {
 export const categoriesService = {
   getAllCategories: async (
     page: number = 1,
-    limit: number = 35,
+    limit: number = 35
   ): Promise<GetAllCategoriesResponse> => {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/v1/categories`,
+        `${authClient.defaults.baseURL}/categories`
       );
     }
 
@@ -292,7 +293,7 @@ export const categoriesService = {
       // ✅ Log headers before making the request
       const headers = authClient.defaults.headers.common;
       console.log("Request Headers:", headers);
-      const response = await authClient.get("/v1/categories", {
+      const response = await authClient.get("/categories", {
         withCredentials: true,
         params: {
           page,
@@ -323,13 +324,52 @@ export const categoriesService = {
     }
   },
   // ✅ Get service by ID
-  getCategoryByID: async (categoryID: string) => {
+  getCategoryByID: async (
+    categoryID: string,
+    page: number = 1,
+    limit: number = 35
+  ) => {
     try {
-      const response = await authClient.get(`/v1/categories/${categoryID}`, {
+      const response = await authClient.get(`/categories/${categoryID}`, {
+        params: {
+          page,
+          limit,
+        },
         // headers: {
         //   Authorization: `Bearer ${token}`,
         // },
       });
+      if (!response.data) {
+        throw new ApiError({
+          statusCode: 500,
+          messages: "Data not found in response",
+        });
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error("API Error Response SERVICES:", error);
+      throw error;
+    }
+  },
+  getSubByCatId: async (
+    categoryID: string,
+    page: number = 1,
+    limit: number = 35
+  ): Promise<GetAllSubCatResponse> => {
+    try {
+      const response = await authClient.get(
+        `/categories/${categoryID}/subcategories`,
+        {
+          params: {
+            page,
+            limit,
+          },
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
+        }
+      );
       if (!response.data) {
         throw new ApiError({
           statusCode: 500,

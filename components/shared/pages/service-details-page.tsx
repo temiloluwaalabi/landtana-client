@@ -15,7 +15,7 @@ import { QuillPreview } from "@/components/ui/quill-preview";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { durations } from "@/config/constants";
 import { toCurrency } from "@/lib/utils";
-import { Service, StyleOption } from "@/types";
+import { Category, Service, StyleOption } from "@/types";
 
 import MaxWidthContainer from "../max-width-container";
 import PageTitleHeader from "../page-title-header";
@@ -24,14 +24,15 @@ import ServicesSection from "./_components/home-service-section";
 type Props = {
   service: Service;
   services: Service[];
+  subCat: Category[];
 };
-export const ServiceDetailsPage = ({ service, services }: Props) => {
+export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
   const [step, setStep] = useState(1);
   const [selectedStyleOption, setSelectedStyleOption] = useState<string>("");
   const [additionalServiceType, setAdditionalServiceType] =
     useState<string>(""); // 'pre-service' or 'post-service'
   const [selectedVariations, setSelectedVariations] = useState<StyleOption[]>(
-    [],
+    []
   );
   const [reviewsRef, reviewsInView] = useInView({
     triggerOnce: false,
@@ -197,7 +198,7 @@ export const ServiceDetailsPage = ({ service, services }: Props) => {
                           -{" "}
                           {
                             durations.find(
-                              (dur) => dur.value === variation.duration,
+                              (dur) => dur.value === variation.duration
                             )?.label
                           }
                         </Label>
@@ -242,7 +243,7 @@ export const ServiceDetailsPage = ({ service, services }: Props) => {
                             {option.name} - {toCurrency(option.price, true)} -{" "}
                             {
                               durations.find(
-                                (dur) => dur.value === option.duration,
+                                (dur) => dur.value === option.duration
                               )?.label
                             }
                           </Label>
@@ -579,7 +580,7 @@ export const ServiceDetailsPage = ({ service, services }: Props) => {
           </div>
         </motion.div>
       </MaxWidthContainer>
-      <ServicesSection filteredServices={services} />
+      <ServicesSection filteredServices={services} categories={subCat} />
     </>
   );
 };

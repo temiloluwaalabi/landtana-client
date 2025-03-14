@@ -150,6 +150,42 @@ export const getCategoryByID = async (id: string) => {
     };
   }
 };
+export const getSubCategoriesByCategoryID = async (id: string) => {
+  try {
+    const category = await categoriesService.getSubByCatId(id);
+
+    logger.info("sub Successfully Fetched");
+
+    return {
+      success: true,
+      category: category.categories,
+    };
+  } catch (error) {
+    logger.error({ error }, "FAILED FETCHING SUBCATEGORY");
+
+    if (error instanceof UnauthorizedError) {
+      return {
+        success: false,
+        message: error.message,
+        status: error.statusCode,
+      };
+    }
+    if (error instanceof ApiError) {
+      return {
+        success: false,
+        message: error.message,
+        rawErrors: error.rawErrors,
+        status: error.statusCode,
+      };
+    }
+
+    return {
+      success: false,
+      message: "Fetching sub-category failed",
+      status: 500,
+    };
+  }
+};
 
 export const getServicesByCategory = async (category: string) => {
   try {

@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
 
-import { getAllServices, getServiceById } from "@/app/actions/services.action";
+import {
+  getAllServices,
+  getServiceById,
+  getSubCategoriesByCategoryID,
+} from "@/app/actions/services.action";
 import { ServiceDetailsPage } from "@/components/shared/pages/service-details-page";
 
 export default async function ServiceDetailsServer({
@@ -12,7 +16,9 @@ export default async function ServiceDetailsServer({
 
   const service = await getServiceById(id);
   const services = await getAllServices();
-
+  const subCat = await getSubCategoriesByCategoryID(
+    "b15bd255-537b-4738-bb98-74938098599d"
+  );
   if (!service.success) {
     return notFound();
   }
@@ -22,6 +28,7 @@ export default async function ServiceDetailsServer({
     <ServiceDetailsPage
       service={service.service}
       services={services.services?.services || []}
+      subCat={subCat.category || []}
     />
   );
 }

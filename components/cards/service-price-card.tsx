@@ -115,7 +115,7 @@ export const ServicePriceCard = (props: Props) => {
         </div>
         <motion.div whileHover="hover">
           <Link
-            href={`services/${props.service.id}`}
+            href={`/services/${props.service.id}`}
             className="flex items-center gap-1 text-base font-semibold text-secondary hover:underline"
           >
             Book Today
@@ -211,7 +211,7 @@ export const ServicePriceCard = (props: Props) => {
         </motion.span>
         <motion.div whileHover="hover" className="mt-1">
           <Link
-            href={`services/${props.service.id}`}
+            href={`/services/${props.service.id}`}
             className="group flex items-center gap-1 text-base font-semibold text-secondary hover:underline"
           >
             <span>Book Today</span>

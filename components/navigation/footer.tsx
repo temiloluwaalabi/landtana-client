@@ -81,7 +81,7 @@ export const MainFooter = () => {
           initial="hidden"
           animate={footerInView ? "show" : "hidden"}
           variants={staggerChildren}
-          className="relative grid grid-cols-1 gap-6 xl:gap-12 md:grid-cols-12"
+          className="relative grid grid-cols-1 gap-6 md:grid-cols-12 xl:gap-12"
         >
           {/* Decorative Elements */}
           <motion.div
@@ -220,7 +220,7 @@ export const MainFooter = () => {
                       "Our Staff",
                       "Our Salon",
                       "General Policies",
-                      "Career",
+                      "Job Board",
                       "Gallery",
                       "Press",
                     ].map((item) => (
@@ -358,7 +358,7 @@ export const MainFooter = () => {
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  <Button className="w-full text-sm rounded-full bg-gradient-to-r from-pink-500 to-purple-500 py-6 font-medium text-white shadow-lg shadow-purple-500/20 hover:from-pink-600 hover:to-purple-600">
+                  <Button className="w-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 py-6 text-sm font-medium text-white shadow-lg shadow-purple-500/20 hover:from-pink-600 hover:to-purple-600">
                     Book Your Appointment
                     <motion.div
                       animate={{ x: [0, 5, 0] }}

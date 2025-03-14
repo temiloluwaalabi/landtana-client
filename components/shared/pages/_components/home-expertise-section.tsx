@@ -10,15 +10,16 @@ import {
   cardVariants,
   labelVariants,
 } from "@/lib/variants";
-import { Category } from "@/types";
+import { Category, Service } from "@/types";
 
 import MaxWidthContainer from "../../max-width-container";
 
 type Categories = {
   filteredCategories: Category[];
+  services: Service[];
 };
 
-const ExpertiseSection = ({ filteredCategories }: Categories) => {
+const ExpertiseSection = ({ filteredCategories, services }: Categories) => {
   // Animation variants
 
   // Use intersection observer for scrolling effect
@@ -61,6 +62,9 @@ const ExpertiseSection = ({ filteredCategories }: Categories) => {
         >
           {filteredCategories
             .filter((cat) => cat.parent_id === null)
+            .filter((cat) =>
+              services.some((service) => service.category_id === cat.id)
+            )
             .map((service) => (
               <motion.div
                 key={service.id}

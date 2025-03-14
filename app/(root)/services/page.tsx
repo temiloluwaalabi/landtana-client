@@ -1,7 +1,10 @@
 import { Metadata } from "next";
 import React from "react";
 
-import { getAllCategories } from "@/app/actions/services.action";
+import {
+  getAllCategories,
+  getAllServices,
+} from "@/app/actions/services.action";
 import { ServicesArchiveClient } from "@/components/shared/pages/services-archive-client";
 export const metadata: Metadata = {
   title: "Services | Landtana Crown Braids",
@@ -10,5 +13,11 @@ export const metadata: Metadata = {
 };
 export default async function MainServicesArchive() {
   const categories = await getAllCategories();
-  return <ServicesArchiveClient categories={categories.categories || []} />;
+  const services = await getAllServices();
+  return (
+    <ServicesArchiveClient
+      services={services.services?.services || []}
+      categories={categories.categories || []}
+    />
+  );
 }

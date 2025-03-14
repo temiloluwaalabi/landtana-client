@@ -5,17 +5,21 @@ import { useInView } from "react-intersection-observer";
 import { ServicePriceCard } from "@/components/cards/service-price-card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Service } from "@/types";
+import { Category, Service } from "@/types";
 
 import MaxWidthContainer from "../../max-width-container";
 
 type Services = {
   filteredServices: Service[];
+  categories: Category[];
 };
 
-const ServicesSection = ({ filteredServices }: Services) => {
+const ServicesSection = ({ filteredServices, categories }: Services) => {
+  console.log("ste", categories);
   const [selectedTab, setSelectedTab] = useState("all");
   const [visibleServices, setVisibleServices] = useState(6);
+
+  console.log("selectedTab", selectedTab);
 
   // Animation variants
   const containerVariants = {
@@ -83,7 +87,7 @@ const ServicesSection = ({ filteredServices }: Services) => {
   const getFilteredServices = () => {
     if (selectedTab === "all") return filteredServices;
     return filteredServices.filter(
-      (service) => service.category_id === selectedTab,
+      (service) => service.category_id === selectedTab
     );
   };
 
@@ -124,37 +128,31 @@ const ServicesSection = ({ filteredServices }: Services) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <TabsList className="mb-8 h-auto flex-wrap gap-3 bg-transparent p-0">
-              {[
-                "all",
-                "box-braid",
-                "twists",
-                "crochet",
-                "cornrows",
-                "weavons",
-                "others",
-              ].map((tab, index) => (
-                <motion.div
-                  key={tab}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * index, duration: 0.4 }}
-                  whileHover={{ y: -3, transition: { duration: 0.2 } }}
-                >
-                  <TabsTrigger
-                    className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white lg:text-base"
-                    value={tab}
+            <TabsList className="mb-4 h-auto flex-wrap items-start justify-start gap-3 bg-transparent p-0">
+              <TabsTrigger
+                className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white lg:text-base"
+                value={"all"}
+              >
+                All
+              </TabsTrigger>
+              {categories
+                // .filter((caat) => (caat.services?.length ?? 0) > 0)
+                .map((tab, index) => (
+                  <motion.div
+                    key={tab.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 * index, duration: 0.4 }}
+                    whileHover={{ y: -3, transition: { duration: 0.2 } }}
                   >
-                    {tab === "all"
-                      ? "All"
-                      : tab === "box-braid"
-                        ? "Box Braids"
-                        : tab === "weavons"
-                          ? "Wig/Weavons"
-                          : tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </TabsTrigger>
-                </motion.div>
-              ))}
+                    <TabsTrigger
+                      className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white lg:text-base"
+                      value={tab.id}
+                    >
+                      {tab.name}
+                    </TabsTrigger>
+                  </motion.div>
+                ))}
             </TabsList>
           </motion.div>
 

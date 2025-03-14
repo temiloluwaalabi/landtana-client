@@ -42,6 +42,7 @@ import ProfessionalSection from "./_components/professionals-section";
 type Props = {
   services: Service[];
   categories: Category[];
+  subCat: Category[];
 };
 export const imageHover = {
   rest: { scale: 1, transition: { duration: 0.3, ease: "easeInOut" } },
@@ -246,11 +247,11 @@ export const HomePageClient = (props: Props) => {
 
   const filteredServices = props.services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const filteredCategories = props.categories.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const cards = data.map((card) => (
     <motion.div
@@ -454,8 +455,14 @@ export const HomePageClient = (props: Props) => {
           </motion.div>
         </motion.div>
       </MaxWidthContainer>
-      <ExpertiseSection filteredCategories={filteredCategories} />
-      <ServicesSection filteredServices={filteredServices} />
+      <ExpertiseSection
+        services={filteredServices}
+        filteredCategories={filteredCategories}
+      />
+      <ServicesSection
+        filteredServices={filteredServices}
+        categories={props.subCat}
+      />
       <MaxWidthContainer className="!bg-[#F5F6F7]">
         <EnhancedCTA />
       </MaxWidthContainer>

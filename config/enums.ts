@@ -13,7 +13,7 @@ export enum FormFieldTypes {
   SKELETON = "skeleton",
   RADIO_GROUP = "radioGroup",
   SWITCH = "switch",
-  RATING = "rating",
+  // RATING = "rating",
   TOGGLE_GROUP = "toggleGroup",
   COMBOBOX = "combobox",
   FILE_INPUT = "fileInput",

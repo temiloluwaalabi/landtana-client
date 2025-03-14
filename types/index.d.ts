@@ -114,6 +114,8 @@ export interface Category {
   deleted_by: null;
   created_at: Date;
   updated_at: Date;
+  parent?: Category;
+  services?: Service[];
 }
 
 export type GetAllCategoriesResponse = {
@@ -130,3 +132,7 @@ export type Booking = {
   created_at: Date;
   updated_at: Date;
 };
+export interface GetAllSubCatResponse {
+  categories: Category[];
+  count: number;
+}
