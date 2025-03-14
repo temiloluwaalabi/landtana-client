@@ -1,72 +1,75 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { toast } from "sonner";
 
 import { ApiError } from "../api/client";
 
-type ErrorHandlerOptions = {
-  onUnauthorized?: () => void; // Callback for 401 errors (e.g., logout, redirect)
-  onForbidden?: () => void; // Callback for 403 errors (e.g., show permission error)
-  onNotFound?: () => void; // Callback for 404 errors (e.g., redirect to 404 page)
-  onValidationError?: (errors: Record<string, string[]>) => void; // Handle validation errors
-};
-
-export const handleMutationError = (
-  error: unknown,
-  options?: ErrorHandlerOptions,
-) => {
+export const handleMutationError = (error: unknown) => {
   console.error("API Error:", error);
-
-  if (!(error instanceof ApiError)) {
-    toast.error("An unexpected error occurred.");
+  // If error is already an instance of ApiError, handle it normally
+  if (error instanceof ApiError) {
+    processApiError(error);
+    return;
+  }
+  // If error is an object with a statusCode, transform it into an ApiError
+  if (typeof error === "object" && error !== null && "statusCode" in error) {
+    const apiError = new ApiError(error as any);
+    processApiError(apiError);
     return;
   }
 
-  const { status, message, errors } = error;
+  // Handle generic JavaScript errors (e.g., network failures)
+  if (error instanceof Error) {
+    toast.error(error.message || "An unexpected error occurred.");
+    return;
+  }
+  // Handle unknown errors
+  toast.error("An unknown error occurred.");
+};
 
-  switch (status) {
+// Helper function to process ApiError instances
+const processApiError = (error: ApiError) => {
+  const { statusCode, message, rawErrors } = error;
+  console.log("STATUS CODE:", statusCode);
+  console.log("MESSAGE:", message);
+  console.log("RAW ERRORS:", rawErrors);
+
+  const errorMessage = Array.isArray(message) ? message.join("; ") : message;
+
+  switch (statusCode) {
     case 400:
-      toast.error(message || "Invalid request.");
-      return;
-
+      toast.error(errorMessage || "Invalid request.");
+      break;
     case 401:
-      toast.error(message || "Invalid credentials. Please try again.");
-      options?.onUnauthorized?.(); // Execute optional callback
-      return;
-
+      toast.error(errorMessage || "Invalid credentials. Please try again.");
+      break;
     case 403:
       toast.error("You do not have permission to perform this action.");
-      options?.onForbidden?.(); // Execute optional callback
-      return;
-
+      break;
     case 404:
       toast.error("Resource not found.");
-      options?.onNotFound?.(); // Execute optional callback
-      return;
-
+      break;
     case 408:
       toast.error("Request timed out. Please try again.");
-      return;
-
+      break;
     case 422:
-      if (errors) {
-        Object.values(errors).forEach((msgs) =>
-          msgs.forEach((msg) => toast.error(msg)),
-        );
-        options?.onValidationError?.(errors); // Execute optional callback
+      if (rawErrors) {
+        Object.values(rawErrors).forEach((errorMessages: string[]) => {
+          errorMessages.forEach((msg: string) => toast.error(msg));
+        });
       } else {
-        toast.error("Validation failed.");
+        toast.error(
+          errorMessage || "Validation failed. Please check your input."
+        );
       }
-      return;
-
+      break;
     case 429:
       toast.error("Too many requests. Please try again later.");
-      return;
-
+      break;
     case 500:
       toast.error("Server error. Please try again later.");
-      return;
-
+      break;
     default:
-      toast.error(message || "An unexpected error occurred.");
+      toast.error(errorMessage || "An unexpected error occurred.");
   }
 };
