@@ -12,11 +12,11 @@ import {
   LOGIN_LINK,
 } from "@/routes";
 
+import { authService } from "../api/api";
 import { apiClient, setAuthToken } from "../api/client";
 import { ValidationError } from "../error";
 import logger from "../logger";
-import { handleMutationError } from "./handle-mutation-error";
-import { authService } from "../api/api";
+import { handleMutationError } from "./handle-api-error";
 import {
   EmailSchemaType,
   PasswordSchemaType,
