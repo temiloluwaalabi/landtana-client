@@ -56,13 +56,13 @@ const BlueVariant = () => {
 };
 const GreenVariant = () => {
   return (
-    <MaxWidthContainer className="relative flex h-[60vh] items-start lg:items-center overflow-hidden bg-primary lg:pt-14 md:h-[75vh] lg:h-[90vh]">
+    <MaxWidthContainer className="relative flex h-[60vh] items-start overflow-hidden bg-primary md:h-[75vh] lg:h-[90vh] lg:items-center lg:pt-14">
       {/* Animated background elements */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
-        className="absolute bottom-0 right-0 z-40 mr-[-120px] hidden md:flex size-[350px] bg-[url(https://res.cloudinary.com/davidleo/image/upload/v1740754941/landtana/IMG-20250114-WA0043-removebg-preview_lk0qup_aapr2q.png)]  bg-contain bg-[right_100%] bg-no-repeat md:size-[550px] lg:size-[600px] xl:size-[700px] 2xl:size-[800px]"
+        className="absolute bottom-0 right-0 z-40 mr-[-120px] hidden size-[350px] bg-[url(https://res.cloudinary.com/davidleo/image/upload/v1740754941/landtana/IMG-20250114-WA0043-removebg-preview_lk0qup_aapr2q.png)] bg-contain  bg-[right_100%] bg-no-repeat md:flex md:size-[550px] lg:size-[600px] xl:size-[700px] 2xl:size-[800px]"
       />
 
       <motion.div
@@ -83,7 +83,7 @@ const GreenVariant = () => {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 0.8, y: 0 }}
         transition={{ duration: 1.3, ease: "easeOut" }}
-        className="absolute bottom-0 right-0 size-[200px] hidden md:flex bg-[url(https://res.cloudinary.com/davidleo/image/upload/v1739729649/landtana/Vector_ypxpyp.png)] bg-contain bg-[0%_0%] bg-no-repeat md:size-[400px] lg:size-[350px] xl:size-[600px]"
+        className="absolute bottom-0 right-0 hidden size-[200px] bg-[url(https://res.cloudinary.com/davidleo/image/upload/v1739729649/landtana/Vector_ypxpyp.png)] bg-contain bg-[0%_0%] bg-no-repeat md:flex md:size-[400px] lg:size-[350px] xl:size-[600px]"
       />
 
       {/* Floating particles effect */}

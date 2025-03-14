@@ -32,22 +32,22 @@ export default function DateSelectionStep({
 
   const selectedDate = date;
 
-  const CustomHeadRow = () => {
-    const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  // const CustomHeadRow = () => {
+  //   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-    return (
-      <div className="grid grid-cols-7 w-full items-center justify-center ">
-        {weekdays.map((weekday, index) => (
-          <div
-            key={index}
-            className="rounded-md text-[0.8rem] font-normal text-muted-foreground"
-          >
-            {weekday}
-          </div>
-        ))}
-      </div>
-    );
-  };
+  //   return (
+  //     <div className="grid w-full grid-cols-7 items-center justify-center ">
+  //       {weekdays.map((weekday, index) => (
+  //         <div
+  //           key={index}
+  //           className="rounded-md text-[0.8rem] font-normal text-muted-foreground"
+  //         >
+  //           {weekday}
+  //         </div>
+  //       ))}
+  //     </div>
+  //   );
+  // };
 
   useEffect(() => {
     const getAvailability = async () => {
@@ -146,7 +146,7 @@ export default function DateSelectionStep({
 
   const findNextAvailableDate = (
     availabilityData: AvailabilityResponse,
-    selectedDate: Date
+    selectedDate: Date,
   ): string | null => {
     const dates = Object.keys(availabilityData.dates).sort();
 
@@ -223,7 +223,7 @@ export default function DateSelectionStep({
                   onClick={() => {
                     const nextAvailableDateStr = findNextAvailableDate(
                       availabilityData,
-                      selectedDate
+                      selectedDate,
                     );
                     if (nextAvailableDateStr) {
                       const nextAvailableDate = new Date(nextAvailableDateStr);

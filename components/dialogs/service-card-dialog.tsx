@@ -49,7 +49,7 @@ export const ServiceCardDialog = (props: Props) => {
   const { bookings, addBooking, updateBooking, type, guests, currentGuestId } =
     useBookingStore();
   const [selectedVariations, setSelectedVariations] = useState<StyleOption[]>(
-    []
+    [],
   );
   const [animateIn, setAnimateIn] = useState(false);
   const [serviceRef] = useInView({
@@ -99,7 +99,7 @@ export const ServiceCardDialog = (props: Props) => {
       : bookings.some((book) => book.serviceId === props.service.id);
 
   const bookedService = bookings.find(
-    (book) => book.serviceId === props.service.id
+    (book) => book.serviceId === props.service.id,
   );
 
   useEffect(() => {
@@ -144,7 +144,7 @@ export const ServiceCardDialog = (props: Props) => {
         if (bookedService) {
           updateBooking(
             bookings.findIndex(
-              (book) => book.serviceId === bookedService.serviceId
+              (book) => book.serviceId === bookedService.serviceId,
             ),
             {
               serviceId: props.service.id,
@@ -153,7 +153,7 @@ export const ServiceCardDialog = (props: Props) => {
               styleOptionId: selectedStyleOption,
               guestId: currentGuestId,
               clientName: guest?.name,
-            }
+            },
           );
         } else {
           addBooking({
@@ -169,14 +169,14 @@ export const ServiceCardDialog = (props: Props) => {
         if (bookedService) {
           updateBooking(
             bookings.findIndex(
-              (book) => book.serviceId === bookedService.serviceId
+              (book) => book.serviceId === bookedService.serviceId,
             ),
             {
               serviceId: props.service.id,
               stylist: null,
               status: "pending",
               styleOptionId: selectedStyleOption,
-            }
+            },
           );
         } else {
           addBooking({
@@ -298,7 +298,7 @@ export const ServiceCardDialog = (props: Props) => {
                                         className={cn(
                                           "group relative overflow-hidden cursor-pointer rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-pink-100 hover:shadow-md",
                                           selectedStyleOption === item.id &&
-                                            "border-pink-200 bg-pink-50/30 shadow-md"
+                                            "border-pink-200 bg-pink-50/30 shadow-md",
                                         )}
                                       >
                                         {/* Decorative gradient overlay when selected */}
@@ -336,7 +336,7 @@ export const ServiceCardDialog = (props: Props) => {
                                                     durations.find(
                                                       (tr) =>
                                                         tr.value ===
-                                                        item.duration
+                                                        item.duration,
                                                     )?.label
                                                   }
                                                 </motion.div>
@@ -348,7 +348,7 @@ export const ServiceCardDialog = (props: Props) => {
                                           </div>
                                         </div>
                                       </motion.div>
-                                    )
+                                    ),
                                   )}
                                 </StaggerContainer>
                               </RadioGroup>
@@ -366,7 +366,7 @@ export const ServiceCardDialog = (props: Props) => {
                                     className={cn(
                                       "group relative overflow-hidden rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-purple-100 hover:shadow-md",
                                       selectedVariations.includes(item) &&
-                                        "border-purple-200 bg-purple-50/30 shadow-md"
+                                        "border-purple-200 bg-purple-50/30 shadow-md",
                                     )}
                                   >
                                     {selectedVariations.includes(item) && (
@@ -381,7 +381,7 @@ export const ServiceCardDialog = (props: Props) => {
                                     <div className="flex cursor-pointer items-center space-x-3">
                                       <Checkbox
                                         checked={selectedVariations.includes(
-                                          item
+                                          item,
                                         )}
                                         onChange={() =>
                                           handleVariationChange(item)
@@ -407,7 +407,7 @@ export const ServiceCardDialog = (props: Props) => {
                                               {
                                                 durations.find(
                                                   (tr) =>
-                                                    tr.value === item.duration
+                                                    tr.value === item.duration,
                                                 )?.label
                                               }
                                             </motion.div>
@@ -536,7 +536,7 @@ export const ServiceCardDialog = (props: Props) => {
                                 className={cn(
                                   "group relative overflow-hidden cursor-pointer rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-pink-100 hover:shadow-md",
                                   selectedStyleOption === item.id &&
-                                    "border-pink-200 bg-pink-50/30 shadow-md"
+                                    "border-pink-200 bg-pink-50/30 shadow-md",
                                 )}
                               >
                                 {/* Decorative gradient overlay when selected */}
@@ -572,7 +572,8 @@ export const ServiceCardDialog = (props: Props) => {
                                           </span>
                                           {
                                             durations.find(
-                                              (tr) => tr.value === item.duration
+                                              (tr) =>
+                                                tr.value === item.duration,
                                             )?.label
                                           }
                                         </motion.div>
@@ -600,7 +601,7 @@ export const ServiceCardDialog = (props: Props) => {
                               className={cn(
                                 "group relative overflow-hidden rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-purple-100 hover:shadow-md",
                                 selectedVariations.includes(item) &&
-                                  "border-purple-200 bg-purple-50/30 shadow-md"
+                                  "border-purple-200 bg-purple-50/30 shadow-md",
                               )}
                             >
                               {selectedVariations.includes(item) && (
@@ -636,7 +637,7 @@ export const ServiceCardDialog = (props: Props) => {
                                         </span>
                                         {
                                           durations.find(
-                                            (tr) => tr.value === item.duration
+                                            (tr) => tr.value === item.duration,
                                           )?.label
                                         }
                                       </motion.div>

@@ -16,7 +16,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/auth/signin`
+        `${authClient.defaults.baseURL}/auth/signin`,
       );
       console.log("Login Credentials:", credentials);
     }
@@ -33,7 +33,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/users`
+        `${authClient.defaults.baseURL}/users`,
       );
     }
 
@@ -113,7 +113,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/auth/reset-password-link`
+        `${authClient.defaults.baseURL}/auth/reset-password-link`,
       );
       console.log("Payload:", values);
     }
@@ -130,7 +130,7 @@ export const authService = {
           // headers: {
           //   Authorization: `Bearer ${token}`,
           // },
-        }
+        },
       );
       // ✅ Check response status manually like `fetch`
 
@@ -152,7 +152,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/auth/reset-password`
+        `${authClient.defaults.baseURL}/auth/reset-password`,
       );
       console.log("Payload:", values);
     }
@@ -172,7 +172,7 @@ export const authService = {
           params: {
             token,
           },
-        }
+        },
       );
       // ✅ Check response status manually like `fetch`
 
@@ -194,12 +194,12 @@ export const authService = {
 export const servService = {
   getAllServices: async (
     page: number = 1,
-    limit: number = 35
+    limit: number = 35,
   ): Promise<GetAllServicesResponse> => {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/services`
+        `${authClient.defaults.baseURL}/services`,
       );
     }
 
@@ -243,7 +243,7 @@ export const servService = {
     try {
       const response = await authClient.get(
         `/services/category/${categoryId}`,
-        {}
+        {},
       );
 
       if (!response.data) {
@@ -280,12 +280,12 @@ export const servService = {
 export const categoriesService = {
   getAllCategories: async (
     page: number = 1,
-    limit: number = 35
+    limit: number = 35,
   ): Promise<GetAllCategoriesResponse> => {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/categories`
+        `${authClient.defaults.baseURL}/categories`,
       );
     }
 
@@ -327,7 +327,7 @@ export const categoriesService = {
   getCategoryByID: async (
     categoryID: string,
     page: number = 1,
-    limit: number = 35
+    limit: number = 35,
   ) => {
     try {
       const response = await authClient.get(`/categories/${categoryID}`, {
@@ -355,7 +355,7 @@ export const categoriesService = {
   getSubByCatId: async (
     categoryID: string,
     page: number = 1,
-    limit: number = 35
+    limit: number = 35,
   ): Promise<GetAllSubCatResponse> => {
     try {
       const response = await authClient.get(
@@ -368,7 +368,7 @@ export const categoriesService = {
           // headers: {
           //   Authorization: `Bearer ${token}`,
           // },
-        }
+        },
       );
       if (!response.data) {
         throw new ApiError({

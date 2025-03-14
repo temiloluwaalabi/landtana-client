@@ -16,7 +16,7 @@ export default async function Home() {
   const services = await getAllServices();
   const categories = await getAllCategories();
   const subCat = await getSubCategoriesByCategoryID(
-    "b15bd255-537b-4738-bb98-74938098599d"
+    "b15bd255-537b-4738-bb98-74938098599d",
   );
   return (
     <HomePageClient

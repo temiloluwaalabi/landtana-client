@@ -98,32 +98,33 @@ const createFieldSchema = (field: JobApplicationFormProps["formFields"][0]) => {
         schema = (schema as z.ZodString).min(
           validations.min,
           validations.message ||
-            `Must be at least ${validations.min} characters`
+            `Must be at least ${validations.min} characters`,
         );
       }
       if (validations.max) {
         schema = (schema as z.ZodString).max(
           validations.max,
-          validations.message || `Must be at most ${validations.max} characters`
+          validations.message ||
+            `Must be at most ${validations.max} characters`,
         );
       }
       if (validations.pattern) {
         schema = (schema as z.ZodString).regex(
           new RegExp(validations.pattern),
-          validations.message || "Invalid format"
+          validations.message || "Invalid format",
         );
       }
     } else if (type === "number") {
       if (validations.min) {
         schema = (schema as z.ZodNumber).min(
           validations.min,
-          validations.message || `Must be at least ${validations.min}`
+          validations.message || `Must be at least ${validations.min}`,
         );
       }
       if (validations.max) {
         schema = (schema as z.ZodNumber).max(
           validations.max,
-          validations.message || `Must be at most ${validations.max}`
+          validations.message || `Must be at most ${validations.max}`,
         );
       }
     }
@@ -169,12 +170,12 @@ export const JobApplicationForm2 = ({
         }
         return acc;
       },
-      { termsAgreed: false } as Record<string, any>
+      { termsAgreed: false } as Record<string, any>,
     ),
   });
 
   const [submissionError, setSubmissionError] = React.useState<string | null>(
-    null
+    null,
   );
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -195,7 +196,7 @@ export const JobApplicationForm2 = ({
       // form.reset(); // Uncomment if you want to reset the form after submission
     } catch {
       setSubmissionError(
-        "There was an error submitting your application. Please try again."
+        "There was an error submitting your application. Please try again.",
       );
     } finally {
       setIsSubmitting(false);

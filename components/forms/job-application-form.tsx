@@ -74,7 +74,7 @@ export const JobApplicationForm = ({
         field.type === "email" &&
         formData[field.id] &&
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-          String(formData[field.id])
+          String(formData[field.id]),
         )
       ) {
         newErrors[field.id] = "Please enter a valid email address";

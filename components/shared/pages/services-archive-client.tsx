@@ -13,7 +13,7 @@ type Props = {
 export const ServicesArchiveClient = (props: Props) => {
   const filteredCategories = props.categories.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
   );
   return (
     <ExpertiseSection

@@ -133,7 +133,7 @@ const categoryVariants = {
 };
 export const BookingStepTwo = (props: Props) => {
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    "b15bd255-537b-4738-bb98-74938098599d"
+    "b15bd255-537b-4738-bb98-74938098599d",
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -146,12 +146,13 @@ export const BookingStepTwo = (props: Props) => {
   // Filter services based on search query and selected category
   const filteredServices = props.services
     .filter(
-      (service) => !selectedCategory || service.category_id === selectedCategory
+      (service) =>
+        !selectedCategory || service.category_id === selectedCategory,
     )
     .filter(
       (service) =>
         !searchQuery ||
-        service.name.toLowerCase().includes(searchQuery.toLowerCase())
+        service.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
   const renderServiceCard = (service: Service) => {
@@ -161,7 +162,7 @@ export const BookingStepTwo = (props: Props) => {
         ? bookings.some(
             (booking) =>
               booking.serviceId === service.id &&
-              booking.guestId === currentGuestId
+              booking.guestId === currentGuestId,
           )
         : bookings.some((booking) => booking.serviceId === service.id);
     return (
@@ -181,7 +182,7 @@ export const BookingStepTwo = (props: Props) => {
             key={service.id}
             className={cn(
               "flex h-auto !w-full relative transition-all items-center overflow-hidden justify-between rounded-[8px] border  hover:bg-white cursor-pointer border-[#D9D9D9] px-6 py-6",
-              isBooked && "border-primary bg-white"
+              isBooked && "border-primary bg-white",
             )}
           >
             {/* Subtle background pattern */}
@@ -262,7 +263,7 @@ export const BookingStepTwo = (props: Props) => {
   const renderCategoryButton = (category: Category) => {
     const isSelected = selectedCategory === category.id;
     const count = props.services.filter(
-      (service) => service.category_id === category.id
+      (service) => service.category_id === category.id,
     ).length;
 
     return (
@@ -274,7 +275,7 @@ export const BookingStepTwo = (props: Props) => {
           "border border-transparent transition-all !bg-transparent",
           isSelected
             ? "!bg-primary text-white"
-            : "bg-primary/10 text-primary hover:bg-primary/20"
+            : "bg-primary/10 text-primary hover:bg-primary/20",
         )}
         initial="normal"
         animate={isSelected ? "selected" : "normal"}
@@ -286,7 +287,7 @@ export const BookingStepTwo = (props: Props) => {
         <motion.div
           className={cn(
             "flex size-6 items-center justify-center rounded-full",
-            isSelected ? "bg-white text-primary" : "bg-primary/10 text-primary"
+            isSelected ? "bg-white text-primary" : "bg-primary/10 text-primary",
           )}
           whileHover={{ scale: 1.1 }}
         >
@@ -434,7 +435,7 @@ export const BookingStepTwo = (props: Props) => {
                           .split("-")
                           .map(
                             (word) =>
-                              word.charAt(0).toUpperCase() + word.slice(1)
+                              word.charAt(0).toUpperCase() + word.slice(1),
                           )
                           .join(" ")}
                       </TabsTrigger>
