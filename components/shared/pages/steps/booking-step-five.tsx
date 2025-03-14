@@ -13,6 +13,7 @@ import {
   Home,
   Calendar as CalendarIcon,
   Download,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect } from "react";
@@ -20,13 +21,62 @@ import React, { useEffect } from "react";
 export default function ConfirmationPage() {
   // This would come from your booking state or URL parameters in a real implementation
   const bookingDetails = {
-    service: "Box Braids",
+    isGroupBooking: true,
     date: "April 10, 2025",
     time: "2:00 PM",
-    duration: "3 hours",
-    stylist: "Tiana Johnson",
-    addons: ["Hair Treatment", "Scalp Massage"],
     bookingId: "LCB-2025041022",
+    groupName: "Johnson Family",
+    participants: [
+      {
+        name: "Aisha Johnson",
+        service: "Box Braids",
+        duration: "3 hours",
+        stylist: "Tiana Williams",
+        addons: ["Hair Treatment", "Scalp Massage"],
+      },
+      {
+        name: "Maya Johnson",
+        service: "Knotless Braids",
+        duration: "3.5 hours",
+        stylist: "Danielle Thompson",
+        addons: ["Edge Treatment"],
+      },
+      {
+        name: "Zoe Johnson",
+        service: "Twists",
+        duration: "2 hours",
+        stylist: "Jasmine Rogers",
+        addons: [],
+      },
+    ],
+  };
+
+  // For individual bookings, we'll convert it to the participants format
+  const participants = bookingDetails.isGroupBooking
+    ? bookingDetails.participants
+    : [
+        {
+          name: "You",
+          service: "Box Braids",
+          duration: "3 hours",
+          stylist: "Tiana Johnson",
+          addons: ["Hair Treatment", "Scalp Massage"],
+        },
+      ];
+
+  // Calculate total duration for the booking
+  const calculateTotalDuration = () => {
+    // This is a simplified calculation, in reality you would need to consider overlapping times
+    let maxDurationHours = 0;
+
+    participants.forEach((participant) => {
+      const hours = parseFloat(participant.duration.split(" ")[0]);
+      if (hours > maxDurationHours) {
+        maxDurationHours = hours;
+      }
+    });
+
+    return `${maxDurationHours} hours`;
   };
 
   // Animation variants
@@ -139,8 +189,10 @@ export default function ConfirmationPage() {
                 Booking Confirmed!
               </h3>
               <p className="mt-1 text-green-700">
-                Your appointment has been successfully scheduled. We&apos;ve
-                sent a confirmation to your email.
+                {bookingDetails.isGroupBooking
+                  ? `Your group appointment has been successfully scheduled for ${participants.length} people.`
+                  : "Your appointment has been successfully scheduled."}{" "}
+                We&apos;ve sent a confirmation to your email.
               </p>
             </div>
           </div>
@@ -161,11 +213,21 @@ export default function ConfirmationPage() {
         >
           <div className="bg-black px-6 py-4 text-white">
             <h1 className="text-2xl font-bold">
-              Your Appointment at Landtana Crown Braids
+              {bookingDetails.isGroupBooking
+                ? `Group Appointment: ${bookingDetails.groupName}`
+                : "Your Appointment at Landtana Crown Braids"}
             </h1>
             <p className="text-gray-200">
               Booking ID: {bookingDetails.bookingId}
             </p>
+            {bookingDetails.isGroupBooking && (
+              <div className="mt-2 flex items-center">
+                <Users className="mr-2 size-4 text-gray-300" />
+                <p className="text-gray-300">
+                  {participants.length} participants
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="p-6">
@@ -201,73 +263,58 @@ export default function ConfirmationPage() {
                     <div className="ml-3">
                       <p className="text-sm font-medium text-gray-900">Time</p>
                       <p className="text-gray-700">
-                        {bookingDetails.time} ({bookingDetails.duration})
+                        {bookingDetails.time} (Approx.{" "}
+                        {calculateTotalDuration()})
                       </p>
                     </div>
                   </motion.div>
+                </div>
 
-                  <motion.div
-                    className="flex items-start"
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                  >
-                    <div className="mt-1 shrink-0">
-                      <div className="flex size-5 items-center justify-center rounded-full bg-gray-200">
-                        <span className="text-xs font-medium">S</span>
-                      </div>
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-900">
-                        Service
-                      </p>
-                      <p className="text-gray-700">{bookingDetails.service}</p>
-                    </div>
-                  </motion.div>
+                {/* Participants Section */}
+                <div className="mt-6">
+                  <h3 className="mb-3 text-lg font-medium text-gray-900">
+                    {bookingDetails.isGroupBooking
+                      ? "Participants"
+                      : "Service Details"}
+                  </h3>
 
-                  {bookingDetails.addons.length > 0 && (
-                    <motion.div
-                      className="flex items-start"
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.9 }}
-                    >
-                      <div className="mt-1 shrink-0">
-                        <div className="flex size-5 items-center justify-center rounded-full bg-gray-200">
-                          <span className="text-xs font-medium">+</span>
+                  <div className="space-y-4">
+                    {participants.map((participant, index) => (
+                      <div key={index} className="rounded-md bg-gray-50 p-3">
+                        <p className="mb-1 font-medium text-gray-900">
+                          {participant.name}
+                        </p>
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div>
+                            <p className="text-gray-600">Service:</p>
+                            <p className="text-gray-900">
+                              {participant.service}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Duration:</p>
+                            <p className="text-gray-900">
+                              {participant.duration}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Stylist:</p>
+                            <p className="text-gray-900">
+                              {participant.stylist}
+                            </p>
+                          </div>
+                          {participant.addons.length > 0 && (
+                            <div>
+                              <p className="text-gray-600">Add-ons:</p>
+                              <p className="text-gray-900">
+                                {participant.addons.join(", ")}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
-                      <div className="ml-3">
-                        <p className="text-sm font-medium text-gray-900">
-                          Add-ons
-                        </p>
-                        <ul className="text-gray-700">
-                          {bookingDetails.addons.map((addon, index) => (
-                            <li key={index}>{addon}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  <motion.div
-                    className="flex items-start"
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 1 }}
-                  >
-                    <div className="mt-1 shrink-0">
-                      <div className="flex size-5 items-center justify-center rounded-full bg-gray-200">
-                        <span className="text-xs font-medium">P</span>
-                      </div>
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-900">
-                        Stylist
-                      </p>
-                      <p className="text-gray-700">{bookingDetails.stylist}</p>
-                    </div>
-                  </motion.div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
 
@@ -313,12 +360,47 @@ export default function ConfirmationPage() {
                     <li>
                       • Free parking is available in the shopping center lot
                     </li>
+                    {bookingDetails.isGroupBooking && (
+                      <li>
+                        • For group bookings, please ensure all participants
+                        arrive together
+                      </li>
+                    )}
                   </ul>
                 </motion.div>
+
+                {bookingDetails.isGroupBooking && (
+                  <motion.div
+                    className="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-4"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 1.1 }}
+                  >
+                    <h3 className="mb-2 font-medium text-blue-900">
+                      Group Booking Notes
+                    </h3>
+                    <ul className="space-y-1 text-sm text-blue-800">
+                      <li>
+                        • All participants will be served simultaneously by
+                        different stylists
+                      </li>
+                      <li>
+                        • The estimated completion time may vary for each
+                        participant
+                      </li>
+                      <li>
+                        • Changes to the group booking require 48-hour notice
+                      </li>
+                      <li>
+                        • A 10% group discount has been applied to each service
+                      </li>
+                    </ul>
+                  </motion.div>
+                )}
               </motion.div>
             </div>
 
-            {/* Placeholder for future payment info section */}
+            {/* Payment info section */}
             <motion.div
               className="mt-8 border-t border-gray-200 pt-6"
               initial={{ opacity: 0 }}
@@ -326,8 +408,9 @@ export default function ConfirmationPage() {
               transition={{ delay: 1.2 }}
             >
               <p className="italic text-gray-500">
-                Payment will be collected at the salon unless otherwise
-                specified.
+                {bookingDetails.isGroupBooking
+                  ? "Payment for all services will be collected at the salon unless otherwise specified. A 10% deposit may be required for group bookings of 4 or more people."
+                  : "Payment will be collected at the salon unless otherwise specified."}
               </p>
             </motion.div>
           </div>
