@@ -292,7 +292,7 @@ export const BookServiceClient = (props: Props) => {
         </motion.div>
       </AnimatePresence>
 
-      {((step === 2 && type !== "group") ||
+      {((step === 2 && type !== "group" && bookings.length > 0) ||
         (step === 3 && type === "group" && bookings.length > 0)) && (
         <>
           <MaxWidthContainer
