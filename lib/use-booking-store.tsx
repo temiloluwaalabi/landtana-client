@@ -73,7 +73,7 @@ type BookingActions = {
   addGuest: (guest: Omit<Guest, "id" | "bookingIndex">) => string; // Returns the new guest ID
   updateGuest: (
     guestId: string,
-    updates: Partial<Omit<Guest, "id" | "bookingIndex">>,
+    updates: Partial<Omit<Guest, "id" | "bookingIndex">>
   ) => void;
   removeGuest: (guestId: string) => void;
   setCurrentGuest: (guestId: string | undefined) => void;
@@ -136,7 +136,7 @@ export const useBookingStore = create<BookingState & BookingActions>(
     updateGuest: (guestId, updates) => {
       set((state) => ({
         guests: state.guests.map((guest) =>
-          guest.id === guestId ? { ...guest, ...updates } : guest,
+          guest.id === guestId ? { ...guest, ...updates } : guest
         ),
       }));
     },
@@ -203,12 +203,12 @@ export const useBookingStore = create<BookingState & BookingActions>(
 
       const currentGuestId = getQueryParam(
         searchParamsString,
-        "currentGuestId",
+        "currentGuestId"
       ) as string;
 
       const urlPrimaryGuestId = getQueryParam(
         searchParamsString,
-        "primaryGuestId",
+        "primaryGuestId"
       ) as string;
 
       const urlPreview =
@@ -324,5 +324,5 @@ export const useBookingStore = create<BookingState & BookingActions>(
       });
     },
     reset: () => set(initialState),
-  }),
+  })
 );

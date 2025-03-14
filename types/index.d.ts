@@ -49,6 +49,7 @@ export interface AvailabilityResponse {
     };
   };
 }
+
 export interface Stylist {
   id: string;
   bio: string;
