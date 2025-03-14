@@ -28,11 +28,11 @@ export const BookingStepOne = () => {
 
           updateBooking(
             bookings.findIndex(
-              (book) => book.serviceId === currentBooking.serviceId
+              (book) => book.serviceId === currentBooking.serviceId,
             ),
             {
               guestId: userId,
-            }
+            },
           );
         }
 
@@ -118,7 +118,7 @@ export const BookingStepOne = () => {
                 "hover:border-primary hover:bg-white/80",
                 type === option.type
                   ? "border-secondary bg-white"
-                  : "border-[#D9D9D9] shadow-md"
+                  : "border-[#D9D9D9] shadow-md",
               )}
             >
               <motion.div
