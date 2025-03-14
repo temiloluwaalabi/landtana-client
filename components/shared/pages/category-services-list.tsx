@@ -16,7 +16,7 @@ type Props = {
 export const CategoryServiceList = ({ services, category }: Props) => {
   const filteredServices = services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
   );
   return (
     <MaxWidthContainer className="!py-[40px]">

@@ -424,7 +424,7 @@ const GalleryPage = () => {
       caption: string;
       likes: number;
     },
-    index: number
+    index: number,
   ) => {
     setOpenImage(image);
     setCurrentIndex(index);
@@ -437,7 +437,7 @@ const GalleryPage = () => {
 
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     setOpenImage(
-      images[currentIndex === 0 ? images.length - 1 : currentIndex - 1]
+      images[currentIndex === 0 ? images.length - 1 : currentIndex - 1],
     );
   }, [currentIndex, getCurrentImages]);
 
@@ -448,7 +448,7 @@ const GalleryPage = () => {
 
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     setOpenImage(
-      images[currentIndex === images.length - 1 ? 0 : currentIndex + 1]
+      images[currentIndex === images.length - 1 ? 0 : currentIndex + 1],
     );
   }, [currentIndex, getCurrentImages]);
 
@@ -657,7 +657,7 @@ const GalleryPage = () => {
                           caption: string;
                           likes: number;
                         },
-                        index: number
+                        index: number,
                       ) => (
                         <motion.div
                           key={image.id}
@@ -718,7 +718,7 @@ const GalleryPage = () => {
                             <Heart size={16} />
                           </motion.div>
                         </motion.div>
-                      )
+                      ),
                     )}
                   </div>
                 )}
