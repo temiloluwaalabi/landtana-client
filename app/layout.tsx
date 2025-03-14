@@ -17,7 +17,9 @@ import { cormorant, iSans, lora } from "./fonts";
 // You're attempting to animate multiple children within AnimatePresence, but its mode is set to "wait". This will lead to odd visual behaviour.
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://landtanacrownbraids.com"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com",
+  ),
   title: "Landtana Crown Braids | Premium Braiding Salon in San Antonio",
   description:
     "San Antonio's premier braiding salon specializing in protective styles, crown braids, and natural hair care. Book your appointment today!",
@@ -29,7 +31,8 @@ export const metadata: Metadata = {
       "Transform your look with expert braiding services from San Antonio's premier natural hair care specialists.",
     type: "website",
     locale: "en_US",
-    url: "https://landtanacrownbraids.com",
+    url:
+      process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com",
     siteName: "Landtana Crown Braids",
     images: [
       {
@@ -97,12 +100,17 @@ export const metadata: Metadata = {
   // Additional metadata
   applicationName: "Landtana Crown Braids",
   authors: [
-    { name: "Landtana Crown Braids", url: "https://landtanacrownbraids.com" },
+    {
+      name: "Landtana Crown Braids",
+      url:
+        process.env.NEXT_PUBLIC_API_BASE_URL ||
+        "https://landtanacrownbraids.com",
+    },
   ],
   generator: "Next.js",
 
   // Android-specific
-  manifest: "/site.webmanifest",
+  manifest: "/manifest.json",
 
   // Apple-specific
   appleWebApp: {
@@ -113,16 +121,22 @@ export const metadata: Metadata = {
 
   // Verification for search consoles
   verification: {
-    google: "google-site-verification-code",
-    yandex: "yandex-verification-code",
+    google:
+      process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION ||
+      "google-site-verification-code",
+    yandex:
+      process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || "yandex-verification-code",
   },
 
   // Alternates for language/region variants if needed
   alternates: {
-    canonical: "https://landtanacrownbraids.com",
+    canonical:
+      process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com",
     languages: {
-      "en-US": "https://landtanacrownbraids.com",
-      "es-US": "https://landtanacrownbraids.com/es",
+      "en-US":
+        process.env.NEXT_PUBLIC_API_BASE_URL ||
+        "https://landtanacrownbraids.com",
+      "es-US": `${process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com"}/es`,
     },
   },
 };
