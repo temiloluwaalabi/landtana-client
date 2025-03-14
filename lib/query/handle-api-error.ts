@@ -59,7 +59,7 @@ const processApiError = (error: ApiError) => {
         });
       } else {
         toast.error(
-          errorMessage || "Validation failed. Please check your input."
+          errorMessage || "Validation failed. Please check your input.",
         );
       }
       break;
