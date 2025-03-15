@@ -4,6 +4,8 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
+import { Button } from "../ui/button";
+
 export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
@@ -66,23 +68,23 @@ export default function PWAInstallPrompt() {
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 shadow-lg">
-      <div className="mx-auto flex max-w-6xl items-center justify-between">
-        <div className="flex items-center space-x-4">
-          {isIOS && (
-            <p>
-              To install this app on your iOS device, tap the share button
-              <span role="img" aria-label="share icon">
-                {" "}
-                ⎋{" "}
-              </span>
-              and then &quot;Add to Home Screen&quot;
-              <span role="img" aria-label="plus icon">
-                {" "}
-                ➕{" "}
-              </span>
-              .
-            </p>
-          )}
+      <div className="mx-auto flex max-w-6xl flex-col items-start justify-between">
+        {isIOS && (
+          <p>
+            To install this app on your iOS device, tap the share button
+            <span role="img" aria-label="share icon">
+              {" "}
+              ⎋{" "}
+            </span>
+            and then &quot;Add to Home Screen&quot;
+            <span role="img" aria-label="plus icon">
+              {" "}
+              ➕{" "}
+            </span>
+            .
+          </p>
+        )}
+        <div className="flex items-center justify-between space-x-4">
           <div className="hidden sm:block">
             <Image
               src="android-chrome-192x192.png"
@@ -97,19 +99,19 @@ export default function PWAInstallPrompt() {
             </p>
           </div>
         </div>
-        <div className="flex space-x-2">
-          <button
+        <div className="flex items-center space-x-2">
+          <Button
             onClick={dismissPrompt}
-            className="px-4 py-2 text-gray-600 hover:text-gray-800"
+            className="w-full px-4 py-2 text-gray-600 hover:text-gray-800"
           >
             Not now
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleInstallClick}
-            className="rounded-lg bg-teal-600 px-4 py-2 text-white hover:bg-teal-700"
+            className="w-full rounded-lg bg-teal-600 px-4 py-2 text-white hover:bg-teal-700"
           >
             Install
-          </button>
+          </Button>
         </div>
       </div>
     </div>
