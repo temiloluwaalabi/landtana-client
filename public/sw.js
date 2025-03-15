@@ -32,7 +32,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(PRECACHE_ASSETS); // Cache critical assets
-    })
+    }),
   );
   self.skipWaiting(); // Activate the new service worker immediately
 });
@@ -46,9 +46,9 @@ self.addEventListener("activate", (event) => {
           if (cache !== CACHE_NAME && cache !== DYNAMIC_CACHE) {
             caches.delete(cache); // Delete old caches
           }
-        })
+        }),
       );
-    })
+    }),
   );
   clients.claim(); // Take control of all clients
 });
@@ -91,7 +91,7 @@ self.addEventListener("fetch", (event) => {
 
           // If not in cache, return the offline page
           return caches.match(OFFLINE_PAGE);
-        })
+        }),
     );
     return;
   }
@@ -118,7 +118,7 @@ self.addEventListener("fetch", (event) => {
             // For failed images, return placeholder
             return caches.match("/placeholder-image.svg");
           });
-      })
+      }),
     );
     return;
   }
@@ -151,7 +151,7 @@ self.addEventListener("fetch", (event) => {
               statusText: "Service Unavailable",
             });
           });
-      })
+      }),
     );
     return;
   }
@@ -160,6 +160,6 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     fetch(request).catch(() => {
       return caches.match(request);
-    })
+    }),
   );
 });
