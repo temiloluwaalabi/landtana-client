@@ -11,7 +11,7 @@ export default function PWAInstallPrompt() {
   useEffect(() => {
     // Check if the app is already installed
     const isAppInstalled = window.matchMedia(
-      "(display-mode: standalone)",
+      "(display-mode: standalone)"
     ).matches;
 
     if (isAppInstalled) {
