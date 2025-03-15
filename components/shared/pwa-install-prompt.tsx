@@ -7,11 +7,16 @@ import { useState, useEffect } from "react";
 export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
+    setIsIOS(
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
+    );
+
     // Check if the app is already installed
     const isAppInstalled = window.matchMedia(
-      "(display-mode: standalone)",
+      "(display-mode: standalone)"
     ).matches;
 
     if (isAppInstalled) {
@@ -63,6 +68,21 @@ export default function PWAInstallPrompt() {
     <div className="fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 shadow-lg">
       <div className="mx-auto flex max-w-6xl items-center justify-between">
         <div className="flex items-center space-x-4">
+          {isIOS && (
+            <p>
+              To install this app on your iOS device, tap the share button
+              <span role="img" aria-label="share icon">
+                {" "}
+                ⎋{" "}
+              </span>
+              and then &quot;Add to Home Screen&quot;
+              <span role="img" aria-label="plus icon">
+                {" "}
+                ➕{" "}
+              </span>
+              .
+            </p>
+          )}
           <div className="hidden sm:block">
             <Image
               src="android-chrome-192x192.png"
