@@ -1,4 +1,3 @@
-import type { NextConfig } from "next";
 import withPWA from "next-pwa";
 
 const withPWAConfig = withPWA({
@@ -6,12 +5,13 @@ const withPWAConfig = withPWA({
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === "development",
+  sw: "sw.js",
 });
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   serverExternalPackages: ["pino", "pino-pretty"],
 
-  headers: async () => {
+  async headers() {
     return [
       {
         source: "/(.*)",
@@ -53,31 +53,31 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
+        protocol: "https" as const,
         hostname: "*",
       },
       {
-        protocol: "http",
+        protocol: "http" as const,
         hostname: "*",
       },
       {
-        protocol: "https",
+        protocol: "https" as const,
         hostname: "res.cloudinary.com",
       },
       {
-        protocol: "https",
+        protocol: "https" as const,
         hostname: "res-console.cloudinary.com",
       },
       {
-        protocol: "https",
-        hostname: "https://widgets.guidestar.org",
+        protocol: "https" as const,
+        hostname: "widgets.guidestar.org",
       },
       {
-        protocol: "https",
+        protocol: "https" as const,
         hostname: "images.unsplash.com",
       },
     ],
   },
 };
 
-module.exports = withPWAConfig(nextConfig as any);
+export default withPWAConfig(nextConfig);
