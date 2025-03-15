@@ -16,7 +16,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(CACHED_ASSETS); // Cache critical assets
-    })
+    }),
   );
   self.skipWaiting(); // Activate the new service worker immediately
 });
@@ -29,9 +29,9 @@ self.addEventListener("activate", (event) => {
           if (cache !== CACHE_NAME) {
             caches.delete(cache); // Delete old caches
           }
-        })
+        }),
       );
-    })
+    }),
   );
   clients.claim(); // Take control of all clients
 });
@@ -49,6 +49,6 @@ self.addEventListener("fetch", (event) => {
         // If network fails, return the offline page
         return caches.match(OFFLINE_PAGE);
       });
-    })
+    }),
   );
 });
