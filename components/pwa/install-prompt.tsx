@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 
 import { PushNotificationManager } from "./pwa";
@@ -8,7 +9,7 @@ function InstallPrompt() {
 
   useEffect(() => {
     setIsIOS(
-      /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream,
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
     );
 
     setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
