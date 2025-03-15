@@ -5,6 +5,7 @@ import NextTopLoader from "nextjs-toploader";
 
 import { Navbar } from "@/components/navigation/navbar";
 import ScrollToTop from "@/components/navigation/scroll-to-top";
+import PWAInstallPrompt from "@/components/shared/pwa-install-prompt";
 import { Toaster } from "@/components/ui/sonner";
 import { businessJsonLd } from "@/lib/jsonld";
 import { cn } from "@/lib/utils";
@@ -18,7 +19,7 @@ import { cormorant, iSans, lora } from "./fonts";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com",
+    process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com"
   ),
   title: "Landtana Crown Braids | Premium Braiding Salon in San Antonio",
   description:
@@ -161,7 +162,7 @@ export default async function RootLayout({
           cormorant.variable,
           lora.variable,
           iSans.variable,
-          "font-lora antialiased",
+          "font-lora antialiased"
         )}
       >
         <Providers>
@@ -169,6 +170,9 @@ export default async function RootLayout({
 
           <Toaster />
           <Navbar type="CENTER" isLogeedIn={session.isLoggedIn || false} />
+          {/* <PushNotificationManager /> */}
+          <PWAInstallPrompt />
+
           {children}
         </Providers>
         <ScrollToTop />
