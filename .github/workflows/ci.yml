@@ -48,19 +48,3 @@ jobs:
 
       - name: Run End-to-End Tests
         run: npm run test:e2e
-
-      # # Optional: Deploy to Vercel
-      # - name: Deploy to Vercel
-      #   uses: amondnet/vercel-action@v25
-      #   with:
-      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
-      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      # # Optional: Notify Slack on Failure
-      # - name: Notify Slack on Failure
-      #   if: failure()
-      #   uses: rtCamp/action-slack-notify@v2
-      #   env:
-      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      #     SLACK_MESSAGE: "CI Pipeline failed for ${{ github.repository }}"
