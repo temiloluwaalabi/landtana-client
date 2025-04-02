@@ -1,8 +1,17 @@
 "use client";
+import { format, formatDate, parse } from "date-fns";
 import { MotionConfig, motion } from "framer-motion";
-import { ArrowRight, Calendar, Clock, Minus, Plus } from "lucide-react";
+import {
+  ArrowRight,
+  Calendar,
+  Clock,
+  Loader2,
+  Minus,
+  Plus,
+} from "lucide-react";
 import * as React from "react";
 import { useInView } from "react-intersection-observer";
+import { toast } from "sonner";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -13,6 +22,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { durations } from "@/config/constants";
+import { useCreateBooking } from "@/lib/query/booking.service";
 import { useBookingStore } from "@/lib/use-booking-store";
 import {
   calculateBookingDetails,
@@ -21,6 +31,7 @@ import {
   formatMinutes,
   toCurrency,
 } from "@/lib/utils";
+import { CreateBookingSchemaType } from "@/lib/validations/main-schema";
 import { cardVariants } from "@/lib/variants";
 import { Service } from "@/types";
 
@@ -31,6 +42,7 @@ type Props = {
 };
 
 export const BookingStepFour = ({ services }: Props) => {
+  const { mutateAsync, isPending } = useCreateBooking();
   const { ref: summaryRef, inView: summaryInView } = useInView({
     threshold: 0.1,
     triggerOnce: false,
@@ -51,6 +63,30 @@ export const BookingStepFour = ({ services }: Props) => {
   } = useBookingStore();
 
   const totalPrice = calculateBookingDetails(bookings, services, services);
+
+  const handleSubmitBooking = async () => {
+    const bookingValue: CreateBookingSchemaType = {
+      service_id: [bookings[0].serviceId],
+      date: date ? formatDate(new Date(date), "yyyy-MM-dd") : "",
+      time: time ? format(parse(time, "h:mm a", new Date()), "HH:mm") : "",
+      price: totalPrice.totalGroupPrice.toString(),
+      style_options: bookings[0].styleOptionId,
+      variations: [],
+      is_group: type === "group",
+      duration: totalPrice.totalGroupDuration.toString(),
+    };
+
+    console.log(bookingValue);
+    await mutateAsync(bookingValue, {
+      onSuccess: () => {
+        toast("Booking successfully created");
+      },
+    });
+    updateState({
+      step: step + 1,
+    });
+    // console.log(bookingValue);
+  };
 
   return (
     <MotionConfig reducedMotion="user">
@@ -456,10 +492,13 @@ export const BookingStepFour = ({ services }: Props) => {
                   </CardContent>
                   <CardFooter>
                     <Button
-                      disabled={!time || !date}
-                      onClick={() => updateState({ step: step + 1 })}
-                      className="h-[48px] w-full"
+                      disabled={!time || !date || isPending}
+                      onClick={handleSubmitBooking}
+                      className="flex h-[48px] w-full items-center "
                     >
+                      {isPending && (
+                        <Loader2 className="me-2 size-4 animate-spin" />
+                      )}
                       Continue
                       <motion.div
                         className="ml-2"

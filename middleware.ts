@@ -38,7 +38,7 @@ export default async function middleware(req: NextRequest) {
   const isAuthRoute = authRoutes.includes(pathname);
 
   const isGuestRoute = guestRoutes.some(
-    (route) => pathname.startsWith(route), // Check if the pathname starts with a guest route
+    (route) => pathname.endsWith(route), // Check if the pathname starts with a guest route
   );
 
   const isSharedRoutes = isAccessibleRoute(pathname, sharedRoutes);
@@ -50,6 +50,9 @@ export default async function middleware(req: NextRequest) {
   if (isLoggedIn && !isOnboarded && pathname !== DEFAULT_ONBOARDING_REDIRECT) {
     return NextResponse.redirect(new URL(DEFAULT_ONBOARDING_REDIRECT, nextUrl));
   }
+
+  console.log("isGuestRoute", isGuestRoute);
+  console.log("isPrivate", privateRoutes);
   // Redirect if reset-password is accessed without a token
   if (pathname === "/reset-password" || pathname === "/confirm-email") {
     const url = new URL(req.url);

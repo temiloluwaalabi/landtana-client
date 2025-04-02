@@ -1,3 +1,4 @@
+import { getSession } from "@/app/actions/session.action";
 import {
   GetAllCategoriesResponse,
   GetAllServicesResponse,
@@ -10,6 +11,7 @@ import {
   EmailSchemaType,
   PasswordSchemaType,
 } from "../validations/common.schema";
+import { CreateBookingSchemaType } from "../validations/main-schema";
 
 export const authService = {
   login: async (credentials: { email: string; password: string }) => {
@@ -381,6 +383,122 @@ export const categoriesService = {
     } catch (error) {
       console.error("API Error Response SERVICES:", error);
       throw error;
+    }
+  },
+};
+export const bookingService = {
+  createBooking: async (values: CreateBookingSchemaType) => {
+    const session = await getSession();
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "Sending login request to:",
+        `${authClient.defaults.baseURL}/bookings`,
+      );
+      console.log("Payload:", values);
+    }
+
+    try {
+      // ✅ Log headers before making the request
+      const headers = authClient.defaults.headers.common;
+      console.log("Request Headers:", headers);
+      const response = await authClient.post("/booking", values, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+      });
+      // ✅ Check response status manually like `fetch`
+
+      // if (process.env.NODE_ENV === "development") {
+      //   console.log("Response:", response.data);
+      // }
+
+      return response.data;
+    } catch (error) {
+      // logger.error({ error }, "Service Creation ACTION Failed");
+
+      if (process.env.NODE_ENV === "development") {
+        console.error("API Error Response BOOKINGS:", error);
+      }
+      throw error; // 👈 **Ensure error is re-thrown for useMutation to catch**
+    }
+  },
+  getAllBookings: async () // page: number = 1,
+  // limit: number = 35,
+  : Promise<GetAllServicesResponse> => {
+    const session = await getSession();
+
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "Sending login request to:",
+        `${authClient.defaults.baseURL}/bookings`,
+      );
+    }
+    try {
+      // ✅ Log headers before making the request
+      const headers = authClient.defaults.headers.common;
+      console.log("Request Headers:", headers);
+      const response = await authClient.get("/bookings", {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+      });
+
+      if (!response.data) {
+        throw new ApiError({
+          statusCode: 500,
+          messages: "Data not found in response",
+        });
+      }
+
+      return response.data;
+    } catch (error) {
+      logger.error({ error }, "SERVICES FETCHING FAILED");
+
+      if (process.env.NODE_ENV === "development") {
+        console.error("API Error Response SERVICES:", error);
+      }
+      throw error; // 👈 **Ensure error is re-thrown for useMutation to catch**
+    }
+  },
+  getUserBookings: async () // page: number = 1,
+  // limit: number = 35,
+  : Promise<GetAllServicesResponse> => {
+    const session = await getSession();
+
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "Sending login request to:",
+        `${authClient.defaults.baseURL}/bookings/user`,
+      );
+    }
+    try {
+      // ✅ Log headers before making the request
+      const headers = authClient.defaults.headers.common;
+      console.log("Request Headers:", headers);
+      const response = await authClient.get("/bookings/user", {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+      });
+
+      if (!response.data) {
+        throw new ApiError({
+          statusCode: 500,
+          messages: "Data not found in response",
+        });
+      }
+
+      return response.data;
+    } catch (error) {
+      logger.error({ error }, "SERVICES FETCHING FAILED");
+
+      if (process.env.NODE_ENV === "development") {
+        console.error("API Error Response SERVICES:", error);
+      }
+      throw error; // 👈 **Ensure error is re-thrown for useMutation to catch**
     }
   },
 };

@@ -24,17 +24,15 @@ export const CreateStylistSchema = z.object({
 });
 
 export const CreateBookingSchema = z.object({
-  stylist_id: z.string().min(1, "Stylist ID is required"),
-  service_id: z
-    .array(z.string().min(1, "Service ID is required"))
-    .min(1, "At least one service ID is required"),
-  booking_datetime: z
-    .string()
-    .refine(
-      (val) => !isNaN(Date.parse(val)),
-      "Invalid date format. Must be an ISO8601 timestamp (e.g., '2025-02-01T10:00:00.000Z')",
-    ),
+  service_id: z.array(z.string().min(1, "Service ID is required")),
+  date: z.string(),
+  time: z.string(),
+  variations: z.array(z.string()).optional(),
+  style_options: z.optional(z.string()),
+  price: z.string(),
+  duration: z.string(),
   additional_notes: z.string().optional(), // Optional field
+  is_group: z.boolean().default(false),
 });
 
 export const GuestSchema = z.object({
