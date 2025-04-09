@@ -502,11 +502,11 @@ export const MainFooter = () => {
           >
             <Link
               className="flex justify-center text-center text-sm text-white/70 transition-colors hover:text-white sm:text-right lg:justify-end lg:text-right"
-              href="https://davidleotech.com"
+              href="https://landtana.com"
             >
-              Designed By{" "}
+              Developed By{" "}
               <span className="ms-2 font-medium text-pink-300">
-                DavidLeoTech
+                Landtana Crown Braids
               </span>
             </Link>
           </motion.div>

@@ -123,7 +123,7 @@ export default function AboutUsClient() {
           transition={{ duration: 1.5 }}
         >
           <Image
-            src="https://res.cloudinary.com/davidleo/image/upload/v1741645591/landtana/modern-beauty-salon-interior_q7xdvr.jpg"
+            src="https://res.cloudinary.com/davidleo/image/upload/v1739726302/landtana/IMG-20250114-WA0030_uenvud.jpg"
             alt="Landtana Crown Braids"
             fill
             className="object-cover brightness-75"
@@ -203,7 +203,7 @@ export default function AboutUsClient() {
             className="relative overflow-hidden rounded-2xl"
           >
             <Image
-              src="https://res.cloudinary.com/davidleo/image/upload/v1741645591/landtana/modern-beauty-salon-interior_q7xdvr.jpg"
+              src="https://res.cloudinary.com/davidleo/image/upload/v1739726298/landtana/IMG-20250114-WA0031_sl9rvo.jpg"
               alt="Landtana Crown Braids Salon"
               width={600}
               height={800}
@@ -388,7 +388,7 @@ export default function AboutUsClient() {
               whileHover="hover"
             >
               <Image
-                src="https://res.cloudinary.com/davidleo/image/upload/v1741645591/landtana/modern-beauty-salon-interior_q7xdvr.jpg"
+                src="https://res.cloudinary.com/davidleo/image/upload/v1739726298/landtana/IMG-20250114-WA0031_sl9rvo.jpg"
                 alt="Main salon area"
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"

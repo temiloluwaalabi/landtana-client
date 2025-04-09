@@ -48,40 +48,6 @@ export default function TeamPageClient() {
         facebook: "https://facebook.com/janedoe",
       },
     },
-    {
-      name: "Maria Johnson",
-      title: "Senior Braider",
-      bio: "Known for her precision and speed, Maria excels in box braids, Senegalese twists, and cornrow designs. With 7 years of experience, she brings creativity and technical expertise to every client's experience.",
-      image:
-        "https://res.cloudinary.com/davidleo/image/upload/v1739748138/landtana/a4ae835795f7033b83f7ebf019ce8bd0_r8h7d7.png",
-      specialties: ["Senegalese Twists", "Box Braids", "Knotless Braids"],
-      social: {
-        instagram: "https://instagram.com/mariaj",
-      },
-    },
-    {
-      name: "Aisha Williams",
-      title: "Braiding Specialist",
-      bio: "Aisha's specialty lies in creating innovative faux locs and goddess braids. Her gentle approach and attention to detail ensure that clients leave not only with gorgeous styles but also with a comfortable experience.",
-      image:
-        "https://res.cloudinary.com/davidleo/image/upload/v1739748137/landtana/DALL_E_2025-02-17_00.21.17_-_A_stylish_hair_salon_focusing_on_hair_cutting_services_showing_a_professional_hairstylist_using_scissors_to_trim_and_shape_a_client_s_hair._The_salon_oooton.webp",
-      specialties: ["Faux Locs", "Goddess Braids", "Passion Twists"],
-      social: {
-        instagram: "https://instagram.com/aishawilliams",
-      },
-    },
-    {
-      name: "Tiffany Lee",
-      title: "Junior Stylist",
-      bio: "The newest addition to our team, Tiffany brings fresh perspectives and contemporary styling ideas. Trained by our senior stylists, she specializes in crochet braids and modern protective styles.",
-      image:
-        "https://res.cloudinary.com/davidleo/image/upload/v1739726297/landtana/IMG-20250114-WA0020_zxnmj0.jpg",
-      specialties: ["Crochet Braids", "Feed-in Braids", "Bohemian Styles"],
-      social: {
-        instagram: "https://instagram.com/tiffanylee",
-        facebook: "https://facebook.com/tiffanylee",
-      },
-    },
   ];
 
   return (

@@ -17,7 +17,15 @@ export const guestRoutes = [
   "/",
 ];
 
-export const sharedRoutes = ["/services", "/confirm-email"];
+export const sharedRoutes = [
+  "/services",
+  "/about-us",
+  "/team",
+  "/confirm-email",
+  "/gallery",
+  "/faq",
+  "/contact-us",
+];
 
 /**
  * An array of routes that are used for authentication

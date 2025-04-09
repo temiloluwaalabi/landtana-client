@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { motion, useAnimation, AnimatePresence } from "framer-motion";
@@ -13,14 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Carousel } from "@/components/ui/apple-cards-carousel";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { faqData } from "@/config/constants";
 import {
@@ -32,7 +26,6 @@ import {
 } from "@/lib/variants";
 import { Category, Service } from "@/types";
 
-import { data } from "../card-demo";
 import { HeroSection } from "../hero";
 import MaxWidthContainer from "../max-width-container";
 import ExpertiseSection from "./_components/home-expertise-section";
@@ -241,6 +234,7 @@ export const HomePageClient = (props: Props) => {
     triggerOnce: true,
     threshold: 0.1,
   });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [reviewRef, reviewInView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -255,76 +249,76 @@ export const HomePageClient = (props: Props) => {
 
   const filteredServices = props.services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const filteredCategories = props.categories.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
-  const cards = data.map((card) => (
-    <motion.div
-      key={card.src}
-      whileHover={{ y: -5 }}
-      className="h-fit w-[400px] rounded-[40px] sm:w-[540px]"
-    >
-      <Card className="h-full overflow-hidden border-none bg-white/10 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
-        <CardHeader className="flex flex-row items-center gap-2">
-          <div className="overflow-hidden rounded-full">
-            <motion.div whileHover={{ scale: 1.1 }} className="size-full">
-              <Image
-                src="https://res.cloudinary.com/davidleo/image/upload/v1739748138/landtana/a4ae835795f7033b83f7ebf019ce8bd0_r8h7d7.png"
-                alt="Box Braid"
-                width={40}
-                height={40}
-                className="size-[40px] rounded-full border border-primary object-cover"
-              />
-            </motion.div>
-          </div>
-          <div className="flex flex-col items-start gap-1">
-            <h4 className="text-white/90">Temi Alabi</h4>
-            <h2 className="text-xs text-white md:text-sm">
-              Exceptional Service & Atmosphere
-            </h2>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="font-lora text-sm font-normal text-white/80 md:text-base">
-            &quot;I had an amazing experience at Landtana! From the moment I
-            walked in, the staff made me feel welcome and comfortable. The salon
-            has a relaxing atmosphere, and my stylist truly listened to what I
-            wanted. I walked out feeling more confident than ever with my new
-            hairstyle. Highly recommend!&quot;
-          </p>
-        </CardContent>
-        <CardFooter className="flex flex-row items-center justify-between text-white/70">
-          <div className="flex">
-            <Star
-              fill="#FF2C56"
-              stroke="#FF2C56"
-              className="border-secondary"
-            />
-            <Star
-              fill="#FF2C56"
-              stroke="#FF2C56"
-              className="border-secondary"
-            />
-            <Star
-              fill="#FF2C56"
-              stroke="#FF2C56"
-              className="border-secondary"
-            />
-            <Star
-              fill="#FF2C56"
-              stroke="#FF2C56"
-              className="border-secondary"
-            />
-            <Star fill="#fff" stroke="#FF2C56" />
-          </div>
-          21st October, 2024
-        </CardFooter>
-      </Card>
-    </motion.div>
-  ));
+  // const cards = data.map((card) => (
+  //   <motion.div
+  //     key={card.src}
+  //     whileHover={{ y: -5 }}
+  //     className="h-fit w-[400px] rounded-[40px] sm:w-[540px]"
+  //   >
+  //     <Card className="h-full overflow-hidden border-none bg-white/10 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
+  //       <CardHeader className="flex flex-row items-center gap-2">
+  //         <div className="overflow-hidden rounded-full">
+  //           <motion.div whileHover={{ scale: 1.1 }} className="size-full">
+  //             <Image
+  //               src="https://res.cloudinary.com/davidleo/image/upload/v1739748138/landtana/a4ae835795f7033b83f7ebf019ce8bd0_r8h7d7.png"
+  //               alt="Box Braid"
+  //               width={40}
+  //               height={40}
+  //               className="size-[40px] rounded-full border border-primary object-cover"
+  //             />
+  //           </motion.div>
+  //         </div>
+  //         <div className="flex flex-col items-start gap-1">
+  //           <h4 className="text-white/90">Temi Alabi</h4>
+  //           <h2 className="text-xs text-white md:text-sm">
+  //             Exceptional Service & Atmosphere
+  //           </h2>
+  //         </div>
+  //       </CardHeader>
+  //       <CardContent>
+  //         <p className="font-lora text-sm font-normal text-white/80 md:text-base">
+  //           &quot;I had an amazing experience at Landtana! From the moment I
+  //           walked in, the staff made me feel welcome and comfortable. The salon
+  //           has a relaxing atmosphere, and my stylist truly listened to what I
+  //           wanted. I walked out feeling more confident than ever with my new
+  //           hairstyle. Highly recommend!&quot;
+  //         </p>
+  //       </CardContent>
+  //       <CardFooter className="flex flex-row items-center justify-between text-white/70">
+  //         <div className="flex">
+  //           <Star
+  //             fill="#FF2C56"
+  //             stroke="#FF2C56"
+  //             className="border-secondary"
+  //           />
+  //           <Star
+  //             fill="#FF2C56"
+  //             stroke="#FF2C56"
+  //             className="border-secondary"
+  //           />
+  //           <Star
+  //             fill="#FF2C56"
+  //             stroke="#FF2C56"
+  //             className="border-secondary"
+  //           />
+  //           <Star
+  //             fill="#FF2C56"
+  //             stroke="#FF2C56"
+  //             className="border-secondary"
+  //           />
+  //           <Star fill="#fff" stroke="#FF2C56" />
+  //         </div>
+  //         21st October, 2024
+  //       </CardFooter>
+  //     </Card>
+  //   </motion.div>
+  // ));
   return (
     <>
       {/* HERO SECTION */} <HeroSection heroVariant="GREEN" />
@@ -477,7 +471,7 @@ export const HomePageClient = (props: Props) => {
         <EnhancedCTA />
       </MaxWidthContainer>
       <ProfessionalSection filteredServices={filteredServices} />
-      <MaxWidthContainer className="bg-primary !py-[40px]">
+      {/* <MaxWidthContainer className="bg-primary !py-[40px]">
         <motion.div
           ref={reviewRef}
           initial="hidden"
@@ -493,9 +487,8 @@ export const HomePageClient = (props: Props) => {
           </motion.h2>
           <Carousel items={cards} />
 
-          {/* <AppleCardsCarouselDemo /> */}
         </motion.div>
-      </MaxWidthContainer>
+      </MaxWidthContainer> */}
       <MaxWidthContainer className="bg-[#F5F6F7] !py-[40px]">
         <motion.div
           className=""

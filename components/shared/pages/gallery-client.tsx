@@ -36,36 +36,6 @@ const galleryData = {
       alt: "Box Braids Style 1",
       caption: "Classic Medium Box Braids",
     },
-    {
-      id: 2,
-      src: "/images/gallery/box-braids-2.jpg",
-      alt: "Box Braids Style 2",
-      caption: "Ombré Box Braids with Beads",
-    },
-    {
-      id: 3,
-      src: "/images/gallery/box-braids-3.jpg",
-      alt: "Box Braids Style 3",
-      caption: "Jumbo Box Braids",
-    },
-    {
-      id: 4,
-      src: "/images/gallery/box-braids-4.jpg",
-      alt: "Box Braids Style 4",
-      caption: "Bohemian Box Braids",
-    },
-    {
-      id: 5,
-      src: "/images/gallery/box-braids-5.jpg",
-      alt: "Box Braids Style 5",
-      caption: "Knotless Box Braids",
-    },
-    {
-      id: 6,
-      src: "/images/gallery/box-braids-6.jpg",
-      alt: "Box Braids Style 6",
-      caption: "Colored Box Braids",
-    },
   ],
   cornrows: [
     {
@@ -73,30 +43,6 @@ const galleryData = {
       src: "/images/gallery/cornrows-1.jpg",
       alt: "Cornrows Style 1",
       caption: "Straight Back Cornrows",
-    },
-    {
-      id: 8,
-      src: "/images/gallery/cornrows-2.jpg",
-      alt: "Cornrows Style 2",
-      caption: "Feed-in Cornrows",
-    },
-    {
-      id: 9,
-      src: "/images/gallery/cornrows-3.jpg",
-      alt: "Cornrows Style 3",
-      caption: "Cornrows with Designs",
-    },
-    {
-      id: 10,
-      src: "/images/gallery/cornrows-4.jpg",
-      alt: "Cornrows Style 4",
-      caption: "Zig-Zag Cornrows",
-    },
-    {
-      id: 11,
-      src: "/images/gallery/cornrows-5.jpg",
-      alt: "Cornrows Style 5",
-      caption: "Cornrows with Extensions",
     },
   ],
   twists: [
@@ -106,30 +52,6 @@ const galleryData = {
       alt: "Twists Style 1",
       caption: "Senegalese Twists",
     },
-    {
-      id: 13,
-      src: "/images/gallery/twists-2.jpg",
-      alt: "Twists Style 2",
-      caption: "Passion Twists",
-    },
-    {
-      id: 14,
-      src: "/images/gallery/twists-3.jpg",
-      alt: "Twists Style 3",
-      caption: "Marley Twists",
-    },
-    {
-      id: 15,
-      src: "/images/gallery/twists-4.jpg",
-      alt: "Twists Style 4",
-      caption: "Havana Twists",
-    },
-    {
-      id: 16,
-      src: "/images/gallery/twists-5.jpg",
-      alt: "Twists Style 5",
-      caption: "Spring Twists",
-    },
   ],
   locsAndOthers: [
     {
@@ -137,36 +59,6 @@ const galleryData = {
       src: "/images/gallery/locs-1.jpg",
       alt: "Locs Style 1",
       caption: "Faux Locs",
-    },
-    {
-      id: 18,
-      src: "/images/gallery/locs-2.jpg",
-      alt: "Locs Style 2",
-      caption: "Goddess Locs",
-    },
-    {
-      id: 19,
-      src: "/images/gallery/locs-3.jpg",
-      alt: "Locs Style 3",
-      caption: "Butterfly Locs",
-    },
-    {
-      id: 20,
-      src: "/images/gallery/others-1.jpg",
-      alt: "Other Style 1",
-      caption: "Knotless Braid Updo",
-    },
-    {
-      id: 21,
-      src: "/images/gallery/others-2.jpg",
-      alt: "Other Style 2",
-      caption: "Crochet Braids",
-    },
-    {
-      id: 22,
-      src: "/images/gallery/others-3.jpg",
-      alt: "Other Style 3",
-      caption: "Fulani Braids",
     },
   ],
 };
@@ -339,28 +231,28 @@ const GalleryPage = () => {
     setTimeout(() => {
       // Mock gallery data
       const mockGalleryData = {
-        boxBraids: Array.from({ length: 8 }, (_, i) => ({
+        boxBraids: Array.from({ length: 2 }, (_, i) => ({
           id: i + 1,
           src: `https://res.cloudinary.com/davidleo/image/upload/v1739726303/landtana/IMG-20250114-WA0024_beh14v.jpg`,
           alt: `Box Braids Style ${i + 1}`,
           caption: `Stunning Box Braids Style ${i + 1}`,
           likes: Math.floor(Math.random() * 100) + 20,
         })),
-        cornrows: Array.from({ length: 8 }, (_, i) => ({
+        cornrows: Array.from({ length: 2 }, (_, i) => ({
           id: i + 101,
           src: `https://res.cloudinary.com/davidleo/image/upload/v1739726295/landtana/IMG-20250114-WA0043_iqtsvu.jpg`,
           alt: `Cornrow Style ${i + 1}`,
           caption: `Elegant Cornrow Design ${i + 1}`,
           likes: Math.floor(Math.random() * 100) + 20,
         })),
-        twists: Array.from({ length: 8 }, (_, i) => ({
+        twists: Array.from({ length: 2 }, (_, i) => ({
           id: i + 201,
           src: `https://res.cloudinary.com/davidleo/image/upload/v1739726290/landtana/IMG-20250114-WA0027_hptzh5.jpg`,
           alt: `Twist Style ${i + 1}`,
           caption: `Beautiful Twist Style ${i + 1}`,
           likes: Math.floor(Math.random() * 100) + 20,
         })),
-        locsAndOthers: Array.from({ length: 8 }, (_, i) => ({
+        locsAndOthers: Array.from({ length: 2 }, (_, i) => ({
           id: i + 301,
           src: `https://res.cloudinary.com/davidleo/image/upload/v1739726280/landtana/IMG-20250114-WA0025_irkyja.jpg`,
           alt: `Locs Style ${i + 1}`,
@@ -424,7 +316,7 @@ const GalleryPage = () => {
       caption: string;
       likes: number;
     },
-    index: number,
+    index: number
   ) => {
     setOpenImage(image);
     setCurrentIndex(index);
@@ -437,7 +329,7 @@ const GalleryPage = () => {
 
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     setOpenImage(
-      images[currentIndex === 0 ? images.length - 1 : currentIndex - 1],
+      images[currentIndex === 0 ? images.length - 1 : currentIndex - 1]
     );
   }, [currentIndex, getCurrentImages]);
 
@@ -448,7 +340,7 @@ const GalleryPage = () => {
 
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     setOpenImage(
-      images[currentIndex === images.length - 1 ? 0 : currentIndex + 1],
+      images[currentIndex === images.length - 1 ? 0 : currentIndex + 1]
     );
   }, [currentIndex, getCurrentImages]);
 
@@ -657,7 +549,7 @@ const GalleryPage = () => {
                           caption: string;
                           likes: number;
                         },
-                        index: number,
+                        index: number
                       ) => (
                         <motion.div
                           key={image.id}
@@ -718,7 +610,7 @@ const GalleryPage = () => {
                             <Heart size={16} />
                           </motion.div>
                         </motion.div>
-                      ),
+                      )
                     )}
                   </div>
                 )}
