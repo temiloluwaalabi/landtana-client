@@ -137,13 +137,13 @@ const categoryVariants = {
 };
 export const BookingStepTwo = (props: Props) => {
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    "b15bd255-537b-4738-bb98-74938098599d"
+    "b15bd255-537b-4738-bb98-74938098599d",
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   // OR
   const [subcategoryFilter, setSubcategoryFilter] = useState<string | null>(
-    null
+    null,
   );
   // Add these state variables at the top of your component
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -167,7 +167,7 @@ export const BookingStepTwo = (props: Props) => {
         const isDirectChild = service.category_id === selectedCategory;
         if (!isDirectChild) {
           const serviceCategory = props.categories.find(
-            (cat) => cat.id === service.category_id
+            (cat) => cat.id === service.category_id,
           );
           const isSubcategoryChild =
             serviceCategory && serviceCategory.parent_id === selectedCategory;
@@ -206,7 +206,7 @@ export const BookingStepTwo = (props: Props) => {
     return true;
   });
   const filteredTab = props.categories.filter(
-    (cat) => cat.parent_id === selectedCategory
+    (cat) => cat.parent_id === selectedCategory,
   );
   const renderServiceCard = (service: Service) => {
     // const isSelected = selectedServices.includes(service.id);
@@ -215,7 +215,7 @@ export const BookingStepTwo = (props: Props) => {
         ? bookings.some(
             (booking) =>
               booking.serviceId === service.id &&
-              booking.guestId === currentGuestId
+              booking.guestId === currentGuestId,
           )
         : bookings.some((booking) => booking.serviceId === service.id);
     return (
@@ -235,7 +235,7 @@ export const BookingStepTwo = (props: Props) => {
             key={service.id}
             className={cn(
               "flex h-auto !w-full relative transition-all items-center overflow-hidden justify-between rounded-[8px] border  hover:bg-white cursor-pointer border-[#D9D9D9] px-6 py-6",
-              isBooked && "border-primary bg-white"
+              isBooked && "border-primary bg-white",
             )}
           >
             {/* Subtle background pattern */}
@@ -317,7 +317,7 @@ export const BookingStepTwo = (props: Props) => {
     const isSelected = selectedCategory === category.id;
     // Count services that directly belong to this category
     const directServicesCount = props.services.filter(
-      (service) => service.category_id === category.id
+      (service) => service.category_id === category.id,
     ).length;
 
     // Count services that belong to subcategories of this category
@@ -326,7 +326,7 @@ export const BookingStepTwo = (props: Props) => {
       .map((cat) => cat.id);
 
     const subcategoryServicesCount = props.services.filter((service) =>
-      subcategoryIds.includes(service.category_id ?? "")
+      subcategoryIds.includes(service.category_id ?? ""),
     ).length;
 
     // Total count of services for this category (direct + subcategories)
@@ -340,7 +340,7 @@ export const BookingStepTwo = (props: Props) => {
           "border border-transparent transition-all !bg-transparent",
           isSelected
             ? "!bg-primary text-white"
-            : "bg-primary/10 text-primary hover:bg-primary/20"
+            : "bg-primary/10 text-primary hover:bg-primary/20",
         )}
         initial="normal"
         animate={isSelected ? "selected" : "normal"}
@@ -352,7 +352,7 @@ export const BookingStepTwo = (props: Props) => {
         <motion.div
           className={cn(
             "flex size-6 items-center justify-center rounded-full",
-            isSelected ? "bg-white text-primary" : "bg-primary/10 text-primary"
+            isSelected ? "bg-white text-primary" : "bg-primary/10 text-primary",
           )}
           whileHover={{ scale: 1.1 }}
         >
@@ -506,7 +506,7 @@ export const BookingStepTwo = (props: Props) => {
                               key={duration.value}
                               variant={
                                 durationFilter.includes(
-                                  duration.value.toString()
+                                  duration.value.toString(),
                                 )
                                   ? "default"
                                   : "outline"
@@ -514,21 +514,21 @@ export const BookingStepTwo = (props: Props) => {
                               className={cn(
                                 "cursor-pointer",
                                 durationFilter.includes(
-                                  duration.value.toString()
+                                  duration.value.toString(),
                                 )
                                   ? "bg-primary"
-                                  : "bg-transparent text-gray-700"
+                                  : "bg-transparent text-gray-700",
                               )}
                               onClick={() => {
                                 if (
                                   durationFilter.includes(
-                                    duration.value.toString()
+                                    duration.value.toString(),
                                   )
                                 ) {
                                   setDurationFilter(
                                     durationFilter.filter(
-                                      (d) => d !== duration.value.toString()
-                                    )
+                                      (d) => d !== duration.value.toString(),
+                                    ),
                                   );
                                 } else {
                                   setDurationFilter([
@@ -639,7 +639,7 @@ export const BookingStepTwo = (props: Props) => {
                             .split("-")
                             .map(
                               (word) =>
-                                word.charAt(0).toUpperCase() + word.slice(1)
+                                word.charAt(0).toUpperCase() + word.slice(1),
                             )
                             .join(" ")}
                         </TabsTrigger>

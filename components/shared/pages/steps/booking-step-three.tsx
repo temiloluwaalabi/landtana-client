@@ -21,7 +21,7 @@ type Props = {
 
 export const BookingStepThree = ({ services }: Props) => {
   const [openAccordionId, setOpenAccordionId] = React.useState<string | null>(
-    null
+    null,
   );
   const [searchTerm, setSearchTerm] = React.useState("");
 
@@ -35,18 +35,18 @@ export const BookingStepThree = ({ services }: Props) => {
   const totalPrice = calculateBookingDetails(
     bookings,
     services,
-    services.filter((serv) => serv.is_addon === true)
+    services.filter((serv) => serv.is_addon === true),
   );
 
   const mappedService =
     type === "group"
       ? totalPrice.bookingDetails.filter(
-          (book) => book.guestId === currentGuestId
+          (book) => book.guestId === currentGuestId,
         )
       : totalPrice.bookingDetails;
 
   const filteredServices = services.filter((service) =>
-    service.name.toLowerCase().includes(searchTerm.toLowerCase())
+    service.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
   // Utility: Get all selected addon IDs from bookings
   const selectedAddonIds = bookings.reduce((acc, booking) => {
@@ -66,7 +66,7 @@ export const BookingStepThree = ({ services }: Props) => {
   // - not selected as a main service
   // - not already booked as an addon
   const validAddonServices = filteredServices.filter(
-    (serv) => serv.is_addon === true && !allSelectedIds.has(serv.id) // already booked or selected
+    (serv) => serv.is_addon === true && !allSelectedIds.has(serv.id), // already booked or selected
   );
   return (
     <motion.div
@@ -163,7 +163,7 @@ export const BookingStepThree = ({ services }: Props) => {
                 <div className="w-full space-y-4">
                   {mappedService.map((booking, index) => {
                     const service = services.find(
-                      (s) => s.id === booking.bookingId
+                      (s) => s.id === booking.bookingId,
                     );
 
                     return service && service?.is_addon ? (
@@ -262,7 +262,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                   setOpenAccordionId((prev) =>
                                     prev === booking.bookingId
                                       ? null
-                                      : booking.bookingId
+                                      : booking.bookingId,
                                   )
                                 }
                                 variant="outline"
@@ -306,7 +306,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                     (item, addonIndex) => {
                                       const parentService = services.find(
                                         (service) =>
-                                          service.id === booking.bookingId
+                                          service.id === booking.bookingId,
                                       );
 
                                       const isAddonBooked =
@@ -315,7 +315,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                               .filter(
                                                 (book) =>
                                                   book.guestId ===
-                                                  currentGuestId
+                                                  currentGuestId,
                                               )
                                               .some((book) => {
                                                 // Check if the service ID is in the addons array
@@ -330,15 +330,15 @@ export const BookingStepThree = ({ services }: Props) => {
                                                   item.style_options.some(
                                                     (option) =>
                                                       book.addons?.includes(
-                                                        option.id
-                                                      )
+                                                        option.id,
+                                                      ),
                                                   );
                                                 const hasVariationInAddons =
                                                   item.variations.some(
                                                     (variation) =>
                                                       book.addons?.includes(
-                                                        variation.id
-                                                      )
+                                                        variation.id,
+                                                      ),
                                                   );
 
                                                 return (
@@ -359,15 +359,15 @@ export const BookingStepThree = ({ services }: Props) => {
                                                 item.style_options.some(
                                                   (option) =>
                                                     book.addons?.includes(
-                                                      option.id
-                                                    )
+                                                      option.id,
+                                                    ),
                                                 );
                                               const hasVariationInAddons =
                                                 item.variations.some(
                                                   (variation) =>
                                                     book.addons?.includes(
-                                                      variation.id
-                                                    )
+                                                      variation.id,
+                                                    ),
                                                 );
 
                                               return (
@@ -401,7 +401,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                                 "flex flex-col justify-between rounded-xl border p-4 h-[120px] transition-all cursor-pointer",
                                                 isAddonBooked
                                                   ? "border-secondary/50 bg-secondary/5"
-                                                  : "border-gray-200 hover:border-primary/30"
+                                                  : "border-gray-200 hover:border-primary/30",
                                               )}
                                               // onClick={() =>
                                               //   handleToggleService(
@@ -435,7 +435,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                                     durations.find(
                                                       (dur) =>
                                                         dur.value ===
-                                                        item.duration
+                                                        item.duration,
                                                     )?.label
                                                   }
                                                 </p>
@@ -469,7 +469,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                           }
                                         />
                                       );
-                                    }
+                                    },
                                   )}
                                 </div>
                               </div>
