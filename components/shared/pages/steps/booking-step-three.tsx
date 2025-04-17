@@ -5,6 +5,7 @@ import * as React from "react";
 import { useInView } from "react-intersection-observer";
 
 import { AddonServiceCard } from "@/components/dialogs/addon-service-card-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // import { useIsMobile } from "@/hooks/use-mobile";
@@ -20,7 +21,7 @@ type Props = {
 
 export const BookingStepThree = ({ services }: Props) => {
   const [openAccordionId, setOpenAccordionId] = React.useState<string | null>(
-    null,
+    null
   );
   const [searchTerm, setSearchTerm] = React.useState("");
 
@@ -34,20 +35,39 @@ export const BookingStepThree = ({ services }: Props) => {
   const totalPrice = calculateBookingDetails(
     bookings,
     services,
-    services.filter((serv) => serv.is_addon === true),
+    services.filter((serv) => serv.is_addon === true)
   );
 
   const mappedService =
     type === "group"
       ? totalPrice.bookingDetails.filter(
-          (book) => book.guestId === currentGuestId,
+          (book) => book.guestId === currentGuestId
         )
       : totalPrice.bookingDetails;
 
   const filteredServices = services.filter((service) =>
-    service.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    service.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  // Utility: Get all selected addon IDs from bookings
+  const selectedAddonIds = bookings.reduce((acc, booking) => {
+    if (booking.addons) {
+      acc.push(...booking.addons);
+    }
+    return acc;
+  }, [] as string[]);
 
+  // Utility: Get all main service IDs (whether addon or not)
+  const mainServiceIds = bookings.map((b) => b.serviceId);
+
+  // Utility: Set of all booked things to avoid duplication
+  const allSelectedIds = new Set([...selectedAddonIds, ...mainServiceIds]);
+
+  // Only show addons that are:
+  // - not selected as a main service
+  // - not already booked as an addon
+  const validAddonServices = filteredServices.filter(
+    (serv) => serv.is_addon === true && !allSelectedIds.has(serv.id) // already booked or selected
+  );
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -143,153 +163,161 @@ export const BookingStepThree = ({ services }: Props) => {
                 <div className="w-full space-y-4">
                   {mappedService.map((booking, index) => {
                     const service = services.find(
-                      (s) => s.id === booking.bookingId,
+                      (s) => s.id === booking.bookingId
                     );
 
-                    return (
-                      service && (
-                        <motion.div
-                          key={booking.bookingId}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: index * 0.1 }}
-                          className="w-full cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md"
-                        >
-                          <div className="flex w-full items-center justify-between border-b border-gray-100 p-3 lg:p-5">
-                            <div className="flex items-center gap-3">
-                              <div className="rounded-xl bg-primary/10 p-3">
-                                <motion.div
-                                  initial={{ rotate: 0 }}
-                                  animate={{ rotate: 360 }}
-                                  transition={{
-                                    duration: 0.8,
-                                    delay: index * 0.2,
-                                  }}
-                                >
-                                  {/* Icon based on service type could go here */}
-                                  <Check className="size-4 text-primary lg:size-5" />
-                                </motion.div>
-                              </div>
-                              <div>
-                                <h3 className="font-cormorant text-base font-bold text-gray-800 md:text-lg lg:text-2xl">
-                                  {service?.name}
-                                </h3>
-                                <p className="font-lora text-sm font-normal text-gray-500">
-                                  {booking.addons?.length || 0} add-ons selected
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-4">
-                              <p className="flex flex-col items-end">
-                                <span className="text-sm text-gray-500">
-                                  Price
-                                </span>
-                                <span className="font-cormorant text-lg font-bold text-primary lg:text-2xl">
-                                  ${booking?.totalPrice}
-                                </span>
-                              </p>
+                    return service && service?.is_addon ? (
+                      <motion.div
+                        key={booking.bookingId}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
+                        className="w-full cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md"
+                      >
+                        <div className="flex w-full items-center justify-between border-b border-gray-100 p-3 lg:p-5">
+                          <div className="flex items-center gap-3">
+                            <div className="rounded-xl bg-primary/10 p-3">
                               <motion.div
-                                whileHover={{ scale: 1.1, rotate: 90 }}
-                                whileTap={{ scale: 0.9 }}
+                                initial={{ rotate: 0 }}
+                                animate={{ rotate: 360 }}
+                                transition={{
+                                  duration: 0.8,
+                                  delay: index * 0.2,
+                                }}
                               >
-                                <Button
-                                  onClick={() =>
-                                    setOpenAccordionId((prev) =>
-                                      prev === booking.bookingId
-                                        ? null
-                                        : booking.bookingId,
-                                    )
-                                  }
-                                  variant="outline"
-                                  size="icon"
-                                  className="size-10 rounded-full border-primary/30 text-primary"
-                                >
-                                  {openAccordionId === booking.bookingId ? (
-                                    <X className="size-5" />
-                                  ) : (
-                                    <Plus className="size-5" />
-                                  )}
-                                </Button>
+                                {/* Icon based on service type could go here */}
+                                <Check className="size-4 text-primary lg:size-5" />
                               </motion.div>
+                            </div>
+                            <div>
+                              <h3 className="font-cormorant text-base font-bold text-gray-800 md:text-lg lg:text-2xl">
+                                {service?.name}
+                              </h3>
+                              <Badge className="font-lora text-sm font-normal text-white">
+                                Addon
+                              </Badge>
                             </div>
                           </div>
 
-                          <AnimatePresence>
-                            {openAccordionId === booking.bookingId && (
+                          <div className="flex items-center gap-4">
+                            <p className="flex flex-col items-end">
+                              <span className="text-sm text-gray-500">
+                                Price
+                              </span>
+                              <span className="font-cormorant text-lg font-bold text-primary lg:text-2xl">
+                                ${booking?.totalPrice}
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key={booking.bookingId}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
+                        className="w-full cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md"
+                      >
+                        <div className="flex w-full items-center justify-between border-b border-gray-100 p-3 lg:p-5">
+                          <div className="flex items-center gap-3">
+                            <div className="rounded-xl bg-primary/10 p-3">
                               <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                                className="overflow-hidden"
+                                initial={{ rotate: 0 }}
+                                animate={{ rotate: 360 }}
+                                transition={{
+                                  duration: 0.8,
+                                  delay: index * 0.2,
+                                }}
                               >
-                                <div className="space-y-4 px-5 py-4">
-                                  <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-                                    <Input
-                                      placeholder="Search add-on services"
-                                      className="rounded-xl border-gray-200 pl-10 focus:border-primary focus:ring-primary"
-                                      value={searchTerm}
-                                      onChange={(e) =>
-                                        setSearchTerm(e.target.value)
-                                      }
-                                    />
-                                  </div>
+                                {/* Icon based on service type could go here */}
+                                <Check className="size-4 text-primary lg:size-5" />
+                              </motion.div>
+                            </div>
+                            <div>
+                              <h3 className="font-cormorant text-base font-bold text-gray-800 md:text-lg lg:text-2xl">
+                                {service?.name}
+                              </h3>
+                              <p className="font-lora text-sm font-normal text-gray-500">
+                                {booking.addons?.length || 0} add-ons selected
+                              </p>
+                            </div>
+                          </div>
 
-                                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-                                    {filteredServices
-                                      .filter(
-                                        (serv) =>
-                                          serv.is_addon === true &&
-                                          serv.id !== booking.bookingId,
-                                      )
-                                      .map((item, addonIndex) => {
-                                        const parentService = services.find(
-                                          (service) =>
-                                            service.id === booking.bookingId,
-                                        );
+                          <div className="flex items-center gap-4">
+                            <p className="flex flex-col items-end">
+                              <span className="text-sm text-gray-500">
+                                Price
+                              </span>
+                              <span className="font-cormorant text-lg font-bold text-primary lg:text-2xl">
+                                ${booking?.totalPrice}
+                              </span>
+                            </p>
+                            <motion.div
+                              whileHover={{ scale: 1.1, rotate: 90 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              <Button
+                                onClick={() =>
+                                  setOpenAccordionId((prev) =>
+                                    prev === booking.bookingId
+                                      ? null
+                                      : booking.bookingId
+                                  )
+                                }
+                                variant="outline"
+                                size="icon"
+                                className="size-10 rounded-full border-primary/30 text-primary"
+                              >
+                                {openAccordionId === booking.bookingId ? (
+                                  <X className="size-5" />
+                                ) : (
+                                  <Plus className="size-5" />
+                                )}
+                              </Button>
+                            </motion.div>
+                          </div>
+                        </div>
 
-                                        const isAddonBooked =
-                                          type === "group"
-                                            ? bookings
-                                                .filter(
-                                                  (book) =>
-                                                    book.guestId ===
-                                                    currentGuestId,
-                                                )
-                                                .some((book) => {
-                                                  // Check if the service ID is in the addons array
-                                                  if (
-                                                    book.addons?.includes(
-                                                      item.id,
-                                                    )
-                                                  ) {
-                                                    return true;
-                                                  }
+                        <AnimatePresence>
+                          {openAccordionId === booking.bookingId && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="space-y-4 px-5 py-4">
+                                <div className="relative">
+                                  <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+                                  <Input
+                                    placeholder="Search add-on services"
+                                    className="rounded-xl border-gray-200 pl-10 focus:border-primary focus:ring-primary"
+                                    value={searchTerm}
+                                    onChange={(e) =>
+                                      setSearchTerm(e.target.value)
+                                    }
+                                  />
+                                </div>
 
-                                                  // Check if any style_option or variation ID is in the addons array
-                                                  const hasStyleOptionInAddons =
-                                                    item.style_options.some(
-                                                      (option) =>
-                                                        book.addons?.includes(
-                                                          option.id,
-                                                        ),
-                                                    );
-                                                  const hasVariationInAddons =
-                                                    item.variations.some(
-                                                      (variation) =>
-                                                        book.addons?.includes(
-                                                          variation.id,
-                                                        ),
-                                                    );
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+                                  {validAddonServices.map(
+                                    (item, addonIndex) => {
+                                      const parentService = services.find(
+                                        (service) =>
+                                          service.id === booking.bookingId
+                                      );
 
-                                                  return (
-                                                    hasStyleOptionInAddons ||
-                                                    hasVariationInAddons
-                                                  );
-                                                })
-                                            : bookings.some((book) => {
+                                      const isAddonBooked =
+                                        type === "group"
+                                          ? bookings
+                                              .filter(
+                                                (book) =>
+                                                  book.guestId ===
+                                                  currentGuestId
+                                              )
+                                              .some((book) => {
                                                 // Check if the service ID is in the addons array
                                                 if (
                                                   book.addons?.includes(item.id)
@@ -302,124 +330,153 @@ export const BookingStepThree = ({ services }: Props) => {
                                                   item.style_options.some(
                                                     (option) =>
                                                       book.addons?.includes(
-                                                        option.id,
-                                                      ),
+                                                        option.id
+                                                      )
                                                   );
                                                 const hasVariationInAddons =
                                                   item.variations.some(
                                                     (variation) =>
                                                       book.addons?.includes(
-                                                        variation.id,
-                                                      ),
+                                                        variation.id
+                                                      )
                                                   );
 
                                                 return (
                                                   hasStyleOptionInAddons ||
                                                   hasVariationInAddons
                                                 );
-                                              });
+                                              })
+                                          : bookings.some((book) => {
+                                              // Check if the service ID is in the addons array
+                                              if (
+                                                book.addons?.includes(item.id)
+                                              ) {
+                                                return true;
+                                              }
 
-                                        return (
-                                          <AddonServiceCard
-                                            parentService={
-                                              parentService as Service
-                                            }
-                                            service={item}
-                                            key={`${service.id}, addonInex ${addonIndex}`}
-                                            trigger={
-                                              <motion.div
-                                                key={item.id}
-                                                initial={{ opacity: 0, y: 15 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{
-                                                  duration: 0.3,
-                                                  delay: addonIndex * 0.05,
-                                                }}
-                                                whileHover={{
-                                                  y: -5,
-                                                  boxShadow:
-                                                    "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
-                                                }}
-                                                className={cn(
-                                                  "flex flex-col justify-between rounded-xl border p-4 h-[120px] transition-all cursor-pointer",
-                                                  isAddonBooked
-                                                    ? "border-secondary/50 bg-secondary/5"
-                                                    : "border-gray-200 hover:border-primary/30",
-                                                )}
-                                                // onClick={() =>
-                                                //   handleToggleService(
-                                                //     item.id,
-                                                //     booking.bookingId
-                                                //   )
-                                                // }
-                                              >
-                                                <div className="space-y-2">
-                                                  <div className="flex items-start justify-between">
-                                                    <h6 className="font-cormorant text-base font-semibold text-gray-800 lg:text-lg 2xl:text-xl">
-                                                      {item.name}
-                                                    </h6>
-                                                    {isAddonBooked && (
-                                                      <motion.div
-                                                        initial={{ scale: 0 }}
-                                                        animate={{ scale: 1 }}
-                                                        transition={{
-                                                          type: "spring",
-                                                          stiffness: 500,
-                                                          damping: 15,
-                                                        }}
-                                                        className="rounded-full bg-secondary/10 p-1"
-                                                      >
-                                                        <Check className="size-4 text-secondary" />
-                                                      </motion.div>
-                                                    )}
-                                                  </div>
-                                                  <p className="text-left text-sm text-gray-500">
-                                                    {
-                                                      durations.find(
-                                                        (dur) =>
-                                                          dur.value ===
-                                                          item.duration,
-                                                      )?.label
-                                                    }
-                                                  </p>
-                                                </div>
+                                              // Check if any style_option or variation ID is in the addons array
+                                              const hasStyleOptionInAddons =
+                                                item.style_options.some(
+                                                  (option) =>
+                                                    book.addons?.includes(
+                                                      option.id
+                                                    )
+                                                );
+                                              const hasVariationInAddons =
+                                                item.variations.some(
+                                                  (variation) =>
+                                                    book.addons?.includes(
+                                                      variation.id
+                                                    )
+                                                );
 
-                                                <div className="flex items-center justify-between">
-                                                  <p className="space-x-1">
-                                                    <span className="text-xs text-gray-400">
-                                                      From
-                                                    </span>
-                                                    <span className="text-lg font-bold text-primary">
-                                                      ${item.base_price}
-                                                    </span>
-                                                  </p>
+                                              return (
+                                                hasStyleOptionInAddons ||
+                                                hasVariationInAddons
+                                              );
+                                            });
 
-                                                  {!isAddonBooked && (
+                                      return (
+                                        <AddonServiceCard
+                                          parentService={
+                                            parentService as Service
+                                          }
+                                          service={item}
+                                          key={`${service?.id}, addonInex ${addonIndex}`}
+                                          trigger={
+                                            <motion.div
+                                              key={item.id}
+                                              initial={{ opacity: 0, y: 15 }}
+                                              animate={{ opacity: 1, y: 0 }}
+                                              transition={{
+                                                duration: 0.3,
+                                                delay: addonIndex * 0.05,
+                                              }}
+                                              whileHover={{
+                                                y: -5,
+                                                boxShadow:
+                                                  "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
+                                              }}
+                                              className={cn(
+                                                "flex flex-col justify-between rounded-xl border p-4 h-[120px] transition-all cursor-pointer",
+                                                isAddonBooked
+                                                  ? "border-secondary/50 bg-secondary/5"
+                                                  : "border-gray-200 hover:border-primary/30"
+                                              )}
+                                              // onClick={() =>
+                                              //   handleToggleService(
+                                              //     item.id,
+                                              //     booking.bookingId
+                                              //   )
+                                              // }
+                                            >
+                                              <div className="space-y-2">
+                                                <div className="flex items-start justify-between">
+                                                  <h6 className="font-cormorant text-base font-semibold text-gray-800 lg:text-lg 2xl:text-xl">
+                                                    {item.name}
+                                                  </h6>
+                                                  {isAddonBooked && (
                                                     <motion.div
-                                                      whileHover={{
-                                                        scale: 1.1,
+                                                      initial={{ scale: 0 }}
+                                                      animate={{ scale: 1 }}
+                                                      transition={{
+                                                        type: "spring",
+                                                        stiffness: 500,
+                                                        damping: 15,
                                                       }}
-                                                      whileTap={{ scale: 0.9 }}
+                                                      className="rounded-full bg-secondary/10 p-1"
                                                     >
-                                                      <div className="flex items-center text-sm font-medium text-secondary">
-                                                        <Plus className="mr-1 size-4" />{" "}
-                                                        Add
-                                                      </div>
+                                                      <Check className="size-4 text-secondary" />
                                                     </motion.div>
                                                   )}
                                                 </div>
-                                              </motion.div>
-                                            }
-                                          />
-                                        );
-                                      })}
-                                  </div>
+                                                <p className="text-left text-sm text-gray-500">
+                                                  {
+                                                    durations.find(
+                                                      (dur) =>
+                                                        dur.value ===
+                                                        item.duration
+                                                    )?.label
+                                                  }
+                                                </p>
+                                              </div>
+
+                                              <div className="flex items-center justify-between">
+                                                <p className="space-x-1">
+                                                  <span className="text-xs text-gray-400">
+                                                    From
+                                                  </span>
+                                                  <span className="text-lg font-bold text-primary">
+                                                    ${item.base_price}
+                                                  </span>
+                                                </p>
+
+                                                {!isAddonBooked && (
+                                                  <motion.div
+                                                    whileHover={{
+                                                      scale: 1.1,
+                                                    }}
+                                                    whileTap={{ scale: 0.9 }}
+                                                  >
+                                                    <div className="flex items-center text-sm font-medium text-secondary">
+                                                      <Plus className="mr-1 size-4" />{" "}
+                                                      Add
+                                                    </div>
+                                                  </motion.div>
+                                                )}
+                                              </div>
+                                            </motion.div>
+                                          }
+                                        />
+                                      );
+                                    }
+                                  )}
                                 </div>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </motion.div>
-                      )
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
                     );
                   })}
                 </div>

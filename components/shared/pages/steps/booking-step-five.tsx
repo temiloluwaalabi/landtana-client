@@ -21,7 +21,7 @@ import React, { useEffect } from "react";
 export default function ConfirmationPage() {
   // This would come from your booking state or URL parameters in a real implementation
   const bookingDetails = {
-    isGroupBooking: true,
+    isGroupBooking: false,
     date: "April 10, 2025",
     time: "2:00 PM",
     bookingId: "LCB-2025041022",

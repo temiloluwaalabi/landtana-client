@@ -98,7 +98,7 @@ export const formUrlQuery = ({ params, updates }: UrlQueryParams) => {
     {
       skipNull: true,
       skipEmptyString: true,
-    },
+    }
   );
 };
 
@@ -120,7 +120,7 @@ export const removeKeysFromQuery = ({
     {
       skipNull: true,
       skipEmptyString: true,
-    },
+    }
   );
 };
 
@@ -139,7 +139,7 @@ export function generateSlug(title: string) {
 export function toCurrency(
   number: number | string,
   disableDecimal = false,
-  decimalPlaces = 2,
+  decimalPlaces = 2
 ) {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -276,7 +276,7 @@ export const secondsToTime = (seconds: number): string => {
  * @returns An object containing the date and time (e.g., { date: "2025-02-01", time: "11:00:00" }).
  */
 export const extractDateTime = (
-  isoString: string,
+  isoString: string
 ): { date: string; time: string } => {
   const dateObj = new Date(isoString);
 
@@ -350,7 +350,7 @@ export const formatDateI = (dateString: Date) => {
 export const calculateBookingDetails = (
   bookings: Booking[],
   services: Service[],
-  allAddons: Service[],
+  allAddons: Service[]
 ) => {
   const bookingDetails = bookings.map((booking) => {
     const service = services.find((s) => s.id === booking.serviceId);
@@ -367,20 +367,20 @@ export const calculateBookingDetails = (
     let totalDuration = 0;
 
     const variation = service?.variations.find(
-      (s) => s.id === booking.variationId,
+      (s) => s.id === booking.variationId
     );
     if (variation) {
-      totalPrice = Number(variation.price); // Replace base price with variation price
-      totalDuration = variation.duration;
+      totalPrice = Number(service.base_price); // Replace base price with variation price
+      totalDuration = service.duration;
     }
 
     const styleOption = service?.style_options.find(
-      (s) => s.id === booking.styleOptionId,
+      (s) => s.id === booking.styleOptionId
     );
 
     if (styleOption) {
-      totalPrice += Number(styleOption.price);
-      totalDuration += styleOption.duration;
+      totalPrice += Number(service.base_price);
+      totalDuration += service.duration;
     }
 
     if (!variation && !styleOption) {
@@ -407,8 +407,8 @@ export const calculateBookingDetails = (
           .find((styleOption) => styleOption.id === addonId);
         if (addonStyleOption) {
           addons.push(addonId);
-          totalPrice += Number(addonStyleOption.price) || 0;
-          totalDuration += addonStyleOption.duration || 0;
+          totalPrice += Number(addonService?.base_price) || 0;
+          totalDuration += addonService?.duration || 0;
         }
 
         // Check if the addonId matches a variation.id
@@ -417,8 +417,8 @@ export const calculateBookingDetails = (
           .find((variation) => variation.id === addonId);
         if (addonVariation) {
           addons.push(addonId);
-          totalPrice += Number(addonVariation.price) || 0;
-          totalDuration += addonVariation.duration || 0;
+          totalPrice += Number(addonService?.base_price) || 0;
+          totalDuration += addonService?.duration || 0;
         }
       });
     }
@@ -434,11 +434,11 @@ export const calculateBookingDetails = (
 
   const totalGroupPrice = bookingDetails.reduce(
     (sum, booking) => sum + booking.totalPrice,
-    0,
+    0
   );
   const totalGroupDuration = bookingDetails.reduce(
     (sum, booking) => sum + booking.totalDuration,
-    0,
+    0
   );
 
   return {

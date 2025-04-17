@@ -125,11 +125,13 @@ export type GetAllCategoriesResponse = {
 };
 export type Booking = {
   id: string;
-  booking_datetime: Date;
+  datetime: Date;
   status: string;
-  additional_notes: string;
+  is_group: boolean;
+  group_size: number;
   user: User;
   services: Service[];
+  additional_notes: string;
   created_at: Date;
   updated_at: Date;
 };

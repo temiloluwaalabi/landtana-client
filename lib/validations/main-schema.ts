@@ -22,18 +22,55 @@ export const CreateStylistSchema = z.object({
     .array(z.string().min(1, "Specialization cannot be empty"))
     .default(["braids"]),
 });
-
-export const CreateBookingSchema = z.object({
-  service_id: z.array(z.string().min(1, "Service ID is required")),
-  date: z.string(),
-  time: z.string(),
-  variations: z.array(z.string()).optional(),
-  style_options: z.optional(z.string()),
-  price: z.string(),
-  duration: z.string(),
-  additional_notes: z.string().optional(), // Optional field
-  is_group: z.boolean().default(false),
+// Guest group member schema
+const GroupMemberSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  contact: z.string().min(7, "Contact is too short"),
+  service_ids: z
+    .array(z.string().uuid())
+    .min(1, "At least one service is required"),
 });
+export const CreateBookingSchema = z
+  .object({
+    service_id: z
+      .array(z.string().uuid())
+      .min(1, "At least one service must be selected"),
+    date: z.string().min(1, "Date is required"), // Format: yyyy-MM-dd
+    time: z.string().min(1, "Time is required"), // Format: HH:mm
+    variations: z.array(z.string().uuid()).optional().default([]),
+    style_options: z.string().uuid({ message: "Style option is required" }),
+    price: z.string().refine((val) => !isNaN(Number(val)), {
+      message: "Price must be a number",
+    }),
+    duration: z.string().refine((val) => !isNaN(Number(val)), {
+      message: "Duration must be a number",
+    }),
+    is_group: z.boolean(),
+    group_size: z.number().int().positive().optional(),
+    group_members: z.array(GroupMemberSchema).optional(),
+    additional_notes: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    // If is_group is true, validate group fields
+    if (data.is_group) {
+      if (!data.group_size || data.group_size < 1) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Group size must be at least 1",
+          path: ["group_size"],
+        });
+      }
+
+      if (!data.group_members || data.group_members.length < 1) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "At least one group member is required",
+          path: ["group_members"],
+        });
+      }
+    }
+  });
 
 export const GuestSchema = z.object({
   name: z.string(),
