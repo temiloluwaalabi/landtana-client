@@ -36,6 +36,7 @@ import { cardVariants } from "@/lib/variants";
 import { Service } from "@/types";
 
 import DateSelectionStep from "../../booking/date-selection-comp";
+import useSession from "@/hooks/use-session";
 
 type Props = {
   services: Service[];
@@ -43,6 +44,7 @@ type Props = {
 
 export const BookingStepFour = ({ services }: Props) => {
   const { mutateAsync, isPending } = useCreateBooking();
+  const { session } = useSession();
   const { ref: summaryRef, inView: summaryInView } = useInView({
     threshold: 0.1,
     triggerOnce: false,
@@ -74,7 +76,7 @@ export const BookingStepFour = ({ services }: Props) => {
 
     if (booking.styleOptionId) {
       const styleOption = service.style_options.find(
-        (opt) => opt.id === booking.styleOptionId,
+        (opt) => opt.id === booking.styleOptionId
       );
       if (styleOption) {
         parts.push(`Style Option: ${styleOption.name}`);
@@ -83,7 +85,7 @@ export const BookingStepFour = ({ services }: Props) => {
 
     if (booking.variationId) {
       const variation = service.variations.find(
-        (v) => v.id === booking.variationId,
+        (v) => v.id === booking.variationId
       );
       if (variation) {
         parts.push(`Variation: ${variation.name}`);
@@ -101,25 +103,37 @@ export const BookingStepFour = ({ services }: Props) => {
     .join("\n");
 
   const handleSubmitBooking = async () => {
-    console.log("Submitting booking...");
+    // console.log("Submitting booking...");
     if (!date || !time) {
       toast.error("Please select a date and time");
       return;
     }
     const isGroup = type === "group";
 
-    const hostBookings = bookings.filter((b) => !b.guestId);
-    const hostBooking = bookings.find((b) => !b.guestId);
+    const hostBookings = bookings.filter((b) => b.guestId === primaryGuestId);
 
-    const guestBookings = bookings.filter((b) => b.guestId);
+    // console.log("hosting", hostBookings);
+    const hostBooking = bookings.find((b) => b.guestId === primaryGuestId);
+
+    const guestBookings = bookings.filter((b) => b.guestId !== primaryGuestId);
+
     // Style option (choose host’s if group, or first available)
     const styleOptionId =
       type === "group"
         ? hostBooking?.styleOptionId
         : bookings.find((b) => b.styleOptionId)?.styleOptionId;
 
+    let serIds = [];
+    // For non-group, just send service_id directly
+    if (!isGroup) {
+      // For individual, include all serviceIds and their addons
+      serIds = bookings.flatMap((b) => [b.serviceId, ...(b.addons || [])]);
+    } else {
+      // For group, include only host services and addons
+      serIds = hostBookings.flatMap((b) => [b.serviceId, ...(b.addons || [])]);
+    }
     const bookingValue: CreateBookingSchemaType = {
-      service_id: [],
+      service_id: serIds,
       date: formatDate(new Date(date), "yyyy-MM-dd"),
       time: format(parse(time, "h:mm a", new Date()), "HH:mm"),
       price: totalPrice.totalGroupPrice.toString(),
@@ -127,36 +141,24 @@ export const BookingStepFour = ({ services }: Props) => {
       variations: bookings
         .map((b) => b.variationId)
         .filter(Boolean) as string[],
-      group_size: isGroup ? guestBookings.length + 1 : undefined,
-
+      group_size: isGroup ? guests.length : undefined,
       is_group: type === "group",
       duration: totalPrice.totalGroupDuration.toString(),
       group_members: isGroup
-        ? bookings
-            .filter((b) => b.guestId)
+        ? guests
+            .filter((b) => b.id)
             .map((b) => ({
-              name: b.clientName || "Guest",
-              email: b.clientEmail || "",
-              contact: b.clientPhone || "",
-              service_ids: [b.serviceId],
+              name: b.name || "Guest",
+              email: session.email || "",
+              contact: "+12025550173",
+              service_ids:
+                [
+                  bookings.find((boo) => boo.guestId === b.id)?.serviceId || "",
+                ] || [],
             }))
         : [],
       additional_notes: finalNotes,
     };
-    // For non-group, just send service_id directly
-    if (!isGroup) {
-      // For individual, include all serviceIds and their addons
-      bookingValue.service_id = bookings.flatMap((b) => [
-        b.serviceId,
-        ...(b.addons || []),
-      ]);
-    } else {
-      // For group, include only host services and addons
-      bookingValue.service_id = hostBookings.flatMap((b) => [
-        b.serviceId,
-        ...(b.addons || []),
-      ]);
-    }
 
     console.log("Submitting booking:", bookingValue);
 
@@ -186,7 +188,7 @@ export const BookingStepFour = ({ services }: Props) => {
                   "flex w-full  items-center justify-between  bg-white  p-3",
                   openAccordionId === true
                     ? "rounded-se-lg rounded-ss-lg"
-                    : "rounded-lg",
+                    : "rounded-lg"
                 )}
               >
                 <div className="flex items-center gap-1">
@@ -296,7 +298,7 @@ export const BookingStepFour = ({ services }: Props) => {
                             transition={{ delay: 0.3 + i * 0.1 }}
                             className={cn(
                               "space-y-2 border-b pb-3",
-                              guests.length - 1 === i && "!border-none !pb-0",
+                              guests.length - 1 === i && "!border-none !pb-0"
                             )}
                           >
                             <div className="flex items-center gap-2">
@@ -308,7 +310,7 @@ export const BookingStepFour = ({ services }: Props) => {
                                       ? "from-primary to-blue-500"
                                       : i % 3 === 1
                                         ? "from-secondary to-pink-400"
-                                        : "from-violet-500 to-purple-700",
+                                        : "from-violet-500 to-purple-700"
                                   )}
                                 >
                                   {guest.id === primaryGuestId
@@ -324,7 +326,7 @@ export const BookingStepFour = ({ services }: Props) => {
                             </div>
                             <div>
                               {totalPrice.bookingDetails.filter(
-                                (book) => book.guestId === guest.id,
+                                (book) => book.guestId === guest.id
                               ).length === 0 && (
                                 <p className="text-sm text-gray-300">
                                   No services selected
@@ -345,7 +347,7 @@ export const BookingStepFour = ({ services }: Props) => {
                                         {
                                           services.find(
                                             (servicee) =>
-                                              servicee.id === service.bookingId,
+                                              servicee.id === service.bookingId
                                           )?.name
                                         }
                                       </h3>
@@ -354,7 +356,7 @@ export const BookingStepFour = ({ services }: Props) => {
                                           durations.find(
                                             (dur) =>
                                               dur.value ===
-                                              service.totalDuration,
+                                              service.totalDuration
                                           )?.label
                                         }
                                       </p>
@@ -491,7 +493,7 @@ export const BookingStepFour = ({ services }: Props) => {
                           <Avatar className="size-8 border border-primary/10">
                             <AvatarFallback
                               className={cn(
-                                "bg-gradient-to-br text-white text-xs from-primary to-blue-500",
+                                "bg-gradient-to-br text-white text-xs from-primary to-blue-500"
                               )}
                             >
                               ME
@@ -506,11 +508,11 @@ export const BookingStepFour = ({ services }: Props) => {
                       <div className="w-full space-y-3">
                         {totalPrice.bookingDetails.map((booking, idx) => {
                           const bookingIndex = bookings.findIndex(
-                            (b) => b.serviceId === booking.bookingId,
+                            (b) => b.serviceId === booking.bookingId
                           );
 
                           const service = services.find(
-                            (s) => s.id === booking.bookingId,
+                            (s) => s.id === booking.bookingId
                           );
 
                           return (

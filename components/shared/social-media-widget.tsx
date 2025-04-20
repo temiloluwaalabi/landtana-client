@@ -123,7 +123,7 @@ const SocialMediaWidget = () => {
 
   return (
     <motion.div
-      className="fixed right-0 top-1/2 z-50 flex -translate-y-1/2 flex-col gap-2"
+      className="fixed right-0 top-0 mt-[10%] z-50 flex -translate-y-1/2 flex-col gap-2"
       initial="hidden"
       animate="visible"
       variants={containerVariants}

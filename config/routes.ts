@@ -100,66 +100,58 @@ export const authMenuRoutes: SidebarItem[] = [
   {
     name: "Bookings",
     icon: Calendar,
-    dropdownItems: [
-      {
-        name: "My Bookings",
-        href: "/dashboard/bookings",
-        icon: Calendar,
-      },
-      {
-        name: "New Booking",
-        href: "/dashboard/bookings/new",
-        icon: Calendar,
-      },
-    ],
+    href: "/dashboard/bookings",
   },
   {
     name: "Payments",
     icon: DollarSign,
-    dropdownItems: [
-      {
-        name: "Billing History",
-        href: "/dashboard/payments/history",
-        icon: DollarSign,
-      },
-      {
-        name: "Manage Payment Methods",
-        href: "/dashboard/payments/methods",
-        icon: DollarSign,
-      },
-    ],
+    href: "/dashboard/payments",
+    // dropdownItems: [
+    //   {
+    //     name: "Billing History",
+    //     href: "/dashboard/payments/history",
+    //     icon: DollarSign,
+    //   },
+    //   {
+    //     name: "Manage Payment Methods",
+    //     href: "/dashboard/payments/methods",
+    //     icon: DollarSign,
+    //   },
+    // ],
   },
   {
     name: "Settings",
     icon: Settings,
-    dropdownItems: [
-      {
-        name: "Profile",
-        href: "/dashboard/settings/profile",
-        icon: User,
-      },
-      {
-        name: "Security",
-        href: "/dashboard/settings/security",
-        icon: Settings,
-      },
-    ],
+    href: "/dashboard/settings",
+
+    // dropdownItems: [
+    //   {
+    //     name: "Profile",
+    //     href: "/dashboard/settings/profile",
+    //     icon: User,
+    //   },
+    //   {
+    //     name: "Security",
+    //     href: "/dashboard/settings/security",
+    //     icon: Settings,
+    //   },
+    // ],
   },
-  {
-    name: "Support",
-    href: "/dashboard/support",
-    icon: LifeBuoy,
-    dropdownItems: [
-      {
-        name: "Help Center",
-        href: "/dashboard/support/help",
-        icon: LifeBuoy,
-      },
-      {
-        name: "Contact Support",
-        href: "/dashboard/support/contact",
-        icon: LifeBuoy,
-      },
-    ],
-  },
+  // {
+  //   name: "Support",
+  //   href: "/dashboard/support",
+  //   icon: LifeBuoy,
+  //   dropdownItems: [
+  //     {
+  //       name: "Help Center",
+  //       href: "/dashboard/support/help",
+  //       icon: LifeBuoy,
+  //     },
+  //     {
+  //       name: "Contact Support",
+  //       href: "/dashboard/support/contact",
+  //       icon: LifeBuoy,
+  //     },
+  //   ],
+  // },
 ];

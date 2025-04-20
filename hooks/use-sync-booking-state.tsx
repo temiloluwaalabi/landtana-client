@@ -23,11 +23,10 @@ export default function useSyncBookingState() {
     confirmed,
     syncFromUrl,
   } = useBookingStore();
-  console.log("USE STORE BOOKINGS", bookings);
 
   // Debounced function to update the URL
   const debouncedUpdateUrl = () => {
-    console.log("DEBOUNCED EFFECT CALLED - Updating URL");
+    // console.log("DEBOUNCED EFFECT CALLED - Updating URL");
 
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
@@ -46,7 +45,7 @@ export default function useSyncBookingState() {
 
     // Only push the new URL if it's different from the current URL
     if (newUrl !== window.location.href) {
-      console.log("Pushing new URL:", newUrl);
+      // console.log("Pushing new URL:", newUrl);
       router.push(newUrl, { scroll: false });
     }
   };
@@ -70,7 +69,7 @@ export default function useSyncBookingState() {
   ]);
 
   useEffect(() => {
-    console.log("EFFECT CALLED FROM");
+    // console.log("EFFECT CALLED FROM");
 
     // if (isStateUpdate) {
     //   setIsStateUpdate(false); // Reset the flag

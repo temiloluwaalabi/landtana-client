@@ -1,5 +1,5 @@
 "use client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -8,6 +8,7 @@ import { apiClient } from "../api/client";
 import logger from "../logger";
 import { handleMutationError } from "./handle-api-error";
 import { CreateBookingSchema } from "../validations/main-schema";
+import { Booking } from "@/types";
 
 export const useCreateBooking = (onSuccessCallback?: () => void) => {
   const router = useRouter();
@@ -31,5 +32,22 @@ export const useCreateBooking = (onSuccessCallback?: () => void) => {
       }
     },
     onError: handleMutationError,
+  });
+};
+
+export const useGetUserBookings = () => {
+  return useQuery<{
+    message: string;
+    bookings: Booking[]
+  }>({
+    queryKey: ["booking", "fetchAll"], // Unique key for this query
+    queryFn: async () => {
+      const response = await apiClient.get("/api/bookings", {
+        withCredentials: true,
+      });
+      return response.data.data; // Assuming the API returns an array of categories
+    },
+    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    retry: 2,
   });
 };

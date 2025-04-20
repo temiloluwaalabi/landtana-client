@@ -29,7 +29,7 @@ export const BookingStepThree = ({ services }: Props) => {
     threshold: 0.1,
     triggerOnce: false,
   });
-  const { step, bookings, updateState, currentGuestId, type } =
+  const { step, bookings, guests, updateState, currentGuestId, type } =
     useBookingStore();
 
   const totalPrice = calculateBookingDetails(
@@ -81,6 +81,7 @@ export const BookingStepThree = ({ services }: Props) => {
       return !allSelectedIds.has(serv.id);
     }
   });
+
   return (
     <motion.div
       initial={{ opacity: 0 }}

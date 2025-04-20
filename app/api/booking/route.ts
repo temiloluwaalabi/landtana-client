@@ -6,6 +6,8 @@ import { getSession } from "@/app/actions/session.action";
 import { UnauthorizedError, ValidationError } from "@/lib/error";
 import logger from "@/lib/logger";
 import { CreateBookingSchema } from "@/lib/validations/main-schema";
+import { bookingService } from "@/lib/api/api";
+import { ApiError } from "@/lib/api/client";
 
 export async function POST(request: Request) {
   try {
@@ -90,6 +92,51 @@ export async function POST(request: Request) {
           error instanceof Error ? error.message : "Authentication failed",
       },
       { status: 401 },
+    );
+  }
+}
+export async function GET() {
+  try {
+    const session = await getSession();
+
+    if (!session || !session.isLoggedIn) {
+      throw new UnauthorizedError();
+    }
+
+    const bookings = await bookingService.getUserBookings();
+
+    return NextResponse.json(
+      {
+        message: "All bookings fetched successfully",
+        bookings,
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("FAILED FETCHING bookings", error);
+
+    if (error instanceof UnauthorizedError) {
+      return NextResponse.json(
+        { message: error.message },
+        { status: error.statusCode },
+      );
+    }
+
+    if (error instanceof ApiError) {
+      return NextResponse.json(
+        { message: error.message, details: error.rawErrors },
+        { status: error.statusCode },
+      );
+    }
+
+    return NextResponse.json(
+      {
+        message:
+          error instanceof Error
+            ? error.message
+            : "Fetching all services failed",
+      },
+      { status: 500 },
     );
   }
 }

@@ -39,7 +39,7 @@ export const CreateBookingSchema = z
     date: z.string().min(1, "Date is required"), // Format: yyyy-MM-dd
     time: z.string().min(1, "Time is required"), // Format: HH:mm
     variations: z.array(z.string().uuid()).optional().default([]),
-    style_options: z.string().uuid({ message: "Style option is required" }),
+    style_options: z.optional(z.string()),
     price: z.string().refine((val) => !isNaN(Number(val)), {
       message: "Price must be a number",
     }),

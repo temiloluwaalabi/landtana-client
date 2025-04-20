@@ -213,7 +213,7 @@ export const ServiceCardDialog = (props: Props) => {
           {props.trigger}
         </DialogTrigger>
         <DialogContent
-          className="max-w-2xl h-[700px] overflow-hidden !rounded-[12px] bg-white px-0 py-4"
+          className="max-w-2xl h-fit max-h-[700px] overflow-hidden !rounded-[12px] bg-white px-0 py-4"
           closeClassName="hidden"
         >
           <AnimatePresence>

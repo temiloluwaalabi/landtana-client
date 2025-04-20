@@ -1,3 +1,4 @@
+"use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -5,16 +6,16 @@ import { useInView } from "react-intersection-observer";
 import { ServicePriceCard } from "@/components/cards/service-price-card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Category, Service } from "@/types";
+import { Booking, Category, Service } from "@/types";
 
 import MaxWidthContainer from "../../max-width-container";
+import { BookedServicePriceCard } from "@/components/cards/booked-service-price-card.tsx";
 
 type Services = {
-  filteredServices: Service[];
-  categories: Category[];
+  filteredServices: Booking[];
 };
 
-const ServicesSection = ({ filteredServices, categories }: Services) => {
+const BookedServicesSection = ({ filteredServices }: Services) => {
   // console.log("ste", categories);
   const [selectedTab, setSelectedTab] = useState("all");
   const [visibleServices, setVisibleServices] = useState(6);
@@ -86,9 +87,7 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
   // Filter services based on selected tab
   const getFilteredServices = () => {
     if (selectedTab === "all") return filteredServices;
-    return filteredServices.filter(
-      (service) => service.category_id === selectedTab
-    );
+    return filteredServices.filter((service) => service.status === selectedTab);
   };
 
   const displayedServices = getFilteredServices().slice(0, visibleServices);
@@ -108,7 +107,7 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
           variants={titleVariants}
         >
           <h2 className="relative bg-gradient-to-r from-secondary to-pink-400 bg-clip-text font-cormorant text-3xl font-bold text-accent md:text-4xl lg:text-6xl">
-            Explore Our Braiding Services
+            My Bookings{" "}
             <motion.span
               className="absolute -bottom-3 left-0 h-1 rounded-full bg-gradient-to-r from-primary to-accent"
               initial={{ width: 0 }}
@@ -116,10 +115,10 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
               transition={{ delay: 0.5, duration: 0.8 }}
             />
           </h2>
-          <p className="max-w-2xl text-left text-base font-light text-[#2F201A] lg:text-2xl">
+          {/* <p className="max-w-2xl text-left text-base font-light text-[#2F201A] lg:text-2xl">
             Discover our premium braiding styles and services tailored to
             enhance your natural beauty
-          </p>
+          </p> */}
         </motion.div>
 
         <Tabs defaultValue="all" onValueChange={handleTabChange}>
@@ -135,24 +134,18 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
               >
                 All
               </TabsTrigger>
-              {categories
-                // .filter((caat) => (caat.services?.length ?? 0) > 0)
-                .map((tab, index) => (
-                  <motion.div
-                    key={tab.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 * index, duration: 0.4 }}
-                    whileHover={{ y: -3, transition: { duration: 0.2 } }}
-                  >
-                    <TabsTrigger
-                      className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white lg:text-base"
-                      value={tab.id}
-                    >
-                      {tab.name}
-                    </TabsTrigger>
-                  </motion.div>
-                ))}
+              <TabsTrigger
+                className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white lg:text-base"
+                value="PENDING"
+              >
+                Pending
+              </TabsTrigger>
+              <TabsTrigger
+                className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white lg:text-base"
+                value="COMPLETED"
+              >
+                Completed
+              </TabsTrigger>
             </TabsList>
           </motion.div>
 
@@ -179,7 +172,7 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
                       transition: { duration: 0.3 },
                     }}
                   >
-                    <ServicePriceCard service={service} />
+                    <BookedServicePriceCard bookedService={service} />
                   </motion.div>
                 ))}
               </motion.div>
@@ -234,4 +227,4 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
   );
 };
 
-export default ServicesSection;
+export default BookedServicesSection;

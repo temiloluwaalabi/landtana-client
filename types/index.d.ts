@@ -125,7 +125,9 @@ export type GetAllCategoriesResponse = {
 };
 export type Booking = {
   id: string;
-  datetime: Date;
+  datetime: string;
+  price: number;
+  duration: number;
   status: string;
   is_group: boolean;
   group_size: number;

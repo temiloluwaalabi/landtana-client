@@ -1,5 +1,6 @@
 import { getSession } from "@/app/actions/session.action";
 import {
+  Booking,
   GetAllCategoriesResponse,
   GetAllServicesResponse,
   GetAllSubCatResponse,
@@ -464,7 +465,7 @@ export const bookingService = {
   },
   getUserBookings: async () // page: number = 1,
   // limit: number = 35,
-  : Promise<GetAllServicesResponse> => {
+  : Promise<Booking[]> => {
     const session = await getSession();
 
     if (process.env.NODE_ENV === "development") {

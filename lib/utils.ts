@@ -35,8 +35,8 @@ interface RemoveUrlQueryParams {
 }
 
 export const formUrlQuery = ({ params, updates }: UrlQueryParams) => {
-  console.log("PARAMS", params);
-  console.log("VALUES", updates);
+  // console.log("PARAMS", params);
+  // console.log("VALUES", updates);
   const currentUrl = { ...qs.parse(params) };
 
   Object.entries(updates).forEach(([key, value]) => {

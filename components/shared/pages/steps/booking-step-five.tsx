@@ -440,7 +440,7 @@ export default function ConfirmationPage() {
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
             <Link
-              href="/bookings"
+              href="/dashboard/bookings"
               className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
             >
               <CalendarIcon className="mr-2 size-4" /> Manage Bookings
