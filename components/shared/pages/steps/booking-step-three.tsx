@@ -29,7 +29,7 @@ export const BookingStepThree = ({ services }: Props) => {
     threshold: 0.1,
     triggerOnce: false,
   });
-  const { step, bookings, guests, updateState, currentGuestId, type } =
+  const { step, bookings, updateState, currentGuestId, type } =
     useBookingStore();
 
   const totalPrice = calculateBookingDetails(

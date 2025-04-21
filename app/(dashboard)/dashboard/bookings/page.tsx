@@ -1,6 +1,7 @@
+import React from "react";
+
 import { getBookingsByUser } from "@/app/actions/bookings.action";
 import { BookingPage } from "@/components/shared/pages/booking-page";
-import React from "react";
 
 export default async function DashboadBookingsPage() {
   const bookings = await getBookingsByUser();

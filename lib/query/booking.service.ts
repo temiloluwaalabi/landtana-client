@@ -4,11 +4,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import * as z from "zod";
 
+import { Booking } from "@/types";
+
 import { apiClient } from "../api/client";
 import logger from "../logger";
 import { handleMutationError } from "./handle-api-error";
 import { CreateBookingSchema } from "../validations/main-schema";
-import { Booking } from "@/types";
 
 export const useCreateBooking = (onSuccessCallback?: () => void) => {
   const router = useRouter();
@@ -38,7 +39,7 @@ export const useCreateBooking = (onSuccessCallback?: () => void) => {
 export const useGetUserBookings = () => {
   return useQuery<{
     message: string;
-    bookings: Booking[]
+    bookings: Booking[];
   }>({
     queryKey: ["booking", "fetchAll"], // Unique key for this query
     queryFn: async () => {

@@ -8,7 +8,7 @@ import * as React from "react";
 import { durations } from "@/config/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toCurrency } from "@/lib/utils";
-import { Booking, Service } from "@/types";
+import { Booking } from "@/types";
 
 type Props = {
   bookedService: Booking;
@@ -168,7 +168,7 @@ export const BookedServicePriceCard = (props: Props) => {
           <p className="text-gray-600">
             {formatDateTime(props.bookedService.datetime)}
           </p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="mt-1 text-sm text-gray-500">
             ID: {generateBookingID(props.bookedService.id)}
           </p>
           <motion.span
@@ -259,12 +259,12 @@ export const BookedServicePriceCard = (props: Props) => {
       <div className="z-10 flex flex-col gap-1">
         <div className="flex items-center gap-2">
           {props.bookedService.is_group && (
-            <span className="text-xs bg-green-100 text-green-600">
+            <span className="bg-green-100 text-xs text-green-600">
               Group Service
             </span>
           )}
           <span
-            className={`px-3 py-1 rounded-full w-fit text-xs font-medium ${getStatusColor(props.bookedService.status)}`}
+            className={`w-fit rounded-full px-3 py-1 text-xs font-medium ${getStatusColor(props.bookedService.status)}`}
           >
             {props.bookedService.status}
           </span>
@@ -277,9 +277,9 @@ export const BookedServicePriceCard = (props: Props) => {
             {generateBookingTitle(props.bookedService)}
           </Link>
         </motion.h3>
-        <div className="flex items-center flex-row-reverse justify-between">
+        <div className="flex flex-row-reverse items-center justify-between">
           <p className="flex flex-col">
-            <span className="text-base text-[#757374] font-normal">
+            <span className="text-base font-normal text-[#757374]">
               Date and Time
             </span>
             <span className="text-[18px] font-medium text-[#3D3D3D]">
@@ -287,7 +287,7 @@ export const BookedServicePriceCard = (props: Props) => {
             </span>
           </p>
           <p className="flex flex-col">
-            <span className="text-base text-[#757374] font-normal">
+            <span className="text-base font-normal text-[#757374]">
               Booking ID
             </span>
             <span className="text-[18px] font-medium text-[#3D3D3D]">

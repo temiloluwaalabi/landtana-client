@@ -22,6 +22,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { durations } from "@/config/constants";
+import useSession from "@/hooks/use-session";
 import { useCreateBooking } from "@/lib/query/booking.service";
 import { useBookingStore } from "@/lib/use-booking-store";
 import {
@@ -36,7 +37,6 @@ import { cardVariants } from "@/lib/variants";
 import { Service } from "@/types";
 
 import DateSelectionStep from "../../booking/date-selection-comp";
-import useSession from "@/hooks/use-session";
 
 type Props = {
   services: Service[];
@@ -115,7 +115,7 @@ export const BookingStepFour = ({ services }: Props) => {
     // console.log("hosting", hostBookings);
     const hostBooking = bookings.find((b) => b.guestId === primaryGuestId);
 
-    const guestBookings = bookings.filter((b) => b.guestId !== primaryGuestId);
+    // const guestBookings = bookings.filter((b) => b.guestId !== primaryGuestId);
 
     // Style option (choose host’s if group, or first available)
     const styleOptionId =
@@ -151,10 +151,9 @@ export const BookingStepFour = ({ services }: Props) => {
               name: b.name || "Guest",
               email: session.email || "",
               contact: "+12025550173",
-              service_ids:
-                [
-                  bookings.find((boo) => boo.guestId === b.id)?.serviceId || "",
-                ] || [],
+              service_ids: [
+                bookings.find((boo) => boo.guestId === b.id)?.serviceId || "",
+              ],
             }))
         : [],
       additional_notes: finalNotes,

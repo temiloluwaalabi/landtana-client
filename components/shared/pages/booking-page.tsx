@@ -1,7 +1,9 @@
 "use client";
 import * as React from "react";
-import BookedServicesSection from "./_components/booked-services-section";
+
 import { Booking } from "@/types";
+
+import BookedServicesSection from "./_components/booked-services-section";
 type Props = {
   bookings: Booking[];
 };

@@ -3,13 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 
-import { ServicePriceCard } from "@/components/cards/service-price-card";
+import { BookedServicePriceCard } from "@/components/cards/booked-service-price-card.tsx";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Booking, Category, Service } from "@/types";
+import { Booking } from "@/types";
 
 import MaxWidthContainer from "../../max-width-container";
-import { BookedServicePriceCard } from "@/components/cards/booked-service-price-card.tsx";
 
 type Services = {
   filteredServices: Booking[];

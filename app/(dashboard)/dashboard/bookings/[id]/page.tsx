@@ -1,7 +1,8 @@
-import { getBookingsByUser } from "@/app/actions/bookings.action";
-import BookingDetailsPage from "@/components/shared/pages/single-booking-details-page";
 import { notFound } from "next/navigation";
 import React from "react";
+
+import { getBookingsByUser } from "@/app/actions/bookings.action";
+import BookingDetailsPage from "@/components/shared/pages/single-booking-details-page";
 
 export default async function BookingDetailsPageDashboard({
   params,

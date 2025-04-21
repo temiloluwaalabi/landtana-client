@@ -401,7 +401,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                               </CollapsibleContent>
                             </Collapsible>
                           ) : (
-                            <p className="text-base text-primary mb-3 ">
+                            <p className="mb-3 text-base text-primary ">
                               <Link href={route.href || "/"}>{route.name}</Link>
                             </p>
                           )}
@@ -417,7 +417,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                         trigger={
                           <Button
                             variant={"ghost"}
-                            className="flex w-full border border-red-900 text-red-900 bg-red-100 items-center justify-start p-2 hover:bg-red-600 hover:px-2 hover:text-white"
+                            className="flex w-full items-center justify-start border border-red-900 bg-red-100 p-2 text-red-900 hover:bg-red-600 hover:px-2 hover:text-white"
                           >
                             <LogOutIcon className="mr-2 size-4" />
                             Logout

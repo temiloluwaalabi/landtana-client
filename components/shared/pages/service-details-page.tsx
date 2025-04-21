@@ -34,6 +34,7 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
   const [selectedVariations, setSelectedVariations] = useState<StyleOption[]>(
     []
   );
+  console.log(additionalServiceType);
   const [reviewsRef, reviewsInView] = useInView({
     triggerOnce: false,
     threshold: 0.1,

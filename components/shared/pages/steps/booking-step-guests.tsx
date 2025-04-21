@@ -67,7 +67,7 @@ export const BookingGroupStep = ({ services }: Props) => {
     step,
   } = useBookingStore();
 
-  const store = useBookingStore.getState();
+  // const store = useBookingStore.getState();
 
   // console.log(store);
 
