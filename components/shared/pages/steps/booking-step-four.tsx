@@ -76,7 +76,7 @@ export const BookingStepFour = ({ services }: Props) => {
 
     if (booking.styleOptionId) {
       const styleOption = service.style_options.find(
-        (opt) => opt.id === booking.styleOptionId
+        (opt) => opt.id === booking.styleOptionId,
       );
       if (styleOption) {
         parts.push(`Style Option: ${styleOption.name}`);
@@ -85,7 +85,7 @@ export const BookingStepFour = ({ services }: Props) => {
 
     if (booking.variationId) {
       const variation = service.variations.find(
-        (v) => v.id === booking.variationId
+        (v) => v.id === booking.variationId,
       );
       if (variation) {
         parts.push(`Variation: ${variation.name}`);
@@ -187,7 +187,7 @@ export const BookingStepFour = ({ services }: Props) => {
                   "flex w-full  items-center justify-between  bg-white  p-3",
                   openAccordionId === true
                     ? "rounded-se-lg rounded-ss-lg"
-                    : "rounded-lg"
+                    : "rounded-lg",
                 )}
               >
                 <div className="flex items-center gap-1">
@@ -297,7 +297,7 @@ export const BookingStepFour = ({ services }: Props) => {
                             transition={{ delay: 0.3 + i * 0.1 }}
                             className={cn(
                               "space-y-2 border-b pb-3",
-                              guests.length - 1 === i && "!border-none !pb-0"
+                              guests.length - 1 === i && "!border-none !pb-0",
                             )}
                           >
                             <div className="flex items-center gap-2">
@@ -309,7 +309,7 @@ export const BookingStepFour = ({ services }: Props) => {
                                       ? "from-primary to-blue-500"
                                       : i % 3 === 1
                                         ? "from-secondary to-pink-400"
-                                        : "from-violet-500 to-purple-700"
+                                        : "from-violet-500 to-purple-700",
                                   )}
                                 >
                                   {guest.id === primaryGuestId
@@ -325,7 +325,7 @@ export const BookingStepFour = ({ services }: Props) => {
                             </div>
                             <div>
                               {totalPrice.bookingDetails.filter(
-                                (book) => book.guestId === guest.id
+                                (book) => book.guestId === guest.id,
                               ).length === 0 && (
                                 <p className="text-sm text-gray-300">
                                   No services selected
@@ -346,7 +346,7 @@ export const BookingStepFour = ({ services }: Props) => {
                                         {
                                           services.find(
                                             (servicee) =>
-                                              servicee.id === service.bookingId
+                                              servicee.id === service.bookingId,
                                           )?.name
                                         }
                                       </h3>
@@ -355,7 +355,7 @@ export const BookingStepFour = ({ services }: Props) => {
                                           durations.find(
                                             (dur) =>
                                               dur.value ===
-                                              service.totalDuration
+                                              service.totalDuration,
                                           )?.label
                                         }
                                       </p>
@@ -492,7 +492,7 @@ export const BookingStepFour = ({ services }: Props) => {
                           <Avatar className="size-8 border border-primary/10">
                             <AvatarFallback
                               className={cn(
-                                "bg-gradient-to-br text-white text-xs from-primary to-blue-500"
+                                "bg-gradient-to-br text-white text-xs from-primary to-blue-500",
                               )}
                             >
                               ME
@@ -507,11 +507,11 @@ export const BookingStepFour = ({ services }: Props) => {
                       <div className="w-full space-y-3">
                         {totalPrice.bookingDetails.map((booking, idx) => {
                           const bookingIndex = bookings.findIndex(
-                            (b) => b.serviceId === booking.bookingId
+                            (b) => b.serviceId === booking.bookingId,
                           );
 
                           const service = services.find(
-                            (s) => s.id === booking.bookingId
+                            (s) => s.id === booking.bookingId,
                           );
 
                           return (

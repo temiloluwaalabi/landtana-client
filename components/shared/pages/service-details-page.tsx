@@ -32,7 +32,7 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
   const [additionalServiceType, setAdditionalServiceType] =
     useState<string>(""); // 'pre-service' or 'post-service'
   const [selectedVariations, setSelectedVariations] = useState<StyleOption[]>(
-    []
+    [],
   );
   console.log(additionalServiceType);
   const [reviewsRef, reviewsInView] = useInView({
@@ -199,7 +199,7 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
                           -{" "}
                           {
                             durations.find(
-                              (dur) => dur.value === variation.duration
+                              (dur) => dur.value === variation.duration,
                             )?.label
                           }
                         </Label>
@@ -244,7 +244,7 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
                             {option.name} - {toCurrency(option.price, true)} -{" "}
                             {
                               durations.find(
-                                (dur) => dur.value === option.duration
+                                (dur) => dur.value === option.duration,
                               )?.label
                             }
                           </Label>

@@ -37,7 +37,7 @@ export async function POST(request: Request) {
         method: "POST",
         headers: headersList,
         body: JSON.stringify(validatedData.data),
-      }
+      },
     );
     const responseData = await response.json();
 
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
           status: response.status,
           error: responseData,
         },
-        "API AUTH FAILED"
+        "API AUTH FAILED",
       );
 
       return NextResponse.json(
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
         },
         {
           status: response.status,
-        }
+        },
       );
     }
 
@@ -76,13 +76,13 @@ export async function POST(request: Request) {
     if (error instanceof ZodError) {
       return NextResponse.json(
         { errors: error.flatten().fieldErrors },
-        { status: 422 }
+        { status: 422 },
       );
     }
     if (error instanceof ValidationError) {
       return NextResponse.json(
         { errors: error.details || "Validation failed" },
-        { status: 422 }
+        { status: 422 },
       );
     }
 
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
         message:
           error instanceof Error ? error.message : "Authentication failed",
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 }
@@ -110,7 +110,7 @@ export async function GET() {
         message: "All bookings fetched successfully",
         bookings,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("FAILED FETCHING bookings", error);
@@ -118,14 +118,14 @@ export async function GET() {
     if (error instanceof UnauthorizedError) {
       return NextResponse.json(
         { message: error.message },
-        { status: error.statusCode }
+        { status: error.statusCode },
       );
     }
 
     if (error instanceof ApiError) {
       return NextResponse.json(
         { message: error.message, details: error.rawErrors },
-        { status: error.statusCode }
+        { status: error.statusCode },
       );
     }
 
@@ -136,7 +136,7 @@ export async function GET() {
             ? error.message
             : "Fetching all services failed",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

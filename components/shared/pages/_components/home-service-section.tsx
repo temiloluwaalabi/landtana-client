@@ -87,7 +87,7 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
   const getFilteredServices = () => {
     if (selectedTab === "all") return filteredServices;
     return filteredServices.filter(
-      (service) => service.category_id === selectedTab
+      (service) => service.category_id === selectedTab,
     );
   };
 
