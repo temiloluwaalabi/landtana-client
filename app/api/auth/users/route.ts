@@ -9,24 +9,21 @@ import { OnboardingSchema } from "@/lib/validations/user/user.schema";
 
 export async function PUT(request: Request) {
   try {
-    console.log("PUT CALLED");
     const session = await getSession();
     const body = await request.json();
-
-    console.log("Incoming Body:", body); // Debug payload
 
     const validatedData = OnboardingSchema.safeParse(body);
 
     if (!validatedData.success) {
       return NextResponse.json(
         { errors: validatedData.error.flatten().fieldErrors },
-        { status: 422 },
+        { status: 422 }
       );
       //   throw new ValidationError(validatedData.error.flatten().fieldErrors);
     }
 
     const basU = new URL(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/users/${session.id}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/users/${session.id}`
     );
     const response = await fetch(basU.href, {
       method: "PUT",
@@ -42,7 +39,7 @@ export async function PUT(request: Request) {
       const errorData = await response.json();
       return NextResponse.json(
         { error: errorData.message || "Onboarding failed" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -62,7 +59,7 @@ export async function PUT(request: Request) {
     if (error instanceof ZodError) {
       return NextResponse.json(
         { errors: error.flatten().fieldErrors },
-        { status: 422 },
+        { status: 422 }
       );
     }
 
@@ -70,7 +67,7 @@ export async function PUT(request: Request) {
       {
         error: error instanceof Error ? error.message : "Onboarding failed",
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 }

@@ -25,7 +25,6 @@ export default function RegisterForm() {
   });
 
   const LoginSubmit = async (values: z.infer<typeof LoginSchema>) => {
-    console.log(values);
     mutate(values);
   };
 

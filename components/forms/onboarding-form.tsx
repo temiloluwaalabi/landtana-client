@@ -26,14 +26,11 @@ export default function OnboardingForm() {
     },
   });
 
-  console.log(loginForm.watch());
   useEffect(() => {
     loginForm.setValue("is_onboarded", true);
   }, [loginForm, session.id]);
 
-  console.log(loginForm.watch());
   const LoginSubmit = async (values: z.infer<typeof OnboardingSchema>) => {
-    console.log(values);
     mutate(values);
   };
 

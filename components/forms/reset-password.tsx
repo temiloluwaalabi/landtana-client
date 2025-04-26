@@ -39,7 +39,6 @@ export default function ResetPasswordForm() {
   const { mutate, isPending } = useResetPassword(token || "");
 
   const LoginSubmit = async (values: z.infer<typeof SetupPasswordCSchema>) => {
-    console.log(values);
     mutate(values);
   };
 

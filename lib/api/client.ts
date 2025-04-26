@@ -19,7 +19,6 @@ export class ApiError extends Error {
     errorType?: string;
     rawErrors?: Record<string, any>;
   }) {
-    console.log("🔥 Creating ApiError with:", response);
     // Normalize message to array
     const messages = Array.isArray(response.messages)
       ? response.messages
@@ -27,7 +26,6 @@ export class ApiError extends Error {
     // Join messages for the Error parent class
     // Join messages for the Error parent class
     const finalMessage = messages.join("; ");
-    console.log("🛑 Final error message:", finalMessage);
 
     super(finalMessage);
     this.name = "ApiError";
@@ -49,7 +47,6 @@ export class ApiError extends Error {
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, ApiError);
     }
-    console.log("✅ ApiError created successfully:", this);
   }
 }
 
@@ -106,7 +103,7 @@ const handleApiError = (error: AxiosError<ApiError>) => {
         new ApiError({
           statusCode: 408,
           messages: "Request timed out. Please try again.",
-        }),
+        })
       );
     }
     if (error.message.includes("Network Error")) {
@@ -114,11 +111,11 @@ const handleApiError = (error: AxiosError<ApiError>) => {
         new ApiError({
           statusCode: 500,
           messages: "Network error. Please check your connection.",
-        }),
+        })
       );
     }
     return Promise.reject(
-      new ApiError({ statusCode: 500, messages: "An unknown error occurred." }),
+      new ApiError({ statusCode: 500, messages: "An unknown error occurred." })
     );
   }
 
@@ -134,15 +131,13 @@ const handleApiError = (error: AxiosError<ApiError>) => {
     ? data.message.filter((msg) => typeof msg === "string")
     : [typeof data?.message === "string" ? data.message : "An error occurred"];
 
-  console.log("🛑 Extracted error messages:", errorMessages);
-
   return Promise.reject(
     new ApiError({
       statusCode: status,
       messages: errorMessages,
       errorType: data.errorType,
       rawErrors: data?.rawErrors || undefined,
-    }),
+    })
   );
 };
 
@@ -182,7 +177,7 @@ const handleApiSuccess = <T>(response: AxiosResponse<T>) => response;
 export const withRetry = async <T>(
   fn: () => Promise<T>,
   maxRetries = 3,
-  delay = 1000,
+  delay = 1000
 ): Promise<T> => {
   let lastError: any;
 
@@ -202,7 +197,7 @@ export const withRetry = async <T>(
       if ((isNetworkError || is5xxError) && attempt < maxRetries - 1) {
         // Wait before retrying with exponential backoff
         await new Promise((resolve) =>
-          setTimeout(resolve, delay * Math.pow(2, attempt)),
+          setTimeout(resolve, delay * Math.pow(2, attempt))
         );
         continue;
       }

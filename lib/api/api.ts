@@ -19,7 +19,7 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/auth/signin`,
+        `${authClient.defaults.baseURL}/auth/signin`
       );
       console.log("Login Credentials:", credentials);
     }
@@ -36,14 +36,13 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/users`,
+        `${authClient.defaults.baseURL}/users`
       );
     }
 
     try {
       // ✅ Log headers before making the request
-      const headers = authClient.defaults.headers.common;
-      console.log("Request Headers:", headers);
+
       const response = await authClient.get(`/users/${id}`, {
         withCredentials: true,
         headers: {
@@ -75,8 +74,7 @@ export const authService = {
   },
   confirmEmail: async (token: string) => {
     // ✅ Log headers before making the request
-    const headers = authClient.defaults.headers.common;
-    console.log("Request Headers:", headers);
+
     const response = await authClient.post("/auth/confirm-email", {
       withCredentials: true,
       headers: {
@@ -96,8 +94,7 @@ export const authService = {
   },
   resendConfirmationLink: async (token: string) => {
     // ✅ Log headers before making the request
-    const headers = authClient.defaults.headers.common;
-    console.log("Request Headers:", headers);
+
     const response = await authClient.post("/auth/resend-confirmation-link", {
       withCredentials: true,
       headers: {
@@ -116,15 +113,14 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/auth/reset-password-link`,
+        `${authClient.defaults.baseURL}/auth/reset-password-link`
       );
       console.log("Payload:", values);
     }
 
     try {
       // ✅ Log headers before making the request
-      const headers = authClient.defaults.headers.common;
-      console.log("Request Headers:", headers);
+
       const response = await authClient.post(
         "/auth/reset-password-link",
         values,
@@ -133,7 +129,7 @@ export const authService = {
           // headers: {
           //   Authorization: `Bearer ${token}`,
           // },
-        },
+        }
       );
       // ✅ Check response status manually like `fetch`
 
@@ -155,15 +151,14 @@ export const authService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/auth/reset-password`,
+        `${authClient.defaults.baseURL}/auth/reset-password`
       );
       console.log("Payload:", values);
     }
 
     try {
       // ✅ Log headers before making the request
-      const headers = authClient.defaults.headers.common;
-      console.log("Request Headers:", headers);
+
       const response = await authClient.post(
         "/auth/reset-password",
         values.password,
@@ -175,7 +170,7 @@ export const authService = {
           params: {
             token,
           },
-        },
+        }
       );
       // ✅ Check response status manually like `fetch`
 
@@ -197,19 +192,18 @@ export const authService = {
 export const servService = {
   getAllServices: async (
     page: number = 1,
-    limit: number = 35,
+    limit: number = 35
   ): Promise<GetAllServicesResponse> => {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/services`,
+        `${authClient.defaults.baseURL}/services`
       );
     }
 
     try {
       // ✅ Log headers before making the request
-      const headers = authClient.defaults.headers.common;
-      console.log("Request Headers:", headers);
+
       const response = await authClient.get("/services", {
         withCredentials: true,
 
@@ -246,7 +240,7 @@ export const servService = {
     try {
       const response = await authClient.get(
         `/services/category/${categoryId}`,
-        {},
+        {}
       );
 
       if (!response.data) {
@@ -283,19 +277,18 @@ export const servService = {
 export const categoriesService = {
   getAllCategories: async (
     page: number = 1,
-    limit: number = 35,
+    limit: number = 35
   ): Promise<GetAllCategoriesResponse> => {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/categories`,
+        `${authClient.defaults.baseURL}/categories`
       );
     }
 
     try {
       // ✅ Log headers before making the request
-      const headers = authClient.defaults.headers.common;
-      console.log("Request Headers:", headers);
+
       const response = await authClient.get("/categories", {
         withCredentials: true,
         params: {
@@ -330,7 +323,7 @@ export const categoriesService = {
   getCategoryByID: async (
     categoryID: string,
     page: number = 1,
-    limit: number = 35,
+    limit: number = 35
   ) => {
     try {
       const response = await authClient.get(`/categories/${categoryID}`, {
@@ -358,7 +351,7 @@ export const categoriesService = {
   getSubByCatId: async (
     categoryID: string,
     page: number = 1,
-    limit: number = 35,
+    limit: number = 35
   ): Promise<GetAllSubCatResponse> => {
     try {
       const response = await authClient.get(
@@ -371,7 +364,7 @@ export const categoriesService = {
           // headers: {
           //   Authorization: `Bearer ${token}`,
           // },
-        },
+        }
       );
       if (!response.data) {
         throw new ApiError({
@@ -393,15 +386,14 @@ export const bookingService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/bookings`,
+        `${authClient.defaults.baseURL}/bookings`
       );
       console.log("Payload:", values);
     }
 
     try {
       // ✅ Log headers before making the request
-      const headers = authClient.defaults.headers.common;
-      console.log("Request Headers:", headers);
+
       const response = await authClient.post("/booking", values, {
         withCredentials: true,
         headers: {
@@ -432,13 +424,12 @@ export const bookingService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/bookings`,
+        `${authClient.defaults.baseURL}/bookings`
       );
     }
     try {
       // ✅ Log headers before making the request
-      const headers = authClient.defaults.headers.common;
-      console.log("Request Headers:", headers);
+
       const response = await authClient.get("/bookings", {
         withCredentials: true,
         headers: {
@@ -471,13 +462,12 @@ export const bookingService = {
     if (process.env.NODE_ENV === "development") {
       console.log(
         "Sending login request to:",
-        `${authClient.defaults.baseURL}/bookings/user`,
+        `${authClient.defaults.baseURL}/bookings/user`
       );
     }
     try {
       // ✅ Log headers before making the request
-      const headers = authClient.defaults.headers.common;
-      console.log("Request Headers:", headers);
+
       const response = await authClient.get("/bookings/user", {
         withCredentials: true,
         headers: {

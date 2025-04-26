@@ -85,8 +85,6 @@ export const useOnboard = () => {
   return useMutation({
     mutationKey: ["auth", "onboard"],
     mutationFn: async (credentials: z.infer<typeof OnboardingSchema>) => {
-      console.log("Payload being sent:", credentials); // Ensure correct data is sent
-
       const response = await apiClient.put(`/api/auth/users`, credentials);
       return response.data;
     },
@@ -113,7 +111,6 @@ export const useUser = (id: string, enabled: boolean) => {
     queryKey: ["user", id],
     queryFn: async () => {
       const response = await apiClient.get(`/api/users/${id}`);
-      console.log("FETCH USER BY ID RESPONSE", response);
       return response.data;
     },
     enabled,

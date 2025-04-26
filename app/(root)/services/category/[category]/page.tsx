@@ -16,14 +16,13 @@ export default async function ServiceDetailsServer({
   if (!categoryD.success) {
     return notFound();
   }
-  // console.log("FETCHED SEVR SERVICE", service.service);
 
   return (
     <CategoryServiceList
       category={categoryD.category}
       services={
         services.services?.services.filter(
-          (service) => service.category_id === category,
+          (service) => service.category_id === category
         ) || []
       }
     />

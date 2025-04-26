@@ -30,9 +30,6 @@ export const handleMutationError = (error: unknown) => {
 // Helper function to process ApiError instances
 const processApiError = (error: ApiError) => {
   const { statusCode, message, rawErrors } = error;
-  console.log("STATUS CODE:", statusCode);
-  console.log("MESSAGE:", message);
-  console.log("RAW ERRORS:", rawErrors);
 
   const errorMessage = Array.isArray(message) ? message.join("; ") : message;
 
@@ -59,7 +56,7 @@ const processApiError = (error: ApiError) => {
         });
       } else {
         toast.error(
-          errorMessage || "Validation failed. Please check your input.",
+          errorMessage || "Validation failed. Please check your input."
         );
       }
       break;

@@ -22,7 +22,6 @@ export default function ForgotPasswordForm() {
   });
 
   const LoginSubmit = async (values: z.infer<typeof EmailSchema>) => {
-    console.log(values);
     mutate(values, {
       onSuccess: () => {
         loginForm.reset();

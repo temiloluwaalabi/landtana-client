@@ -30,18 +30,17 @@ export async function POST(request: Request) {
           Accept: "application/json",
         },
         body: JSON.stringify(validatedData.data),
-      },
+      }
     );
     const responseData = await response.json();
 
-    // console.log("RESPO", responseData);
     if (!response.ok) {
       logger.error(
         {
           status: response.status,
           error: responseData,
         },
-        "API AUTH FAILED",
+        "API AUTH FAILED"
       );
 
       return NextResponse.json(
@@ -51,7 +50,7 @@ export async function POST(request: Request) {
         },
         {
           status: response.status,
-        },
+        }
       );
     }
 
@@ -80,13 +79,13 @@ export async function POST(request: Request) {
     if (error instanceof ZodError) {
       return NextResponse.json(
         { errors: error.flatten().fieldErrors },
-        { status: 422 },
+        { status: 422 }
       );
     }
     if (error instanceof ValidationError) {
       return NextResponse.json(
         { errors: error.details || "Validation failed" },
-        { status: 422 },
+        { status: 422 }
       );
     }
 
@@ -95,7 +94,7 @@ export async function POST(request: Request) {
         message:
           error instanceof Error ? error.message : "Authentication failed",
       },
-      { status: 401 },
+      { status: 401 }
     );
   }
 }

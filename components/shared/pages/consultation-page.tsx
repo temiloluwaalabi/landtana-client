@@ -170,7 +170,7 @@ export default function ConsultationPage() {
   // Get only the applicable questions based on conditions
   const getApplicableQuestions = React.useCallback(() => {
     return questions.filter(
-      (q) => !q.condition || q.condition(consultationData),
+      (q) => !q.condition || q.condition(consultationData)
     );
   }, [consultationData]);
 
@@ -218,7 +218,7 @@ export default function ConsultationPage() {
   const handleCheckboxChange = (
     field: string,
     value: string,
-    checked: boolean,
+    checked: boolean
   ) => {
     if (checked) {
       setConsultationData({
@@ -242,7 +242,6 @@ export default function ConsultationPage() {
 
   const handleSubmit = () => {
     // In a real app, you would submit the form data to your API
-    console.log("Form submitted with data:", consultationData);
     // Redirect to confirmation page
     router.push("/consultation/confirmation");
   };
@@ -453,7 +452,7 @@ export default function ConsultationPage() {
                     handleCheckboxChange(
                       "concerns",
                       concern,
-                      !consultationData.concerns.includes(concern),
+                      !consultationData.concerns.includes(concern)
                     )
                   }
                 >
@@ -465,7 +464,7 @@ export default function ConsultationPage() {
                         handleCheckboxChange(
                           "concerns",
                           concern,
-                          checked as boolean,
+                          checked as boolean
                         )
                       }
                       className="size-5"
@@ -509,7 +508,7 @@ export default function ConsultationPage() {
                     handleCheckboxChange(
                       "goals",
                       goal,
-                      !consultationData.goals.includes(goal),
+                      !consultationData.goals.includes(goal)
                     )
                   }
                 >

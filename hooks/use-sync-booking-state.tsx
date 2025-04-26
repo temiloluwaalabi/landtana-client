@@ -26,8 +26,6 @@ export default function useSyncBookingState() {
 
   // Debounced function to update the URL
   const debouncedUpdateUrl = () => {
-    // console.log("DEBOUNCED EFFECT CALLED - Updating URL");
-
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
       updates: {

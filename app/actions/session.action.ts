@@ -14,7 +14,7 @@ export async function getSession() {
 
   const session = await getIronSession<SessionData>(
     await cookies(),
-    sessionOptions,
+    sessionOptions
   );
 
   if (!session.isLoggedIn) {
@@ -50,7 +50,6 @@ export async function loginSession(user: Partial<User>, accessToken?: string) {
 
   const token = (await cookies()).get("access_token")?.value;
 
-  console.log(token);
   Object.assign(session, {
     id: user.id,
     first_name: user.first_name,
@@ -76,7 +75,7 @@ export async function onBoardSession(user: Partial<User>) {
 }
 export async function RegisterSession(
   user: Partial<User>,
-  accessToken?: string,
+  accessToken?: string
 ) {
   const session = await getSession();
 
