@@ -110,7 +110,7 @@ export const BookingGroupStep = ({ services }: Props) => {
 
   const onSubmit = (values: z.infer<typeof GuestFormSchema>) => {
     const validGuests = values.guests.filter(
-      (guest) => guest.name.trim() !== ""
+      (guest) => guest.name.trim() !== "",
     );
 
     validGuests.forEach((guest) => {
@@ -217,7 +217,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                           ? "bg-primary"
                           : index % 3 === 1
                             ? "bg-secondary"
-                            : "bg-violet-500"
+                            : "bg-violet-500",
                       )}
                     />
 
@@ -231,7 +231,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                                 ? "from-primary to-blue-500"
                                 : index % 3 === 1
                                   ? "from-secondary to-pink-400"
-                                  : "from-violet-500 to-purple-700"
+                                  : "from-violet-500 to-purple-700",
                             )}
                           >
                             {guest.id === primaryGuestId
@@ -444,7 +444,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                         transition={{ delay: 0.3 + i * 0.1 }}
                         className={cn(
                           "space-y-2 border-b pb-3",
-                          guests.length - 1 === i && "!border-none !pb-0"
+                          guests.length - 1 === i && "!border-none !pb-0",
                         )}
                       >
                         <div className="flex items-center gap-2">
@@ -456,7 +456,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                                   ? "from-primary to-blue-500"
                                   : i % 3 === 1
                                     ? "from-secondary to-pink-400"
-                                    : "from-violet-500 to-purple-700"
+                                    : "from-violet-500 to-purple-700",
                               )}
                             >
                               {guest.id === primaryGuestId
@@ -471,7 +471,7 @@ export const BookingGroupStep = ({ services }: Props) => {
 
                         <div>
                           {totalPrice.bookingDetails.filter(
-                            (book) => book.guestId === guest.id
+                            (book) => book.guestId === guest.id,
                           ).length === 0 && (
                             <p className="text-sm text-gray-300">
                               No services selected
@@ -493,7 +493,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                                     {
                                       services.find(
                                         (servicee) =>
-                                          servicee.id === service.bookingId
+                                          servicee.id === service.bookingId,
                                       )?.name
                                     }
                                   </h3>
@@ -501,7 +501,7 @@ export const BookingGroupStep = ({ services }: Props) => {
                                     {
                                       durations.find(
                                         (dur) =>
-                                          dur.value === service.totalDuration
+                                          dur.value === service.totalDuration,
                                       )?.label
                                     }
                                   </p>

@@ -143,7 +143,7 @@ export default function DateSelectionStep({
 
   const findNextAvailableDate = (
     availabilityData: AvailabilityResponse,
-    selectedDate: Date
+    selectedDate: Date,
   ): string | null => {
     const dates = Object.keys(availabilityData.dates).sort();
 
@@ -220,7 +220,7 @@ export default function DateSelectionStep({
                   onClick={() => {
                     const nextAvailableDateStr = findNextAvailableDate(
                       availabilityData,
-                      selectedDate
+                      selectedDate,
                     );
                     if (nextAvailableDateStr) {
                       const nextAvailableDate = new Date(nextAvailableDateStr);

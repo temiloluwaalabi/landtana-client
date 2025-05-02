@@ -78,7 +78,7 @@ export default async function ServiceDetailsServer({
   const service = await getServiceById(id);
   const services = await getAllServices();
   const subCat = await getSubCategoriesByCategoryID(
-    "b15bd255-537b-4738-bb98-74938098599d"
+    "b15bd255-537b-4738-bb98-74938098599d",
   );
 
   if (!service.success) {

@@ -103,7 +103,7 @@ const handleApiError = (error: AxiosError<ApiError>) => {
         new ApiError({
           statusCode: 408,
           messages: "Request timed out. Please try again.",
-        })
+        }),
       );
     }
     if (error.message.includes("Network Error")) {
@@ -111,11 +111,11 @@ const handleApiError = (error: AxiosError<ApiError>) => {
         new ApiError({
           statusCode: 500,
           messages: "Network error. Please check your connection.",
-        })
+        }),
       );
     }
     return Promise.reject(
-      new ApiError({ statusCode: 500, messages: "An unknown error occurred." })
+      new ApiError({ statusCode: 500, messages: "An unknown error occurred." }),
     );
   }
 
@@ -137,7 +137,7 @@ const handleApiError = (error: AxiosError<ApiError>) => {
       messages: errorMessages,
       errorType: data.errorType,
       rawErrors: data?.rawErrors || undefined,
-    })
+    }),
   );
 };
 
@@ -177,7 +177,7 @@ const handleApiSuccess = <T>(response: AxiosResponse<T>) => response;
 export const withRetry = async <T>(
   fn: () => Promise<T>,
   maxRetries = 3,
-  delay = 1000
+  delay = 1000,
 ): Promise<T> => {
   let lastError: any;
 
@@ -197,7 +197,7 @@ export const withRetry = async <T>(
       if ((isNetworkError || is5xxError) && attempt < maxRetries - 1) {
         // Wait before retrying with exponential backoff
         await new Promise((resolve) =>
-          setTimeout(resolve, delay * Math.pow(2, attempt))
+          setTimeout(resolve, delay * Math.pow(2, attempt)),
         );
         continue;
       }

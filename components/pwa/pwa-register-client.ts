@@ -18,7 +18,7 @@ export function usePWARegistration() {
           .then((registration) => {
             console.log(
               "Service Worker registered successfully:",
-              registration.scope
+              registration.scope,
             );
 
             // Track which pages have been visited while online
@@ -37,7 +37,7 @@ export function usePWARegistration() {
               // Check if this page is already tracked
               const pageExists = cachedPages.some(
                 (page: { url: string; title: string; timestamp: number }) =>
-                  page.url === currentPath
+                  page.url === currentPath,
               );
 
               if (!pageExists) {
@@ -56,7 +56,7 @@ export function usePWARegistration() {
 
                 localStorage.setItem(
                   "cachedPages",
-                  JSON.stringify(cachedPages)
+                  JSON.stringify(cachedPages),
                 );
               }
             };
@@ -85,7 +85,7 @@ export function usePWARegistration() {
       window.addEventListener("online", () => {
         console.log("You are now online");
         document.dispatchEvent(
-          new CustomEvent("connectivity-changed", { detail: { online: true } })
+          new CustomEvent("connectivity-changed", { detail: { online: true } }),
         );
       });
 
@@ -94,7 +94,7 @@ export function usePWARegistration() {
         document.dispatchEvent(
           new CustomEvent("connectivity-changed", {
             detail: { online: false },
-          })
+          }),
         );
       });
     }

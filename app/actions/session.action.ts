@@ -14,7 +14,7 @@ export async function getSession() {
 
   const session = await getIronSession<SessionData>(
     await cookies(),
-    sessionOptions
+    sessionOptions,
   );
 
   if (!session.isLoggedIn) {
@@ -75,7 +75,7 @@ export async function onBoardSession(user: Partial<User>) {
 }
 export async function RegisterSession(
   user: Partial<User>,
-  accessToken?: string
+  accessToken?: string,
 ) {
   const session = await getSession();
 
