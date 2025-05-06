@@ -12,7 +12,7 @@ export const BookingPage = (props: Props) => {
   return (
     <BookedServicesSection
       filteredServices={props.bookings.filter(
-        (service) => service.price !== null
+        (service) => service.price !== null,
       )}
       services={props.services}
     />

@@ -63,7 +63,7 @@ export const BookingDetails = ({ booking, services }: BookingDetailsProps) => {
     if (booking.is_group) {
       // For group bookings, only calculate "Me" services
       const myServices = booking.group_members?.find(
-        (member) => member.name === "Me"
+        (member) => member.name === "Me",
       )?.services;
       if (myServices) {
         myServices.forEach((service) => {
@@ -115,7 +115,7 @@ export const BookingDetails = ({ booking, services }: BookingDetailsProps) => {
 
   // Determine if there are aftercare tips available
   const hasAftercareTips = services.find(
-    (ser) => ser.name === mainService?.name
+    (ser) => ser.name === mainService?.name,
   );
 
   return (

@@ -147,7 +147,7 @@ export const BookedServicePriceCard = (props: Props) => {
           <Image
             src={
               props.services.find(
-                (ser) => ser.id === props.bookedService.services?.[0]?.id
+                (ser) => ser.id === props.bookedService.services?.[0]?.id,
               )?.featured_image ||
               "https://res.cloudinary.com/davidleo/image/upload/v1739726284/landtana/IMG-20250114-WA0041_tra4t4.jpg"
             }
@@ -187,8 +187,8 @@ export const BookedServicePriceCard = (props: Props) => {
                     d.value ===
                     props.bookedService.services?.reduce(
                       (total, service) => total + service.duration,
-                      0
-                    )
+                      0,
+                    ),
                 )?.label
               }
             </span>
@@ -240,7 +240,7 @@ export const BookedServicePriceCard = (props: Props) => {
           <Image
             src={
               props.services.find(
-                (ser) => ser.id === props.bookedService.services?.[0]?.id
+                (ser) => ser.id === props.bookedService.services?.[0]?.id,
               )?.featured_image ||
               "https://res.cloudinary.com/davidleo/image/upload/v1739726284/landtana/IMG-20250114-WA0041_tra4t4.jpg"
             }

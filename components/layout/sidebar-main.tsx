@@ -32,7 +32,7 @@ export const SidebarNav = () => {
       {SIDEBAR_ITEMS.map((item, index) => {
         const isActive = pathname === (item.href as string);
         const pathnameExistInDropdowns: any = item.dropdownItems?.filter(
-          (dropdownItem) => dropdownItem.href === pathname
+          (dropdownItem) => dropdownItem.href === pathname,
         );
         const isDropdown = Boolean(pathnameExistInDropdowns?.length);
 
@@ -56,7 +56,7 @@ export const SidebarNav = () => {
                               // href={item.href}
                               className={cn(
                                 "flex gap-2",
-                                isActive && "text-primary !py-3 "
+                                isActive && "text-primary !py-3 ",
                               )}
                             >
                               {item.icon && <item.icon className="size-5" />}
@@ -81,7 +81,7 @@ export const SidebarNav = () => {
                                       className={cn(
                                         "hover:bg-orange-100 py-3 h-[40px]",
                                         isChildActive &&
-                                          "!text-white bg-primary hover:!bg-primary"
+                                          "!text-white bg-primary hover:!bg-primary",
                                       )}
                                     >
                                       <span className="truncate text-base">
@@ -105,7 +105,7 @@ export const SidebarNav = () => {
                           className={cn(
                             "hover:bg-orange-100 py-3 h-[40px]",
                             isActive &&
-                              " !text-white bg-primary hover:!bg-primary"
+                              " !text-white bg-primary hover:!bg-primary",
                           )}
                         >
                           {item.icon && <item.icon />}
