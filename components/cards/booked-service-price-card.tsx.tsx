@@ -182,7 +182,7 @@ export const BookedServicePriceCard = (props: Props) => {
           member.services?.reduce(
             (memberSum, service) =>
               memberSum + parseFloat(service.base_price || "0"),
-            0
+            0,
           ) || 0;
 
         return groupTotal + memberTotal;
@@ -196,7 +196,7 @@ export const BookedServicePriceCard = (props: Props) => {
 
     return booking.services.reduce(
       (total, service) => total + parseFloat(service.base_price || "0"),
-      0
+      0,
     );
   };
   // Generate booking ID (first 8 characters of UUID)
@@ -217,7 +217,7 @@ export const BookedServicePriceCard = (props: Props) => {
           <Image
             src={
               props.services.find(
-                (ser) => ser.id === props.bookedService.services?.[0]?.id
+                (ser) => ser.id === props.bookedService.services?.[0]?.id,
               )?.featured_image ||
               "https://res.cloudinary.com/davidleo/image/upload/v1739726284/landtana/IMG-20250114-WA0041_tra4t4.jpg"
             }
@@ -257,8 +257,8 @@ export const BookedServicePriceCard = (props: Props) => {
                     d.value ===
                     props.bookedService.services?.reduce(
                       (total, service) => total + service.duration,
-                      0
-                    )
+                      0,
+                    ),
                 )?.label
               }
             </span>
@@ -308,7 +308,7 @@ export const BookedServicePriceCard = (props: Props) => {
           <Image
             src={
               props.services.find(
-                (ser) => ser.id === props.bookedService.services?.[0]?.id
+                (ser) => ser.id === props.bookedService.services?.[0]?.id,
               )?.featured_image ||
               "https://res.cloudinary.com/davidleo/image/upload/v1739726284/landtana/IMG-20250114-WA0041_tra4t4.jpg"
             }

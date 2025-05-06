@@ -14,14 +14,14 @@ export const Logo = (props: Props) => {
     <div
       className={cn(
         "relative flex items-center justify-center w-fit",
-        props.className
+        props.className,
       )}
     >
       <Link className="absolute left-0 top-0 z-50 size-full" href="/" />
       <div
         className={cn(
           "bg-black relative flex items-center size-[75px] p-2 rounded-full",
-          props.bgClass
+          props.bgClass,
         )}
       >
         <Image

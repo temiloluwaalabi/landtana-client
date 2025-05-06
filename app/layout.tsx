@@ -16,7 +16,7 @@ import { cormorant, iSans, lora } from "./fonts";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com"
+    process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com",
   ),
   title: "Landtana Crown Braids | Premium Braiding Salon in San Antonio",
   description:
@@ -156,7 +156,7 @@ export default async function RootLayout({
           cormorant.variable,
           lora.variable,
           iSans.variable,
-          "font-lora antialiased"
+          "font-lora antialiased",
         )}
       >
         <Providers>

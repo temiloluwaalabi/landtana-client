@@ -32,7 +32,7 @@ export const MainUserDashboard = (props: MainUserDashboardProps) => {
   const totalBookings = props.singleBookings.length;
   const totalGroupBooking = props.groupBooking.length;
   const upcomingBookingsCount = props.singleBookings.filter(
-    (booking) => booking.datetime && new Date(booking.datetime) > new Date()
+    (booking) => booking.datetime && new Date(booking.datetime) > new Date(),
   ).length;
 
   // Calculate most booked service and other metrics
@@ -346,7 +346,7 @@ export const MainUserDashboard = (props: MainUserDashboardProps) => {
                     props.groupBooking.forEach((booking) => {
                       const myServices =
                         booking.group_members?.find(
-                          (member) => member.name === "Me"
+                          (member) => member.name === "Me",
                         )?.services || [];
                       myServices.forEach((service) => {
                         serviceStats[service.name] =
@@ -357,7 +357,7 @@ export const MainUserDashboard = (props: MainUserDashboardProps) => {
                     // Calculate total count and percentages
                     const totalCount = Object.values(serviceStats).reduce(
                       (sum, count) => sum + Number(count),
-                      0
+                      0,
                     );
 
                     // Sort services by count (descending)
@@ -413,7 +413,7 @@ export const MainUserDashboard = (props: MainUserDashboardProps) => {
                       "px-3 py-1 text-sm rounded-md",
                       activeTab === "upcoming"
                         ? "bg-orange-600 text-white"
-                        : "text-gray-600 dark:text-light-600"
+                        : "text-gray-600 dark:text-light-600",
                     )}
                     onClick={() => setActiveTab("upcoming")}
                   >
@@ -424,7 +424,7 @@ export const MainUserDashboard = (props: MainUserDashboardProps) => {
                       "px-3 py-1 text-sm rounded-md",
                       activeTab === "group"
                         ? "bg-orange-600 text-white"
-                        : "text-gray-600 dark:text-light-600"
+                        : "text-gray-600 dark:text-light-600",
                     )}
                     onClick={() => setActiveTab("group")}
                   >
@@ -452,7 +452,7 @@ export const MainUserDashboard = (props: MainUserDashboardProps) => {
                               {booking.datetime
                                 ? format(
                                     new Date(booking.datetime),
-                                    "EEEE, MMMM dd"
+                                    "EEEE, MMMM dd",
                                   )
                                 : "Unknown Date"}{" "}
                             </span>
@@ -520,7 +520,7 @@ export const MainUserDashboard = (props: MainUserDashboardProps) => {
                               {booking.datetime
                                 ? format(
                                     new Date(booking.datetime),
-                                    "EEEE, MMMM dd"
+                                    "EEEE, MMMM dd",
                                   )
                                 : "Unknown Date"}{" "}
                             </span>
@@ -611,7 +611,7 @@ export const MainUserDashboard = (props: MainUserDashboardProps) => {
                   props.groupBooking.forEach((booking) => {
                     const myServices =
                       booking.group_members?.find(
-                        (member) => member.name === "Me"
+                        (member) => member.name === "Me",
                       )?.services || [];
                     myServices.forEach((service) => {
                       serviceStats[service.name] =
@@ -622,7 +622,7 @@ export const MainUserDashboard = (props: MainUserDashboardProps) => {
                   // Calculate total count and percentages
                   const totalCount = Object.values(serviceStats).reduce(
                     (sum, count) => sum + Number(count),
-                    0
+                    0,
                   );
 
                   // Sort services by count (descending)
