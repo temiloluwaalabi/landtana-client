@@ -110,13 +110,48 @@ export const BookedServicePriceCard = (props: Props) => {
     return `${formattedDate} - ${formattedTime}`;
   };
 
-  // Generate booking title
+  /**
+   * Generates a descriptive title for a booking
+   * - For single-person bookings: Service name or "Service + N others"
+   * - For group bookings: Shows the group size and combines services
+   */
   const generateBookingTitle = (booking: Booking): string => {
+    // Handle empty booking case
+    if (!booking) return "Untitled Booking";
+
+    // For group bookings
+    if (
+      booking.is_group &&
+      booking.group_members &&
+      booking.group_members.length > 0
+    ) {
+      const totalPeople = booking.group_size || booking.group_members.length;
+
+      // Get all unique service names across group members
+      const allServiceNames = new Set<string>();
+      booking.group_members.forEach((member) => {
+        member.services?.forEach((service) => {
+          allServiceNames.add(service.name);
+        });
+      });
+
+      // Create descriptive group title
+      if (allServiceNames.size === 0) {
+        return `Group Booking (${totalPeople} people)`;
+      } else if (allServiceNames.size === 1) {
+        return `Group ${Array.from(allServiceNames)[0]} (${totalPeople} people)`;
+      } else {
+        const mainService = Array.from(allServiceNames)[0];
+        return `Group ${mainService} + ${allServiceNames.size - 1} other service${allServiceNames.size > 2 ? "s" : ""} (${totalPeople} people)`;
+      }
+    }
+
+    // For individual bookings
     if (!booking.services || booking.services.length === 0) {
       return "Untitled Booking";
     }
 
-    // Use the main service (first non-addon service) as the primary title component
+    // Find main service (first non-addon service or first service)
     const mainService =
       booking.services.find((service) => !service.is_addon) ||
       booking.services[0];
@@ -125,10 +160,45 @@ export const BookedServicePriceCard = (props: Props) => {
       return mainService.name;
     }
 
-    // For multiple services, show main service + count of additional services
-    return `${mainService.name} + ${booking.services.length - 1} service${booking.services.length > 2 ? "s" : ""}`;
+    // Count additional services
+    const additionalServices = booking.services.length - 1;
+    return `${mainService.name} + ${additionalServices} service${additionalServices > 1 ? "s" : ""}`;
   };
 
+  /**
+   * Calculates the total price for a booking
+   * Handles both individual and group bookings
+   */
+  const calculateTotalPrice = (booking: Booking): number => {
+    // For group bookings
+    if (
+      booking.is_group &&
+      booking.group_members &&
+      booking.group_members.length > 0
+    ) {
+      return booking.group_members.reduce((groupTotal, member) => {
+        // Calculate total for each member's services
+        const memberTotal =
+          member.services?.reduce(
+            (memberSum, service) =>
+              memberSum + parseFloat(service.base_price || "0"),
+            0
+          ) || 0;
+
+        return groupTotal + memberTotal;
+      }, 0);
+    }
+
+    // For individual bookings
+    if (!booking.services || booking.services.length === 0) {
+      return 0;
+    }
+
+    return booking.services.reduce(
+      (total, service) => total + parseFloat(service.base_price || "0"),
+      0
+    );
+  };
   // Generate booking ID (first 8 characters of UUID)
   const generateBookingID = (uuid: string): string => {
     return `BK-${uuid.substring(0, 8).toUpperCase()}`;
@@ -147,7 +217,7 @@ export const BookedServicePriceCard = (props: Props) => {
           <Image
             src={
               props.services.find(
-                (ser) => ser.id === props.bookedService.services?.[0]?.id,
+                (ser) => ser.id === props.bookedService.services?.[0]?.id
               )?.featured_image ||
               "https://res.cloudinary.com/davidleo/image/upload/v1739726284/landtana/IMG-20250114-WA0041_tra4t4.jpg"
             }
@@ -187,8 +257,8 @@ export const BookedServicePriceCard = (props: Props) => {
                     d.value ===
                     props.bookedService.services?.reduce(
                       (total, service) => total + service.duration,
-                      0,
-                    ),
+                      0
+                    )
                 )?.label
               }
             </span>
@@ -211,9 +281,7 @@ export const BookedServicePriceCard = (props: Props) => {
         >
           <span className="text-xs dark:text-light-400">From</span>
           <h2 className="-mt-1 text-sm font-bold dark:text-black">
-            {props.bookedService.services
-              ? `$${props.bookedService.services.reduce((total, service) => total + parseFloat(service.base_price), 0).toFixed(2)}`
-              : "0"}{" "}
+            ${calculateTotalPrice(props.bookedService).toFixed(2)}
           </h2>
         </motion.div>
       </div>
@@ -240,7 +308,7 @@ export const BookedServicePriceCard = (props: Props) => {
           <Image
             src={
               props.services.find(
-                (ser) => ser.id === props.bookedService.services?.[0]?.id,
+                (ser) => ser.id === props.bookedService.services?.[0]?.id
               )?.featured_image ||
               "https://res.cloudinary.com/davidleo/image/upload/v1739726284/landtana/IMG-20250114-WA0041_tra4t4.jpg"
             }
@@ -259,9 +327,7 @@ export const BookedServicePriceCard = (props: Props) => {
       >
         <span className="text-xs dark:text-light-400">From</span>
         <h2 className="text-2xl font-bold dark:text-black">
-          {props.bookedService.services
-            ? `$${props.bookedService.services.reduce((total, service) => total + parseFloat(service.base_price), 0).toFixed(2)}`
-            : "0"}
+          ${calculateTotalPrice(props.bookedService).toFixed(2)}
         </h2>
         <motion.span
           initial={{ opacity: 0, scale: 0 }}
@@ -275,7 +341,7 @@ export const BookedServicePriceCard = (props: Props) => {
       <div className="z-10 flex flex-col gap-1">
         <div className="flex items-center gap-2">
           {props.bookedService.is_group && (
-            <span className="bg-green-100 text-xs text-green-600">
+            <span className="rounded-[4px] bg-green-100 px-2 text-xs text-green-600">
               Group Service
             </span>
           )}

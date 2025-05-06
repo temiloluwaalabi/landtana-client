@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 import { useBookingStore } from "@/lib/use-booking-store";
 import { formUrlQuery } from "@/lib/utils";
@@ -25,7 +25,7 @@ export default function useSyncBookingState() {
   } = useBookingStore();
 
   // Debounced function to update the URL
-  const debouncedUpdateUrl = () => {
+  const debouncedUpdateUrl = useCallback(() => {
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
       updates: {
@@ -46,12 +46,23 @@ export default function useSyncBookingState() {
       // console.log("Pushing new URL:", newUrl);
       router.push(newUrl, { scroll: false });
     }
-  };
+  }, [
+    searchParams,
+    step,
+    type,
+    currentGuestId,
+    primaryGuestId,
+    bookings,
+    guests,
+    checkout,
+    preview,
+    confirmed,
+    router,
+  ]);
 
   // Sync URL from state (debounced)
   useEffect(() => {
     debouncedUpdateUrl();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     step,
     type,
@@ -64,6 +75,7 @@ export default function useSyncBookingState() {
     confirmed,
     searchParams,
     router,
+    debouncedUpdateUrl,
   ]);
 
   useEffect(() => {

@@ -39,12 +39,48 @@ export const BookingDetails = ({ booking, services }: BookingDetailsProps) => {
   const router = useRouter();
   const [showAftercareInfo, setShowAftercareInfo] = useState(false);
 
+  /**
+   * Generates a descriptive title for a booking
+   * - For single-person bookings: Service name or "Service + N others"
+   * - For group bookings: Shows the group size and combines services
+   */
   const generateBookingTitle = (booking: Booking): string => {
+    // Handle empty booking case
+    if (!booking) return "Untitled Booking";
+
+    // For group bookings
+    if (
+      booking.is_group &&
+      booking.group_members &&
+      booking.group_members.length > 0
+    ) {
+      const totalPeople = booking.group_size || booking.group_members.length;
+
+      // Get all unique service names across group members
+      const allServiceNames = new Set<string>();
+      booking.group_members.forEach((member) => {
+        member.services?.forEach((service) => {
+          allServiceNames.add(service.name);
+        });
+      });
+
+      // Create descriptive group title
+      if (allServiceNames.size === 0) {
+        return `Group Booking (${totalPeople} people)`;
+      } else if (allServiceNames.size === 1) {
+        return `Group ${Array.from(allServiceNames)[0]} (${totalPeople} people)`;
+      } else {
+        const mainService = Array.from(allServiceNames)[0];
+        return `Group ${mainService} + ${allServiceNames.size - 1} other service${allServiceNames.size > 2 ? "s" : ""} (${totalPeople} people)`;
+      }
+    }
+
+    // For individual bookings
     if (!booking.services || booking.services.length === 0) {
       return "Untitled Booking";
     }
 
-    // Use the main service (first non-addon service) as the primary title component
+    // Find main service (first non-addon service or first service)
     const mainService =
       booking.services.find((service) => !service.is_addon) ||
       booking.services[0];
@@ -53,23 +89,54 @@ export const BookingDetails = ({ booking, services }: BookingDetailsProps) => {
       return mainService.name;
     }
 
-    // For multiple services, show main service + count of additional services
-    return `${mainService.name} + ${booking.services.length - 1} service${booking.services.length > 2 ? "s" : ""}`;
+    // Count additional services
+    const additionalServices = booking.services.length - 1;
+    return `${mainService.name} + ${additionalServices} service${additionalServices > 1 ? "s" : ""}`;
   };
 
+  /**
+   * Calculates the total price for a booking
+   * Handles both individual and group bookings
+   */
+  // const calculateTotalPrice = (booking: Booking): number => {
+  //   // For group bookings
+  //   if (booking.is_group && booking.group_members && booking.group_members.length > 0) {
+  //     return booking.group_members.reduce((groupTotal, member) => {
+  //       // Calculate total for each member's services
+  //       const memberTotal = member.services?.reduce((memberSum, service) =>
+  //         memberSum + parseFloat(service.base_price || '0'), 0) || 0;
+
+  //       return groupTotal + memberTotal;
+  //     }, 0);
+  //   }
+
+  //   // For individual bookings
+  //   if (!booking.services || booking.services.length === 0) {
+  //     return 0;
+  //   }
+
+  //   return booking.services.reduce((total, service) =>
+  //     total + parseFloat(service.base_price || '0'), 0);
+
+  // }
   // Calculate total cost
   const calculateTotalCost = () => {
     let total = 0;
     if (booking.is_group) {
-      // For group bookings, only calculate "Me" services
-      const myServices = booking.group_members?.find(
-        (member) => member.name === "Me",
-      )?.services;
-      if (myServices) {
-        myServices.forEach((service) => {
-          total += parseFloat(service.base_price);
+      // // For group bookings, only calculate "Me" services
+      // const myServices = booking.group_members?.find(
+      //   (member) => member.name === "Me"
+      // )?.services;
+      booking.group_members?.forEach((member) => {
+        member.services?.forEach((service) => {
+          total += parseFloat(service.base_price || "0");
         });
-      }
+      });
+      // if (myServices) {
+      //   myServices.forEach((service) => {
+      //     total += parseFloat(service.base_price);
+      //   });
+      // }
     } else {
       // For individual bookings
       booking.services?.forEach((service) => {
@@ -115,7 +182,7 @@ export const BookingDetails = ({ booking, services }: BookingDetailsProps) => {
 
   // Determine if there are aftercare tips available
   const hasAftercareTips = services.find(
-    (ser) => ser.name === mainService?.name,
+    (ser) => ser.name === mainService?.name
   );
 
   return (
@@ -191,8 +258,12 @@ export const BookingDetails = ({ booking, services }: BookingDetailsProps) => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Location</p>
-                  <p className="font-medium">Afro Hair Studio</p>
-                  <p className="text-sm">123 Braiding Lane, Suite 101</p>
+                  <p className="font-medium"> Landtana Crown Braids</p>
+                  <p className="text-sm">
+                    6923 W Loop 1604 N suite 214,
+                    <br />
+                    San Antonio, TX 78254
+                  </p>
                 </div>
               </div>
 

@@ -120,12 +120,13 @@ export const BookingStepOne = () => {
           >
             <Button
               onClick={() => handleSelectType(option.type)}
+              disabled={option.type === "gift-card"}
               className={cn(
                 "group flex h-[75px] w-full items-center justify-start gap-6 rounded-[8px] border bg-white/50 p-6 transition-all",
                 "hover:border-primary hover:bg-white/80",
                 type === option.type
                   ? "border-secondary bg-white"
-                  : "border-[#D9D9D9] shadow-md",
+                  : "border-[#D9D9D9] shadow-md"
               )}
             >
               <motion.div

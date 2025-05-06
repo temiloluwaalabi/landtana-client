@@ -34,21 +34,21 @@ export const AppSidebar = ({
     >
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem className="cursor-pointer rounded-md hover:bg-white dark:!bg-white">
+          <SidebarMenuItem className="cursor-pointer rounded-md hover:bg-white dark:!bg-white dark:!hover:bg-white">
             <SidebarMenuButton
               size="lg"
               asChild
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground "
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group"
             >
               <div className="flex items-center justify-between">
                 <Logo
-                  bgClass="bg-transparent"
-                  className="size-[100px] group-data-[collapsible=icon]:hidden"
+                  bgClass="bg-transparent size-[200px]"
+                  className="group-data-[collapsible=icon]:hidden"
                   logoLink="https://res.cloudinary.com/davidleo/image/upload/v1746452381/landtana/landtana_logo_x07115.png"
                 />
                 <Logo
-                  bgClass="bg-transparent"
-                  className="hidden size-[100px] group-data-[collapsible=icon]:flex"
+                  bgClass="bg-transparent size-[75px]"
+                  className="hidden group-data-[collapsible=icon]:flex"
                   logoLink="https://res.cloudinary.com/davidleo/image/upload/v1746452256/landtana/Asset_2_nyywsg.png"
                 />
                 {/* <SidebarTrigger className="cursor-pointer  group-data-[collapsible=icon]:w-full" /> */}
