@@ -13,17 +13,17 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { cn } from "@/lib/utils";
+import { cn, removeS } from "@/lib/utils";
 
 import { Button, buttonVariants } from "../ui/button";
 
 interface PageTitleHeaderProps {
   page: string;
-  showPage?: boolean;
+  pageDesc?: string;
+
   addLink?: string;
   onAddClick?: () => void;
   addLabel?: string;
-  lastItem?: string;
   showCrumbs?: boolean;
   showBtn?: boolean;
   secondBtn?: React.ReactNode;
@@ -35,26 +35,25 @@ interface PageTitleHeaderProps {
   addDialog?: boolean;
   dialogContent?: React.ReactNode;
 }
-export const defaultFormatter = (crumb: string) => {
+const defaultFormatter = (crumb: string) => {
   return crumb
     .replace(/[-_]/g, " ")
     .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-      index === 0 ? word.toUpperCase() : word.toLowerCase(),
+      index === 0 ? word.toUpperCase() : word.toLowerCase()
     );
 };
 
 const PageTitleHeader = ({
   page,
   addLink,
-  showPage,
-  lastItem,
+  pageDesc,
   addType,
   showCrumbs,
   showbtn,
   addLabel,
   onAddClick,
   showBtn = !!addLink || !!onAddClick,
-  homeCrumb = { label: "Home", href: "/" },
+  homeCrumb = { label: "Home", href: "/dashboard" },
   addDialog,
   breadcrumbFormatter = defaultFormatter,
   className,
@@ -62,15 +61,15 @@ const PageTitleHeader = ({
   secondBtn,
 }: PageTitleHeaderProps) => {
   const pathname = usePathname();
-  const parts = pathname.split("/");
+  const parts = pathname.split("/").filter(Boolean);
   parts.shift();
   const breadcrumbs = parts;
 
   const AddButton = () => {
-    const label = addLabel;
+    const label = addLabel || `Add New ${removeS(page)}`;
     const buttonClass = cn(
       buttonVariants({ variant: "default" }),
-      "gap-2 hover:bg-red-900",
+      "gap-2 hover:bg-red-900"
     );
 
     if (addLink) {
@@ -94,16 +93,17 @@ const PageTitleHeader = ({
     <section
       className={cn(
         "mb-2 flex flex-wrap items-center justify-between gap-4 md:mb-4 2xl:mb-6",
-        className,
+        className
       )}
     >
       {" "}
       <div className="flex flex-col items-start gap-1">
-        {showPage && (
-          <h1 className="dark:text-light-200 text-xl font-bold tracking-tight md:text-2xl">
-            {page}
-          </h1>
-        )}
+        <h1 className="text-xl font-bold tracking-tight dark:text-light-200 md:text-2xl">
+          {page}
+        </h1>
+        <p className="text-xs font-normal text-[#6B7280] lg:text-sm">
+          {pageDesc}
+        </p>
 
         {showCrumbs && (
           <Breadcrumb>
@@ -116,7 +116,7 @@ const PageTitleHeader = ({
               <BreadcrumbSeparator />
               {breadcrumbs.map((crumb, index) => {
                 const isLast = index === breadcrumbs.length - 1;
-                const href = `/${breadcrumbs.slice(0, index + 1).join("/")}`;
+                const href = `/dashboard/${breadcrumbs.slice(0, index + 1).join("/")}`;
                 const formattedCrumb = breadcrumbFormatter(crumb, index);
 
                 return (
@@ -128,7 +128,7 @@ const PageTitleHeader = ({
                         </BreadcrumbLink>
                       ) : (
                         <span className="font-medium text-foreground">
-                          {lastItem || formattedCrumb}
+                          {formattedCrumb}
                         </span>
                       )}
                     </BreadcrumbItem>

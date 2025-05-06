@@ -1,4 +1,4 @@
-import { Calendar, DollarSign, LifeBuoy, Settings, User } from "lucide-react";
+import { Calendar, DollarSign, Settings, User } from "lucide-react";
 
 export const allRoutes = {
   home: {
@@ -21,6 +21,51 @@ export const allRoutes = {
   },
   contact: {
     url: "/contact-us",
+  },
+  signIn: {
+    url: "/sign-in",
+  },
+  signUp: {
+    url: "/sign-up",
+  },
+  forgotPassword: {
+    url: "/forgot-password",
+  },
+  resetPassword: {
+    url: "/reset-password",
+  },
+  verifyEmail: {
+    url: "/verify-email",
+  },
+  unauthorized: {
+    url: "/unauthorized",
+  },
+  notFound: {
+    url: "/404",
+  },
+  serverError: {
+    url: "/500",
+  },
+  dashboard: {
+    url: "/dashboard",
+  },
+  bookings: {
+    url: "/dashboard/bookings",
+  },
+  dashServices: {
+    url: "/dashboard/services",
+  },
+  serviceCategories: {
+    url: "/dashboard/services/categories",
+  },
+  payments: {
+    url: "/dashboard/payments",
+  },
+  settings: {
+    url: "/dashboard/settings",
+  },
+  profile: {
+    url: "/dashboard/profile",
   },
 };
 

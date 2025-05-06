@@ -6,15 +6,16 @@ import { useInView } from "react-intersection-observer";
 import { BookedServicePriceCard } from "@/components/cards/booked-service-price-card.tsx";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Booking } from "@/types";
+import { Booking, Service } from "@/types";
 
-import MaxWidthContainer from "../../max-width-container";
+import PageTitleHeader from "../../page-title-header";
 
 type Services = {
   filteredServices: Booking[];
+  services: Service[];
 };
 
-const BookedServicesSection = ({ filteredServices }: Services) => {
+const BookedServicesSection = ({ filteredServices, services }: Services) => {
   // console.log("ste", categories);
   const [selectedTab, setSelectedTab] = useState("all");
   const [visibleServices, setVisibleServices] = useState(6);
@@ -30,15 +31,6 @@ const BookedServicesSection = ({ filteredServices }: Services) => {
         staggerChildren: 0.1,
         delayChildren: 0.2,
       },
-    },
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, x: -30 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
     },
   };
 
@@ -93,33 +85,19 @@ const BookedServicesSection = ({ filteredServices }: Services) => {
   const hasMoreServices = getFilteredServices().length > visibleServices;
 
   return (
-    <MaxWidthContainer className="py-8 lg:py-16">
+    <section className="">
+      <PageTitleHeader
+        page="My Bookings"
+        className="border-b px-[15px] py-[14px] lg:px-[15px] 2xl:px-[20px]"
+        pageDesc="Track and manage client information and activities"
+      />
       <motion.div
         ref={ref}
-        className="relative flex flex-col justify-center space-y-7 lg:space-y-12"
+        className="2xl:px-[20px relative flex flex-col justify-center space-y-7 px-[15px] py-[14px] lg:space-y-12 lg:px-[15px]"
         variants={containerVariants}
         initial="hidden"
         animate={inView ? "visible" : "hidden"}
       >
-        <motion.div
-          className="flex w-full  flex-col items-start justify-start space-y-4"
-          variants={titleVariants}
-        >
-          <h2 className="relative bg-gradient-to-r from-secondary to-pink-400 bg-clip-text font-cormorant text-3xl font-bold text-accent md:text-4xl lg:text-6xl">
-            My Bookings{" "}
-            <motion.span
-              className="absolute -bottom-3 left-0 h-1 rounded-full bg-gradient-to-r from-primary to-accent"
-              initial={{ width: 0 }}
-              animate={{ width: "120px" }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-            />
-          </h2>
-          {/* <p className="max-w-2xl text-left text-base font-light text-[#2F201A] lg:text-2xl">
-            Discover our premium braiding styles and services tailored to
-            enhance your natural beauty
-          </p> */}
-        </motion.div>
-
         <Tabs defaultValue="all" onValueChange={handleTabChange}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -128,19 +106,19 @@ const BookedServicesSection = ({ filteredServices }: Services) => {
           >
             <TabsList className="custom-scrollbar mb-2 flex size-full h-auto items-start justify-start gap-3 overflow-hidden overflow-x-scroll bg-transparent p-0 lg:mb-4">
               <TabsTrigger
-                className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white lg:text-base"
+                className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white dark:text-dark-400 dark:data-[state=active]:text-white lg:text-base"
                 value={"all"}
               >
                 All
               </TabsTrigger>
               <TabsTrigger
-                className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white lg:text-base"
+                className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white dark:text-dark-400 dark:data-[state=active]:text-white lg:text-base"
                 value="PENDING"
               >
                 Pending
               </TabsTrigger>
               <TabsTrigger
-                className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white lg:text-base"
+                className="rounded-[60px] border border-gray-200 bg-white/80 px-6 py-2 text-sm font-medium shadow-sm backdrop-blur-sm transition-all duration-300 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-white dark:text-dark-400 dark:data-[state=active]:text-white lg:text-base"
                 value="COMPLETED"
               >
                 Completed
@@ -171,7 +149,10 @@ const BookedServicesSection = ({ filteredServices }: Services) => {
                       transition: { duration: 0.3 },
                     }}
                   >
-                    <BookedServicePriceCard bookedService={service} />
+                    <BookedServicePriceCard
+                      bookedService={service}
+                      services={services}
+                    />
                   </motion.div>
                 ))}
               </motion.div>
@@ -222,7 +203,7 @@ const BookedServicesSection = ({ filteredServices }: Services) => {
           </AnimatePresence>
         </Tabs>
       </motion.div>
-    </MaxWidthContainer>
+    </section>
   );
 };
 

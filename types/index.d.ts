@@ -123,19 +123,39 @@ export type GetAllCategoriesResponse = {
   categories: Category[];
   total: number;
 };
+export interface GroupMember {
+  name: string;
+  email: string;
+  services: {
+    name: string;
+    base_price: string;
+  }[];
+}
+
 export type Booking = {
   id: string;
-  datetime: string;
-  price: number;
-  duration: number;
+  datetime: Date | null;
+  price: number | null;
+  duration: number | null;
   status: string;
+  additional_notes: null | string;
   is_group: boolean;
-  group_size: number;
-  user: User;
-  services: Service[];
-  additional_notes: string;
+  group_size: number | null;
   created_at: Date;
   updated_at: Date;
+  user?: {
+    id: string;
+    first_name: string;
+    email: string;
+  };
+  services?: {
+    id: string;
+    name: string;
+    base_price: string;
+    duration: number;
+    is_addon: boolean;
+  }[];
+  group_members?: GroupMember[];
 };
 export interface GetAllSubCatResponse {
   categories: Category[];

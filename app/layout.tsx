@@ -3,24 +3,20 @@ import "./globals.css";
 import Script from "next/script";
 import NextTopLoader from "nextjs-toploader";
 
-import { Navbar } from "@/components/navigation/navbar";
 import ScrollToTop from "@/components/navigation/scroll-to-top";
 // import { PWAComponents } from "@/components/pwa/pwa-components";
-import SocialMediaWidget from "@/components/shared/social-media-widget";
 import { Toaster } from "@/components/ui/sonner";
 import { businessJsonLd } from "@/lib/jsonld";
 import { cn } from "@/lib/utils";
 import Providers from "@/providers/tansack-provider";
 
-// import { getUserAction } from "./actions/users.action";
-import { getSession } from "./actions/session.action";
 import { cormorant, iSans, lora } from "./fonts";
 
 // You're attempting to animate multiple children within AnimatePresence, but its mode is set to "wait". This will lead to odd visual behaviour.
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com",
+    process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com"
   ),
   title: "Landtana Crown Braids | Premium Braiding Salon in San Antonio",
   description:
@@ -148,8 +144,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getSession();
-
   return (
     <html lang="en">
       <Script
@@ -162,18 +156,15 @@ export default async function RootLayout({
           cormorant.variable,
           lora.variable,
           iSans.variable,
-          "font-lora antialiased",
+          "font-lora antialiased"
         )}
       >
         <Providers>
           <NextTopLoader color="#216015" showSpinner={false} />
 
           <Toaster />
-          <Navbar type="CENTER" isLogeedIn={session.isLoggedIn || false} />
-          {/* <PushNotificationManager /> */}
 
           {children}
-          <SocialMediaWidget />
         </Providers>
         <ScrollToTop />
 

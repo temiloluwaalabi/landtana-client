@@ -33,7 +33,16 @@ interface RemoveUrlQueryParams {
   params: string;
   keysToRemove: string[];
 }
-
+export function removeS(page: string): string {
+  // Check if the string contains "s"
+  if (page.charAt(page.length - 1) === "s") {
+    // Remove the last character
+    return page.slice(0, -1);
+  } else {
+    // If "s" is not found, return the original string
+    return page;
+  }
+}
 export const formUrlQuery = ({ params, updates }: UrlQueryParams) => {
   // console.log("PARAMS", params);
   // console.log("VALUES", updates);
@@ -98,7 +107,7 @@ export const formUrlQuery = ({ params, updates }: UrlQueryParams) => {
     {
       skipNull: true,
       skipEmptyString: true,
-    },
+    }
   );
 };
 
@@ -120,7 +129,7 @@ export const removeKeysFromQuery = ({
     {
       skipNull: true,
       skipEmptyString: true,
-    },
+    }
   );
 };
 
@@ -139,7 +148,7 @@ export function generateSlug(title: string) {
 export function toCurrency(
   number: number | string,
   disableDecimal = false,
-  decimalPlaces = 2,
+  decimalPlaces = 2
 ) {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -276,7 +285,7 @@ export const secondsToTime = (seconds: number): string => {
  * @returns An object containing the date and time (e.g., { date: "2025-02-01", time: "11:00:00" }).
  */
 export const extractDateTime = (
-  isoString: string,
+  isoString: string
 ): { date: string; time: string } => {
   const dateObj = new Date(isoString);
 
@@ -350,7 +359,7 @@ export const formatDateI = (dateString: Date) => {
 export const calculateBookingDetails = (
   bookings: Booking[],
   services: Service[],
-  allAddons: Service[],
+  allAddons: Service[]
 ) => {
   const bookingDetails = bookings.map((booking) => {
     const service = services.find((s) => s.id === booking.serviceId);
@@ -367,7 +376,7 @@ export const calculateBookingDetails = (
     let totalDuration = 0;
 
     const variation = service?.variations.find(
-      (s) => s.id === booking.variationId,
+      (s) => s.id === booking.variationId
     );
     if (variation) {
       totalPrice = Number(service.base_price); // Replace base price with variation price
@@ -375,7 +384,7 @@ export const calculateBookingDetails = (
     }
 
     const styleOption = service?.style_options.find(
-      (s) => s.id === booking.styleOptionId,
+      (s) => s.id === booking.styleOptionId
     );
 
     if (styleOption) {
@@ -434,11 +443,11 @@ export const calculateBookingDetails = (
 
   const totalGroupPrice = bookingDetails.reduce(
     (sum, booking) => sum + booking.totalPrice,
-    0,
+    0
   );
   const totalGroupDuration = bookingDetails.reduce(
     (sum, booking) => sum + booking.totalDuration,
-    0,
+    0
   );
 
   return {

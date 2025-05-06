@@ -7,11 +7,11 @@ import * as React from "react";
 
 import { durations } from "@/config/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { toCurrency } from "@/lib/utils";
-import { Booking } from "@/types";
+import { Booking, Service } from "@/types";
 
 type Props = {
   bookedService: Booking;
+  services: Service[];
 };
 export const BookedServicePriceCard = (props: Props) => {
   const isMobile = useIsMobile();
@@ -88,8 +88,8 @@ export const BookedServicePriceCard = (props: Props) => {
     }
   };
 
-  const formatDateTime = (datetimeStr: string): string => {
-    const date = new Date(datetimeStr);
+  const formatDateTime = (datetime: Date): string => {
+    const date = datetime;
 
     // Format date: April 18, 2025
     const dateOptions: Intl.DateTimeFormatOptions = {
@@ -140,13 +140,15 @@ export const BookedServicePriceCard = (props: Props) => {
       initial="initial"
       animate="animate"
       whileHover="hover"
-      className="grid grid-cols-12 gap-4 rounded-[12px] bg-white p-3 shadow-sm transition-shadow duration-300 hover:shadow-md"
+      className="grid grid-cols-12 gap-4 rounded-[12px] bg-white p-3 shadow-sm transition-shadow duration-300 hover:shadow-md dark:bg-dark-300"
     >
       <div className="relative col-span-4 h-[100px] overflow-hidden rounded-[12px]">
         <motion.div variants={imageVariants} className="size-full">
           <Image
             src={
-              props.bookedService.services[0]?.featured_image ||
+              props.services.find(
+                (ser) => ser.id === props.bookedService.services?.[0]?.id
+              )?.featured_image ||
               "https://res.cloudinary.com/davidleo/image/upload/v1739726284/landtana/IMG-20250114-WA0041_tra4t4.jpg"
             }
             alt="Box Braid"
@@ -159,16 +161,18 @@ export const BookedServicePriceCard = (props: Props) => {
         <div className="flex flex-col justify-between gap-1">
           <motion.h3
             variants={textVariants}
-            className="max-w-[130px] font-cormorant text-lg font-semibold !leading-5 text-gray-800"
+            className="font-cormorant max-w-[130px] text-lg font-semibold !leading-5 text-gray-800 dark:text-light-800"
           >
             <Link href={`/dashboard/bookings/${props.bookedService.id}`}>
               {generateBookingTitle(props.bookedService)}
             </Link>
           </motion.h3>
-          <p className="text-gray-600">
-            {formatDateTime(props.bookedService.datetime)}
+          <p className="text-gray-600 dark:text-light-700">
+            {props.bookedService.datetime
+              ? formatDateTime(new Date(props.bookedService.datetime))
+              : "No date available"}
           </p>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-gray-500 dark:text-light-400">
             ID: {generateBookingID(props.bookedService.id)}
           </p>
           <motion.span
@@ -178,8 +182,14 @@ export const BookedServicePriceCard = (props: Props) => {
             <Clock className="size-4 text-gray-500" />
             <span className="font-lora text-sm font-bold text-gray-500">
               {
-                durations.find((d) => d.value === props.bookedService.duration)
-                  ?.label
+                durations.find(
+                  (d) =>
+                    d.value ===
+                    props.bookedService.services?.reduce(
+                      (total, service) => total + service.duration,
+                      0
+                    )
+                )?.label
               }
             </span>
           </motion.span>
@@ -187,7 +197,7 @@ export const BookedServicePriceCard = (props: Props) => {
         <motion.div whileHover="hover">
           <Link
             href={`/dashboard/bookings/${props.bookedService.id}`}
-            className="flex items-center gap-1 text-base font-semibold text-secondary hover:underline"
+            className="flex items-center gap-1 text-base font-semibold text-secondary hover:underline dark:text-primaryP"
           >
             View Details
             <motion.span variants={arrowVariants} className="ml-1">
@@ -199,9 +209,11 @@ export const BookedServicePriceCard = (props: Props) => {
           className="absolute right-0 top-0 -mr-3 -mt-6 flex size-[65px] flex-col items-center justify-center rounded-full border-4 border-primary bg-[#E7FFE3] shadow-md"
           variants={priceCircleVariants}
         >
-          <span className="text-xs">From</span>
-          <h2 className="-mt-1 text-base font-bold">
-            {toCurrency(props.bookedService.price, true)}
+          <span className="text-xs dark:text-light-400">From</span>
+          <h2 className="-mt-1 text-sm font-bold dark:text-black">
+            {props.bookedService.services
+              ? `$${props.bookedService.services.reduce((total, service) => total + parseFloat(service.base_price), 0).toFixed(2)}`
+              : "0"}{" "}
           </h2>
         </motion.div>
       </div>
@@ -227,7 +239,9 @@ export const BookedServicePriceCard = (props: Props) => {
         <motion.div variants={imageVariants} className="relative size-full">
           <Image
             src={
-              props.bookedService.services[0]?.featured_image ||
+              props.services.find(
+                (ser) => ser.id === props.bookedService.services?.[0]?.id
+              )?.featured_image ||
               "https://res.cloudinary.com/davidleo/image/upload/v1739726284/landtana/IMG-20250114-WA0041_tra4t4.jpg"
             }
             alt="Box Braid"
@@ -243,9 +257,11 @@ export const BookedServicePriceCard = (props: Props) => {
         className="absolute right-0 top-0 mr-2 mt-3 flex size-[100px] flex-col items-center justify-center rounded-full border-4 border-primary bg-[#E7FFE3] shadow-lg"
         variants={priceCircleVariants}
       >
-        <span className="text-xs">From</span>
-        <h2 className="text-2xl font-bold">
-          {toCurrency(props.bookedService.price, true)}
+        <span className="text-xs dark:text-light-400">From</span>
+        <h2 className="text-2xl font-bold dark:text-black">
+          {props.bookedService.services
+            ? `$${props.bookedService.services.reduce((total, service) => total + parseFloat(service.base_price), 0).toFixed(2)}`
+            : "0"}
         </h2>
         <motion.span
           initial={{ opacity: 0, scale: 0 }}
@@ -271,7 +287,7 @@ export const BookedServicePriceCard = (props: Props) => {
         </div>
         <motion.h3
           variants={textVariants}
-          className="cursor-pointer text-[24px] font-bold text-[#0C090A]"
+          className="cursor-pointer text-[24px] font-bold text-[#0C090A] dark:text-light-800"
         >
           <Link href={`/dashboard/bookings/${props.bookedService.id}`}>
             {generateBookingTitle(props.bookedService)}
@@ -279,18 +295,20 @@ export const BookedServicePriceCard = (props: Props) => {
         </motion.h3>
         <div className="flex flex-row-reverse items-center justify-between">
           <p className="flex flex-col">
-            <span className="text-base font-normal text-[#757374]">
+            <span className="text-base font-normal text-[#757374] dark:text-light-500">
               Date and Time
             </span>
-            <span className="text-[18px] font-medium text-[#3D3D3D]">
-              {formatDateTime(props.bookedService.datetime)}
+            <span className="text-[18px] font-medium text-[#3D3D3D] dark:text-light-600">
+              {props.bookedService.datetime
+                ? formatDateTime(new Date(props.bookedService.datetime))
+                : "No date available"}
             </span>
           </p>
           <p className="flex flex-col">
-            <span className="text-base font-normal text-[#757374]">
+            <span className="text-base font-normal text-[#757374] dark:text-light-500">
               Booking ID
             </span>
-            <span className="text-[18px] font-medium text-[#3D3D3D]">
+            <span className="text-[18px] font-medium text-[#3D3D3D] dark:text-light-600">
               {generateBookingID(props.bookedService.id)}
             </span>
           </p>
@@ -299,7 +317,7 @@ export const BookedServicePriceCard = (props: Props) => {
         <motion.div whileHover="hover" className="mt-1">
           <Link
             href={`/dashboard/bookings/${props.bookedService.id}`}
-            className="group flex items-center gap-1 text-base font-semibold text-secondary hover:underline"
+            className="group flex items-center gap-1 text-base font-semibold text-secondary hover:underline dark:text-primaryP"
           >
             <span>View Details</span>
             <motion.span

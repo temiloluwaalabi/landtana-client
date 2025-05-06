@@ -28,6 +28,8 @@ export default async function middleware(req: NextRequest) {
   const isLoggedIn = session.isLoggedIn || false;
   const isOnboarded = session.is_boarded || false;
 
+  console.log("SESSION", session);
+
   // Helper function to check if a path starts with any guest or shared route
   const isAccessibleRoute = (pathname: string, routes: string[]) => {
     return routes.some((route) => pathname.startsWith(route));
@@ -36,7 +38,7 @@ export default async function middleware(req: NextRequest) {
   const isAuthRoute = authRoutes.includes(pathname);
 
   const isGuestRoute = guestRoutes.some(
-    (route) => pathname.endsWith(route), // Check if the pathname starts with a guest route
+    (route) => pathname.endsWith(route) // Check if the pathname starts with a guest route
   );
 
   const isSharedRoutes = isAccessibleRoute(pathname, sharedRoutes);
@@ -66,7 +68,7 @@ export default async function middleware(req: NextRequest) {
   if (privateRoutes && !isLoggedIn) {
     const sanitizeCallback = sanitizeCallbackUrl(
       `${pathname}${search}`,
-      origin,
+      origin
     );
 
     const callbackUrl = sanitizeCallback || DEFAULT_LOGIN_REDIRECT;
