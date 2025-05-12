@@ -38,11 +38,11 @@ export const LogoutModal = (props: Props) => {
       <DialogTrigger asChild className="">
         {props.trigger}
       </DialogTrigger>
-      <DialogContent className="dark:bg-dark-200 flex flex-col gap-3  border-none">
+      <DialogContent className="flex flex-col gap-3 border-none  dark:bg-dark-200">
         <DialogHeader>
-          <DialogTitle className="dark:text-light-700 flex items-center space-x-2 text-base">
+          <DialogTitle className="flex items-center space-x-2 text-base dark:text-light-700">
             <Info className="me-2 size-4" />
-            Sign out of DNA Center
+            Sign out of Landtana Crown Braids
           </DialogTitle>
           <DialogDescription>
             Are you sure you want to logout? We&apos;ll sign you out and remove

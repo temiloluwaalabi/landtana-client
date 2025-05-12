@@ -1,4 +1,4 @@
-import { Home, Calendar, Scissors, Settings, Wallet, User } from "lucide-react";
+import { Home, Calendar, Scissors, Settings, Wallet } from "lucide-react";
 
 import { allRoutes } from "./routes";
 
@@ -59,9 +59,9 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     href: allRoutes.settings.url,
     icon: Settings,
   },
-  {
-    name: "Profile",
-    href: allRoutes.profile.url,
-    icon: User,
-  },
+  // {
+  //   name: "Profile",
+  //   href: allRoutes.profile.url,
+  //   icon: User,
+  // },
 ];

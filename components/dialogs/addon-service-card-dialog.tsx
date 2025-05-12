@@ -74,6 +74,11 @@ export const AddonServiceCard = (props: Props) => {
     },
   };
 
+  // Find the booked service
+  const bookedService = bookings.find(
+    (book) => book.serviceId === props.parentService.id
+  );
+
   const bookingExists =
     type === "group"
       ? bookings
@@ -86,10 +91,10 @@ export const AddonServiceCard = (props: Props) => {
 
             // Check if any style_option or variation ID is in the addons array
             const hasStyleOptionInAddons = props.service.style_options.some(
-              (option) => book.addons?.includes(option.id),
+              (option) => book.addons?.includes(option.id)
             );
             const hasVariationInAddons = props.service.variations.some(
-              (variation) => book.addons?.includes(variation.id),
+              (variation) => book.addons?.includes(variation.id)
             );
 
             return hasStyleOptionInAddons || hasVariationInAddons;
@@ -102,27 +107,23 @@ export const AddonServiceCard = (props: Props) => {
 
           // Check if any style_option or variation ID is in the addons array
           const hasStyleOptionInAddons = props.service.style_options.some(
-            (option) => book.addons?.includes(option.id),
+            (option) => book.addons?.includes(option.id)
           );
           const hasVariationInAddons = props.service.variations.some(
-            (variation) => book.addons?.includes(variation.id),
+            (variation) => book.addons?.includes(variation.id)
           );
 
           return hasStyleOptionInAddons || hasVariationInAddons;
         });
 
-  // Find the booked service
-  const bookedService = bookings.find(
-    (book) => book.serviceId === props.parentService.id,
-  );
   useEffect(() => {
     if (bookingExists && bookedService?.addons) {
       // Initialize selectedStyleOption and selectedVariations based on the addons array
       const styleOptionInAddons = props.service.style_options.find((option) =>
-        bookedService.addons?.includes(option.id),
+        bookedService.addons?.includes(option.id)
       );
       const variationsInAddons = props.service.variations.filter((variation) =>
-        bookedService.addons?.includes(variation.id),
+        bookedService.addons?.includes(variation.id)
       );
 
       if (styleOptionInAddons) {
@@ -162,7 +163,9 @@ export const AddonServiceCard = (props: Props) => {
   // Trigger animation when dialog opens
   useEffect(() => {
     if (openDialog) {
-      setTimeout(() => setAnimateIn(true), 100);
+      // Slight delay before animation to ensure DOM is ready
+      const timer = setTimeout(() => setAnimateIn(true), 100);
+      return () => clearTimeout(timer);
     } else {
       setAnimateIn(false);
     }
@@ -172,38 +175,62 @@ export const AddonServiceCard = (props: Props) => {
     setAnimateIn(false);
     setTimeout(() => {
       const parentBookingIndex = bookings.findIndex(
-        (booking) => booking.serviceId === bookedService?.serviceId,
+        (booking) => booking.serviceId === bookedService?.serviceId
       );
 
       if (parentBookingIndex === -1) return;
 
       const parentBooking = bookings[parentBookingIndex];
+      // Get a copy of the existing addons array
+      const existingAddons = [...(parentBooking.addons ?? [])];
+      // Check if main service is already added as an addon
 
-      // Start with existing addons that are NOT related to this service
-      const updatedAddons = [
-        ...(parentBooking.addons ?? []).filter(
-          (id) =>
-            id !== props.service.id &&
-            !props.service.style_options.some((option) => option.id === id) &&
-            !props.service.variations.some((variation) => variation.id === id),
-        ),
-      ];
+      // Leave all other services and their addons untouched
+      const updatedAddons = existingAddons.filter((id) => {
+        // Check if this ID belongs to the current service or its options/variations
+        const isCurrentService = id === props.service.id;
+        const isCurrentStyleOption = props.service.style_options.some(
+          (option) => option.id === id
+        );
+        const isCurrentVariation = props.service.variations.some(
+          (variation) => variation.id === id
+        );
 
-      // Add the currently selected options
+        // Keep everything EXCEPT items related to current service (we'll add back selected ones)
+        return !(
+          isCurrentService ||
+          isCurrentStyleOption ||
+          isCurrentVariation
+        );
+      });
+
+      // Handle style options
       if (props.service.style_options.length > 0 && selectedStyleOption) {
         updatedAddons.push(selectedStyleOption);
       }
+
+      // Handle variations
       if (
         props.service.variations.length > 0 &&
         selectedVariations.length > 0
       ) {
-        updatedAddons.push(...selectedVariations);
+        selectedVariations.forEach((variationId) => {
+          updatedAddons.push(variationId);
+        });
       }
+
+      // Handle simple add/remove of this service as an addon (if no style options or variations)
       if (
         !props.service.style_options.length &&
         !props.service.variations.length
       ) {
-        updatedAddons.push(props.service.id);
+        const serviceIsAddon = existingAddons.includes(props.service.id);
+
+        if (!serviceIsAddon) {
+          // Only add if it wasn't already an addon
+          updatedAddons.push(props.service.id);
+        }
+        // If it was an addon, we've already filtered it out, so effectively removing it
       }
 
       updateBooking(parentBookingIndex, { addons: updatedAddons });
@@ -214,30 +241,63 @@ export const AddonServiceCard = (props: Props) => {
     setAnimateIn(false);
     setTimeout(() => {
       const parentBookingIndex = bookings.findIndex(
-        (booking) => booking.serviceId === bookedService?.serviceId,
+        (booking) => booking.serviceId === bookedService?.serviceId
       );
 
       if (parentBookingIndex === -1) return;
+
       const parentBooking = bookings[parentBookingIndex];
-      // Create an updated addons array
-      let updatedAddons = [...(parentBooking.addons ?? [])];
-      if (bookingExists) {
-        // Remove the service.id, style_option.id, and variation.id(s) from addons
-        updatedAddons = updatedAddons.filter((id) => id !== styleId);
+
+      // Just remove the specific style ID, don't touch other addons
+      const updatedAddons = (parentBooking.addons ?? []).filter(
+        (id) => id !== styleId
+      );
+
+      // Reset the selected style option if it matches the one being cleared
+      if (selectedStyleOption === styleId) {
         setSelectedStyleOption("");
-        updateBooking(parentBookingIndex, { addons: updatedAddons });
-        setOpenDialog(false);
       }
+
+      updateBooking(parentBookingIndex, { addons: updatedAddons });
+      setOpenDialog(false);
     }, 500);
   };
 
   const handleVariationChange = (variationId: string) => {
-    setSelectedVariations(
-      (prev) =>
-        prev.includes(variationId)
-          ? prev.filter((id) => id !== variationId) // Remove if already selected
-          : [...prev, variationId], // Add if not selected
-    );
+    // Update the local state for selected variations
+    setSelectedVariations((prev) => {
+      // Create new array to avoid mutation
+      const updatedVariations = prev.includes(variationId)
+        ? prev.filter((id) => id !== variationId) // Remove if already selected
+        : [...prev, variationId]; // Add if not selected
+
+      // Find the parent booking
+      const parentBookingIndex = bookings.findIndex(
+        (booking) => booking.serviceId === bookedService?.serviceId
+      );
+
+      if (parentBookingIndex !== -1) {
+        const parentBooking = bookings[parentBookingIndex];
+
+        // Get the IDs of all variations for the current service
+        const allVariationIds = props.service.variations.map((v) => v.id);
+
+        // Remove all variations of THIS service, keep everything else
+        const updatedAddons = (parentBooking.addons ?? []).filter(
+          (id) => !allVariationIds.includes(id)
+        );
+
+        // Add back only the currently selected variations
+        updatedVariations.forEach((varId) => {
+          updatedAddons.push(varId);
+        });
+
+        // Update the booking with the new addons
+        updateBooking(parentBookingIndex, { addons: updatedAddons });
+      }
+
+      return updatedVariations;
+    });
   };
 
   const isMobile = useIsMobile();
@@ -342,7 +402,7 @@ export const AddonServiceCard = (props: Props) => {
                                     className={cn(
                                       "group relative overflow-hidden cursor-pointer rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-pink-100 hover:shadow-md",
                                       selectedStyleOption.includes(item.id) &&
-                                        "border-pink-200 bg-pink-50/30 shadow-md",
+                                        "border-pink-200 bg-pink-50/30 shadow-md"
                                     )}
                                   >
                                     {/* Decorative gradient overlay when selected */}
@@ -379,15 +439,12 @@ export const AddonServiceCard = (props: Props) => {
                                               {
                                                 durations.find(
                                                   (tr) =>
-                                                    tr.value === item.duration,
+                                                    tr.value === item.duration
                                                 )?.label
                                               }
                                             </motion.div>
                                           </div>
                                         </div>
-                                        {/* <h3 className="text-lg font-semibold text-slate-800">
-                                          {toCurrency(item.price)}
-                                        </h3> */}
                                       </div>
                                     </div>
                                   </motion.div>
@@ -408,7 +465,7 @@ export const AddonServiceCard = (props: Props) => {
                                 className={cn(
                                   "group relative cursor-pointer overflow-hidden rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-purple-100 hover:shadow-md",
                                   selectedVariations.includes(item.id) &&
-                                    "border-purple-200 bg-purple-50/30 shadow-md",
+                                    "border-purple-200 bg-purple-50/30 shadow-md"
                                 )}
                               >
                                 {selectedVariations.includes(item.id) && (
@@ -423,7 +480,7 @@ export const AddonServiceCard = (props: Props) => {
                                 <div className="relative z-50 flex cursor-pointer items-center space-x-3">
                                   <Checkbox
                                     checked={selectedVariations.includes(
-                                      item.id,
+                                      item.id
                                     )}
                                     onCheckedChange={() =>
                                       handleVariationChange(item.id)
@@ -448,8 +505,7 @@ export const AddonServiceCard = (props: Props) => {
                                           </span>
                                           {
                                             durations.find(
-                                              (tr) =>
-                                                tr.value === item.duration,
+                                              (tr) => tr.value === item.duration
                                             )?.label
                                           }
                                         </motion.div>
@@ -584,7 +640,7 @@ export const AddonServiceCard = (props: Props) => {
                                 className={cn(
                                   "group relative overflow-hidden cursor-pointer rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-pink-100 hover:shadow-md",
                                   selectedStyleOption.includes(item.id) &&
-                                    "border-pink-200 bg-pink-50/30 shadow-md",
+                                    "border-pink-200 bg-pink-50/30 shadow-md"
                                 )}
                               >
                                 {/* Decorative gradient overlay when selected */}
@@ -620,8 +676,7 @@ export const AddonServiceCard = (props: Props) => {
                                           </span>
                                           {
                                             durations.find(
-                                              (tr) =>
-                                                tr.value === item.duration,
+                                              (tr) => tr.value === item.duration
                                             )?.label
                                           }
                                         </motion.div>
@@ -650,7 +705,7 @@ export const AddonServiceCard = (props: Props) => {
                               className={cn(
                                 "group relative cursor-pointer overflow-hidden rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-purple-100 hover:shadow-md",
                                 selectedVariations.includes(item.id) &&
-                                  "border-purple-200 bg-purple-50/30 shadow-md",
+                                  "border-purple-200 bg-purple-50/30 shadow-md"
                               )}
                             >
                               {selectedVariations.includes(item.id) && (
@@ -688,7 +743,7 @@ export const AddonServiceCard = (props: Props) => {
                                         </span>
                                         {
                                           durations.find(
-                                            (tr) => tr.value === item.duration,
+                                            (tr) => tr.value === item.duration
                                           )?.label
                                         }
                                       </motion.div>
@@ -726,7 +781,9 @@ export const AddonServiceCard = (props: Props) => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
                 >
-                  {bookedService ? "Update Booking" : "Add to Booking"}
+                  {bookedService?.addons?.includes(props.service.id)
+                    ? "Remove Service"
+                    : "Add to Booking"}
                 </motion.span>{" "}
               </Button>
             </motion.div>{" "}

@@ -160,3 +160,12 @@ export const getBookingByID = async (id: string) => {
     };
   }
 };
+// export const GetAccountDetails = async (date: string) => {
+//   const result = await bookingService.getAvailableDates();
+
+//   if (result instanceof ApiError) {
+//     return ApiError.markAsError(result);
+//   } else {
+//     return result;
+//   }
+// };

@@ -191,7 +191,7 @@ export default function TimeSelectionStep({
   const hasSalonCapacity = (
     totalServiceDuration: number,
     bookedHours: number,
-    totalDailyHours: number,
+    totalDailyHours: number
   ): boolean => {
     // Convert service duration from minutes to hours
     const serviceDurationHours = totalServiceDuration / 60;
@@ -205,129 +205,13 @@ export default function TimeSelectionStep({
     return workingHours.isBookingEnabled;
   };
 
-  // const isDateAvailabe = (
-  //   bookedSlots: TimeSlot[] | undefined,
-  //   totalDuration: number,
-  //   selectedDate: Date,
-  //   workingHours: WorkingHours,
-  //   salonCapacity: SalonCapacity,
-  // ) => {
-  //   if (!isBookingEnabled(workingHours)) {
-  //     return false;
-  //   }
-
-  //   if (
-  //     !hasSalonCapacity(
-  //       totalDuration,
-  //       salonCapacity.bookedHours,
-  //       salonCapacity.totalDailyHours,
-  //     )
-  //   ) {
-  //     return false;
-  //   }
-
-  //   if (!bookedSlots) return true;
-
-  //   const openingTime = workingHours.openingTime;
-  //   const closingTime = workingHours.closingTime;
-  //   const breakTime = workingHours.breakTime;
-
-  //   const openingTimestamp = new Date(
-  //     `${format(selectedDate, "yyyy-MM-dd")}T${openingTime}`,
-  //   ).getTime();
-  //   const closingTimestamp = new Date(
-  //     `${format(selectedDate, "yyyy-MM-dd")}T${closingTime}`,
-  //   ).getTime();
-
-  //   // Convert break time to timestamps (if provided)
-  //   const breakStart = breakTime
-  //     ? new Date(
-  //         `${format(selectedDate, "yyyy-MM-dd")}T${breakTime.start}`,
-  //       ).getTime()
-  //     : null;
-  //   const breakEnd = breakTime
-  //     ? new Date(
-  //         `${format(selectedDate, "yyyy-MM-dd")}T${breakTime.end}`,
-  //       ).getTime()
-  //     : null;
-
-  //   // Convert booked slots to a list of time ranges
-  //   const bookedRanges = bookedSlots.map((slot) => ({
-  //     start: new Date(
-  //       `${format(selectedDate, "yyyy-MM-dd")}T${slot.startTime}`,
-  //     ).getTime(),
-  //     end: new Date(
-  //       `${format(selectedDate, "yyyy-MM-dd")}T${slot.endTime}`,
-  //     ).getTime(),
-  //   }));
-
-  //   // Generate all possible slots
-  //   let currentTime = openingTimestamp;
-
-  //   while (currentTime + totalDuration * 60 * 1000 <= closingTimestamp) {
-  //     const slotStart = new Date(currentTime);
-  //     const slotEnd = new Date(currentTime + totalDuration * 60 * 1000);
-
-  //     // Count concurrent bookings for this time slot
-  //     const concurrentBookings = bookedRanges.filter(
-  //       (range) =>
-  //         (slotStart.getTime() >= range.start &&
-  //           slotStart.getTime() < range.end) ||
-  //         (slotEnd.getTime() > range.start && slotEnd.getTime() <= range.end) ||
-  //         (slotStart.getTime() <= range.start &&
-  //           slotEnd.getTime() >= range.end),
-  //     ).length;
-
-  //     let overlapsWithExistingBooking = false;
-  //     if (bookedSlots && bookedSlots.length > 0) {
-  //       for (const booking of bookedSlots) {
-  //         const bookingStart = parseTime(booking.startTime);
-  //         const bookingEnd = parseTime(booking.endTime);
-
-  //         // Check if the new slot overlaps with the booking
-  //         if (
-  //           (slotStart < bookingEnd && slotEnd > bookingStart) ||
-  //           slotStart.getTime() === bookingStart.getTime()
-  //         ) {
-  //           overlapsWithExistingBooking = true;
-  //           break;
-  //         }
-  //       }
-  //     }
-
-  //     // Skip if this slot overlaps with existing bookings
-  //     if (overlapsWithExistingBooking) {
-  //       continue;
-  //     }
-
-  //     // Check if the slot has available capacity
-  //     const hasCapacity = concurrentBookings < salonCapacity.maxBookingsPerHour;
-
-  //     // Check if the slot overlaps with the break time
-  //     const isDuringBreak =
-  //       breakStart &&
-  //       breakEnd &&
-  //       ((slotStart.getTime() >= breakStart &&
-  //         slotStart.getTime() < breakEnd) ||
-  //         (slotEnd.getTime() > breakStart && slotEnd.getTime() <= breakEnd));
-
-  //     if (hasCapacity && !isDuringBreak) {
-  //       return true; // At least one available slot
-  //     }
-  //     // Move to the next slot (e.g., every 15 minutes)
-  //     currentTime += 15 * 60 * 1000;
-  //   }
-
-  //   return false;
-  // };
-
   const generateAvailableStartTimes = (
     bookings: Booking[] | undefined,
     serviceMinDuration: number, // Minimum expected duration of service in minutes
     selectedDate: Date,
     workingHours: WorkingHours,
     salonCapacity: SalonCapacity,
-    intervalMinutes: number = 30, // Time between slots (30 min by default)
+    intervalMinutes: number = 30 // Time between slots (30 min by default)
   ) => {
     if (!isBookingEnabled(workingHours)) {
       return [];
@@ -337,7 +221,7 @@ export default function TimeSelectionStep({
       !hasSalonCapacity(
         serviceMinDuration,
         salonCapacity.bookedHours,
-        salonCapacity.totalDailyHours,
+        salonCapacity.totalDailyHours
       )
     ) {
       return [];
@@ -374,12 +258,12 @@ export default function TimeSelectionStep({
         // Calculate total duration for this booking
         const totalDuration = (booking.services ?? []).reduce(
           (sum, service) => sum + service.duration,
-          0,
+          0
         );
 
         const bookingStartDate = parseTime(bookingStartTime);
         const bookingEndDate = new Date(
-          bookingStartDate.getTime() + totalDuration * 60 * 1000,
+          bookingStartDate.getTime() + totalDuration * 60 * 1000
         );
 
         // Increment occupancy for each 15-min slot this booking occupies
@@ -415,7 +299,7 @@ export default function TimeSelectionStep({
       const slotStartTime = slotStart.getTime();
 
       const potentialEndTime = new Date(
-        slotStartTime + serviceMinDuration * 60 * 1000,
+        slotStartTime + serviceMinDuration * 60 * 1000
       );
 
       // Skip if service would extend beyond closing time
@@ -660,7 +544,7 @@ export default function TimeSelectionStep({
       selectedDate,
       workingHours,
       salonCapacity,
-      60, // 30-minute intervals
+      60 // 30-minute intervals
     );
 
     if (availableStartTimes.length === 0) {
@@ -683,7 +567,7 @@ export default function TimeSelectionStep({
               `w-fit justify-center bg-transparent border border-[#D9D9D9] h-[42px]
              text-primary hover:text-white hover:bg-secondary hover:border-secondary`,
               time === startTime &&
-                "bg-[#FED8DE] text-secondary border-secondary",
+                "bg-[#FED8DE] text-secondary border-secondary"
             )}
             onClick={() => handleTimeSelect(startTime)}
           >

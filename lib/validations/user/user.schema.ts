@@ -15,3 +15,18 @@ export const OnboardingSchema = z.object({
   country: z.string(),
   is_onboarded: z.boolean().default(true),
 });
+export const BiodataSchema = z.object({
+  fullName: z.string(),
+  dob: z.date(),
+  gender: z.string(),
+  address: z.string(),
+  phoneNumber: z.string(),
+  email: z.optional(z.string().email()),
+  emergencyContact: z
+    .object({
+      name: z.string(),
+      phoneNumber: z.string(),
+      relationship: z.string(),
+    })
+    .optional(),
+});

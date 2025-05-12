@@ -9,6 +9,7 @@ import {
   Minus,
   Plus,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useInView } from "react-intersection-observer";
 import { toast } from "sonner";
@@ -21,6 +22,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { allRoutes } from "@/config/routes";
 import useSession from "@/hooks/use-session";
 import { useCreateBooking } from "@/lib/query/booking.service";
 import { useBookingStore } from "@/lib/use-booking-store";
@@ -44,6 +46,7 @@ type Props = {
 export const BookingStepFour = ({ services }: Props) => {
   const { mutateAsync, isPending } = useCreateBooking();
   const { session } = useSession();
+  const router = useRouter();
   const { ref: summaryRef, inView: summaryInView } = useInView({
     threshold: 0.1,
     triggerOnce: false,
@@ -51,17 +54,8 @@ export const BookingStepFour = ({ services }: Props) => {
   const [openAccordionId, setOpenAccordionId] = React.useState<boolean>(true);
   // const [hideDetails, setHideDetails] = React.useState(false);
 
-  const {
-    step,
-    bookings,
-    updateState,
-    primaryGuestId,
-    removeBooking,
-    date,
-    time,
-    guests,
-    type,
-  } = useBookingStore();
+  const { bookings, primaryGuestId, removeBooking, date, time, guests, type } =
+    useBookingStore();
 
   console.log("Bookings", bookings);
 
@@ -91,7 +85,7 @@ export const BookingStepFour = ({ services }: Props) => {
         }
 
         const styleOption = service.style_options.find(
-          (opt) => opt.id === addonId,
+          (opt) => opt.id === addonId
         );
 
         if (styleOption) {
@@ -101,7 +95,7 @@ export const BookingStepFour = ({ services }: Props) => {
         }
 
         const variation = service.variations.find(
-          (variation) => variation.id === addonId,
+          (variation) => variation.id === addonId
         );
         if (variation) {
           foundAddon = variation;
@@ -118,7 +112,7 @@ export const BookingStepFour = ({ services }: Props) => {
             ? services.find(
                 (s) =>
                   s.style_options.some((o) => o.id === addonId) ||
-                  s.variations.some((v) => v.id === addonId),
+                  s.variations.some((v) => v.id === addonId)
               )
             : null,
       };
@@ -136,7 +130,7 @@ export const BookingStepFour = ({ services }: Props) => {
 
     if (booking.styleOptionId) {
       const styleOption = service.style_options.find(
-        (opt) => opt.id === booking.styleOptionId,
+        (opt) => opt.id === booking.styleOptionId
       );
       if (styleOption) {
         parts.push(`Style Option: ${styleOption.name}`);
@@ -145,7 +139,7 @@ export const BookingStepFour = ({ services }: Props) => {
 
     if (booking.variationId) {
       const variation = service.variations.find(
-        (v) => v.id === booking.variationId,
+        (v) => v.id === booking.variationId
       );
       if (variation) {
         parts.push(`Variation: ${variation.name}`);
@@ -222,11 +216,10 @@ export const BookingStepFour = ({ services }: Props) => {
     await mutateAsync(bookingValue, {
       onSuccess: () => {
         toast("Booking successfully created");
+        router.push(allRoutes.bookings.url);
       },
     });
-    updateState({
-      step: step + 1,
-    });
+
     // console.log(bookingValue);
   };
 
@@ -245,7 +238,7 @@ export const BookingStepFour = ({ services }: Props) => {
                   "flex w-full  items-center justify-between  bg-white  p-3",
                   openAccordionId === true
                     ? "rounded-se-lg rounded-ss-lg"
-                    : "rounded-lg",
+                    : "rounded-lg"
                 )}
               >
                 <div className="flex items-center gap-1">
@@ -355,7 +348,7 @@ export const BookingStepFour = ({ services }: Props) => {
                             transition={{ delay: 0.3 + i * 0.1 }}
                             className={cn(
                               "space-y-2 border-b pb-3",
-                              guests.length - 1 === i && "!border-none !pb-0",
+                              guests.length - 1 === i && "!border-none !pb-0"
                             )}
                           >
                             <div className="flex items-center gap-2">
@@ -367,7 +360,7 @@ export const BookingStepFour = ({ services }: Props) => {
                                       ? "from-primary to-blue-500"
                                       : i % 3 === 1
                                         ? "from-secondary to-pink-400"
-                                        : "from-violet-500 to-purple-700",
+                                        : "from-violet-500 to-purple-700"
                                   )}
                                 >
                                   {guest.id === primaryGuestId
@@ -383,7 +376,7 @@ export const BookingStepFour = ({ services }: Props) => {
                             </div>
                             <div>
                               {totalPrice.bookingDetails.filter(
-                                (book) => book.guestId === guest.id,
+                                (book) => book.guestId === guest.id
                               ).length === 0 && (
                                 <p className="text-sm text-gray-300">
                                   No services selected
@@ -399,7 +392,7 @@ export const BookingStepFour = ({ services }: Props) => {
                                   const addonDetails = getAddonDetails(service);
 
                                   const serviceD = services.find(
-                                    (s) => s.id === service.bookingId,
+                                    (s) => s.id === service.bookingId
                                   );
 
                                   return (
@@ -573,7 +566,7 @@ export const BookingStepFour = ({ services }: Props) => {
                           <Avatar className="size-8 border border-primary/10">
                             <AvatarFallback
                               className={cn(
-                                "bg-gradient-to-br text-white text-xs from-primary to-blue-500",
+                                "bg-gradient-to-br text-white text-xs from-primary to-blue-500"
                               )}
                             >
                               ME
@@ -588,13 +581,13 @@ export const BookingStepFour = ({ services }: Props) => {
                       <div className="w-full space-y-3">
                         {totalPrice.bookingDetails.map((booking, idx) => {
                           const bookingIndex = bookings.findIndex(
-                            (b) => b.serviceId === booking.bookingId,
+                            (b) => b.serviceId === booking.bookingId
                           );
 
                           const addonDetails = getAddonDetails(booking);
 
                           const service = services.find(
-                            (s) => s.id === booking.bookingId,
+                            (s) => s.id === booking.bookingId
                           );
 
                           return (
@@ -705,92 +698,6 @@ export const BookingStepFour = ({ services }: Props) => {
             )}
           </motion.div>
         </div>
-
-        {/* <div className=" fixed bottom-0 left-0 z-20 flex h-fit w-full items-end !py-0 transition-all animate-in md:hidden">
-          <Card className="relative h-fit w-full animate-accordion-down rounded-none rounded-se-lg  rounded-ss-lg border p-0 shadow-lg transition-transform">
-            <CardHeader
-              className={cn(
-                "flex w-full flex-row items-center justify-between  pb-4 shadow-none outline-none",
-                hideDetails && "border-b-[3px]"
-              )}
-            >
-              <div>
-                <h2 className="font-lora text-lg font-medium text-gray-500">
-                  {bookings.length}{" "}
-                  {bookings.length > 1 ? "services" : "service"} selected
-                </h2>
-                <p className="space-x-1">
-                  <span className="font-lora text-xl font-bold text-primary">
-                    ${totalPrice.totalGroupPrice}
-                  </span>
-                </p>
-              </div>
-              <div>
-                <Button
-                  onClick={() => setHideDetails((prev) => !prev)}
-                  className="w-fit p-0"
-                  variant={"link"}
-                >
-                  Details
-                  <ChevronUp className="size-4" />
-                </Button>
-              </div>
-            </CardHeader>
-            {hideDetails && (
-              <CardContent className=" py-6 transition-transform">
-                <div className="flex flex-col items-start justify-between gap-4">
-                  <h3 className="font-semibold">Selected Services</h3>
-                  <div className="w-full space-y-3">
-                    {totalPrice.bookingDetails.map((booking) => {
-                      const bookingIndex = bookings.findIndex(
-                        (b) => b.serviceId === booking.bookingId
-                      );
-
-                      const service = services.find(
-                        (s) => s.id === booking.bookingId
-                      );
-
-                      return (
-                        <div
-                          key={booking.bookingId}
-                          className="flex w-full items-center justify-between rounded-md "
-                        >
-                          <div>
-                            <h3 className="font-cormorant text-xl font-bold">
-                              {service?.name}{" "}
-                            </h3>
-                            <p className="font-lora text-sm font-normal text-gray-500">
-                              {formatMinutes(booking.totalDuration)}
-                            </p>
-                          </div>
-                          <div className="flex items-center  gap-2">
-                            <p className="space-x-1">
-                              <span className="font-cormorant text-2xl font-bold text-primary">
-                                {toCurrency(booking.totalPrice)}
-                              </span>
-                            </p>
-                            <Button
-                              onClick={() => {
-                                if (bookingIndex !== -1) {
-                                  removeBooking(bookingIndex);
-                                }
-                              }}
-                              size={"icon"}
-                              className="!size-[14px] rounded-full border border-secondary bg-transparent p-0 text-secondary shadow-none hover:border-none hover:bg-accent hover:text-white"
-                            >
-                              <Minus className="!size-2" />
-                            </Button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </CardContent>
-            )}
-       
-          </Card>
-        </div> */}
       </motion.section>
     </MotionConfig>
   );

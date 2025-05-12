@@ -21,7 +21,7 @@ type Props = {
 
 export const BookingStepThree = ({ services }: Props) => {
   const [openAccordionId, setOpenAccordionId] = React.useState<string | null>(
-    null,
+    null
   );
   const [searchTerm, setSearchTerm] = React.useState("");
 
@@ -35,18 +35,20 @@ export const BookingStepThree = ({ services }: Props) => {
   const totalPrice = calculateBookingDetails(
     bookings,
     services,
-    services.filter((serv) => serv.is_addon === true),
+    services.filter((serv) => serv.is_addon === true)
   );
+
+  console.log(totalPrice.bookingDetails);
 
   const mappedService =
     type === "group"
       ? totalPrice.bookingDetails.filter(
-          (book) => book.guestId === currentGuestId,
+          (book) => book.guestId === currentGuestId
         )
       : totalPrice.bookingDetails;
 
   const filteredServices = services.filter((service) =>
-    service.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    service.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getAllSelectedServiceAndAddonIds = (): Set<string> => {
@@ -58,7 +60,7 @@ export const BookingStepThree = ({ services }: Props) => {
   const currentGuestSelectedAddonIds = new Set(
     bookings
       .filter((b) => b.guestId === currentGuestId)
-      .flatMap((b) => b.addons || []),
+      .flatMap((b) => b.addons || [])
   );
 
   // const guestAddonMap = getGuestAddonMap();
@@ -79,6 +81,21 @@ export const BookingStepThree = ({ services }: Props) => {
     } else {
       // For individual bookings: hide all selected addons (original behavior)
       return !allSelectedIds.has(serv.id);
+    }
+  });
+
+  const shownAddonServices = filteredServices.filter((serv) => {
+    // Only consider addon services
+    if (serv.is_addon !== true) return false;
+
+    if (type === "group") {
+      // For group bookings: only hide addons that THIS specific guest already selected
+      // Don't hide addons selected by other guests
+      // Don't hide addons that are selected as main services by other guests
+      return currentGuestSelectedAddonIds.has(serv.id);
+    } else {
+      // For individual bookings: hide all selected addons (original behavior)
+      return allSelectedIds.has(serv.id);
     }
   });
 
@@ -177,7 +194,7 @@ export const BookingStepThree = ({ services }: Props) => {
                 <div className="w-full space-y-4">
                   {mappedService.map((booking, index) => {
                     const service = services.find(
-                      (s) => s.id === booking.bookingId,
+                      (s) => s.id === booking.bookingId
                     );
 
                     return service && service?.is_addon ? (
@@ -276,7 +293,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                   setOpenAccordionId((prev) =>
                                     prev === booking.bookingId
                                       ? null
-                                      : booking.bookingId,
+                                      : booking.bookingId
                                   )
                                 }
                                 variant="outline"
@@ -320,7 +337,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                     (item, addonIndex) => {
                                       const parentService = services.find(
                                         (service) =>
-                                          service.id === booking.bookingId,
+                                          service.id === booking.bookingId
                                       );
 
                                       const isAddonBooked =
@@ -329,7 +346,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                               .filter(
                                                 (book) =>
                                                   book.guestId ===
-                                                  currentGuestId,
+                                                  currentGuestId
                                               )
                                               .some((book) => {
                                                 // Check if the service ID is in the addons array
@@ -344,15 +361,15 @@ export const BookingStepThree = ({ services }: Props) => {
                                                   item.style_options.some(
                                                     (option) =>
                                                       book.addons?.includes(
-                                                        option.id,
-                                                      ),
+                                                        option.id
+                                                      )
                                                   );
                                                 const hasVariationInAddons =
                                                   item.variations.some(
                                                     (variation) =>
                                                       book.addons?.includes(
-                                                        variation.id,
-                                                      ),
+                                                        variation.id
+                                                      )
                                                   );
 
                                                 return (
@@ -373,15 +390,15 @@ export const BookingStepThree = ({ services }: Props) => {
                                                 item.style_options.some(
                                                   (option) =>
                                                     book.addons?.includes(
-                                                      option.id,
-                                                    ),
+                                                      option.id
+                                                    )
                                                 );
                                               const hasVariationInAddons =
                                                 item.variations.some(
                                                   (variation) =>
                                                     book.addons?.includes(
-                                                      variation.id,
-                                                    ),
+                                                      variation.id
+                                                    )
                                                 );
 
                                               return (
@@ -415,7 +432,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                                 "flex flex-col justify-between rounded-xl border p-4 h-[120px] transition-all cursor-pointer",
                                                 isAddonBooked
                                                   ? "border-secondary/50 bg-secondary/5"
-                                                  : "border-gray-200 hover:border-primary/30",
+                                                  : "border-gray-200 hover:border-primary/30"
                                               )}
                                               // onClick={() =>
                                               //   handleToggleService(
@@ -449,7 +466,7 @@ export const BookingStepThree = ({ services }: Props) => {
                                                     durations.find(
                                                       (dur) =>
                                                         dur.value ===
-                                                        item.duration,
+                                                        item.duration
                                                     )?.label
                                                   }
                                                 </p>
@@ -483,7 +500,183 @@ export const BookingStepThree = ({ services }: Props) => {
                                           }
                                         />
                                       );
-                                    },
+                                    }
+                                  )}
+                                </div>
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+                                  {shownAddonServices.map(
+                                    (item, addonIndex) => {
+                                      const parentService = services.find(
+                                        (service) =>
+                                          service.id === booking.bookingId
+                                      );
+
+                                      const isAddonBooked =
+                                        type === "group"
+                                          ? bookings
+                                              .filter(
+                                                (book) =>
+                                                  book.guestId ===
+                                                  currentGuestId
+                                              )
+                                              .some((book) => {
+                                                // Check if the service ID is in the addons array
+                                                if (
+                                                  book.addons?.includes(item.id)
+                                                ) {
+                                                  return true;
+                                                }
+
+                                                // Check if any style_option or variation ID is in the addons array
+                                                const hasStyleOptionInAddons =
+                                                  item.style_options.some(
+                                                    (option) =>
+                                                      book.addons?.includes(
+                                                        option.id
+                                                      )
+                                                  );
+                                                const hasVariationInAddons =
+                                                  item.variations.some(
+                                                    (variation) =>
+                                                      book.addons?.includes(
+                                                        variation.id
+                                                      )
+                                                  );
+
+                                                return (
+                                                  hasStyleOptionInAddons ||
+                                                  hasVariationInAddons
+                                                );
+                                              })
+                                          : bookings.some((book) => {
+                                              // Check if the service ID is in the addons array
+                                              if (
+                                                book.addons?.includes(item.id)
+                                              ) {
+                                                return true;
+                                              }
+
+                                              // Check if any style_option or variation ID is in the addons array
+                                              const hasStyleOptionInAddons =
+                                                item.style_options.some(
+                                                  (option) =>
+                                                    book.addons?.includes(
+                                                      option.id
+                                                    )
+                                                );
+                                              const hasVariationInAddons =
+                                                item.variations.some(
+                                                  (variation) =>
+                                                    book.addons?.includes(
+                                                      variation.id
+                                                    )
+                                                );
+
+                                              return (
+                                                hasStyleOptionInAddons ||
+                                                hasVariationInAddons
+                                              );
+                                            });
+
+                                      console.log(
+                                        "isAddonBooked",
+                                        isAddonBooked
+                                      );
+
+                                      return (
+                                        <AddonServiceCard
+                                          parentService={
+                                            parentService as Service
+                                          }
+                                          service={item}
+                                          key={`${service?.id}, addonInex ${addonIndex}`}
+                                          trigger={
+                                            <motion.div
+                                              key={item.id}
+                                              initial={{ opacity: 0, y: 15 }}
+                                              animate={{ opacity: 1, y: 0 }}
+                                              transition={{
+                                                duration: 0.3,
+                                                delay: addonIndex * 0.05,
+                                              }}
+                                              whileHover={{
+                                                y: -5,
+                                                boxShadow:
+                                                  "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
+                                              }}
+                                              className={cn(
+                                                "flex flex-col justify-between rounded-xl border p-4 h-[120px] transition-all cursor-pointer",
+                                                isAddonBooked
+                                                  ? "border-secondary/50 bg-secondary/5"
+                                                  : "border-gray-200 hover:border-primary/30"
+                                              )}
+                                              // onClick={() =>
+                                              //   handleToggleService(
+                                              //     item.id,
+                                              //     booking.bookingId
+                                              //   )
+                                              // }
+                                            >
+                                              <div className="space-y-2">
+                                                <div className="flex items-start justify-between">
+                                                  <h6 className="font-cormorant text-base font-semibold text-gray-800 lg:text-lg 2xl:text-xl">
+                                                    {item.name}
+                                                  </h6>
+                                                  {isAddonBooked && (
+                                                    <motion.div
+                                                      initial={{ scale: 0 }}
+                                                      animate={{ scale: 1 }}
+                                                      transition={{
+                                                        type: "spring",
+                                                        stiffness: 500,
+                                                        damping: 15,
+                                                      }}
+                                                      className="rounded-full bg-secondary/10 p-1"
+                                                    >
+                                                      <X className="size-4 text-secondary" />
+                                                    </motion.div>
+                                                  )}
+                                                </div>
+                                                <p className="text-left text-sm text-gray-500">
+                                                  {
+                                                    durations.find(
+                                                      (dur) =>
+                                                        dur.value ===
+                                                        item.duration
+                                                    )?.label
+                                                  }
+                                                </p>
+                                              </div>
+
+                                              <div className="flex items-center justify-between">
+                                                <p className="space-x-1">
+                                                  <span className="text-xs text-gray-400">
+                                                    From
+                                                  </span>
+                                                  <span className="text-lg font-bold text-primary">
+                                                    ${item.base_price}
+                                                  </span>
+                                                </p>
+
+                                                {!isAddonBooked && (
+                                                  <motion.div
+                                                    whileHover={{
+                                                      scale: 1.1,
+                                                    }}
+                                                    whileTap={{ scale: 0.9 }}
+                                                  >
+                                                    <div className="flex items-center text-sm font-medium text-secondary">
+                                                      <Plus className="mr-1 size-4" />{" "}
+                                                      Add
+                                                    </div>
+                                                  </motion.div>
+                                                )}
+                                              </div>
+                                            </motion.div>
+                                          }
+                                        />
+                                      );
+                                    }
                                   )}
                                 </div>
                               </div>

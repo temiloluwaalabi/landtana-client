@@ -182,7 +182,7 @@ export const BookingDetails = ({ booking, services }: BookingDetailsProps) => {
 
   // Determine if there are aftercare tips available
   const hasAftercareTips = services.find(
-    (ser) => ser.name === mainService?.name,
+    (ser) => ser.name === mainService?.name
   );
 
   return (
@@ -409,9 +409,14 @@ export const BookingDetails = ({ booking, services }: BookingDetailsProps) => {
               <Avatar className="mb-3 size-20">
                 <AvatarImage src="https://res.cloudinary.com/davidleo/image/upload/v1744896654/aa876a7a2f9aac97c39f34649357f02b_eqqhqh.jpg" />
               </Avatar>
-              <h3 className="font-medium">Amina Johnson</h3>
+              <h3 className="font-medium">ANITA ABAWAH</h3>
+              <p className="text-sm text-gray-500">Professional Hair stylist</p>
               <p className="text-sm text-gray-500">
-                Senior Braiding Specialist
+                Specializes in Hair Braiding
+              </p>
+              <p className="text-sm text-gray-500">Over 7 years + experience</p>
+              <p className="text-sm text-gray-500">
+                Holder of BSC in ECONOMICS
               </p>
               <p className="mt-2 flex items-center justify-center">
                 <span className="flex text-yellow-400">

@@ -1,7 +1,11 @@
-import React from "react";
+import React, { Suspense } from "react";
 
 import ConfirmEmailPageClient from "@/components/shared/pages/confirm-email-page";
 
 export default function ConfirmEmailPage() {
-  return <ConfirmEmailPageClient />;
+  return (
+    <Suspense>
+      <ConfirmEmailPageClient />
+    </Suspense>
+  );
 }

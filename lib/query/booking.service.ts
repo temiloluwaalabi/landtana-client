@@ -9,6 +9,7 @@ import { Booking } from "@/types";
 import { apiClient } from "../api/client";
 import logger from "../logger";
 import { handleMutationError } from "./handle-api-error";
+import { bookingService } from "../api/api";
 import { CreateBookingSchema } from "../validations/main-schema";
 
 export const useCreateBooking = (onSuccessCallback?: () => void) => {
@@ -49,6 +50,19 @@ export const useGetUserBookings = () => {
       return response.data.data; // Assuming the API returns an array of categories
     },
     staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    retry: 2,
+  });
+};
+export const useFetchDates = (dateStr: string, enabled?: boolean) => {
+  return useQuery({
+    queryKey: ["dates", dateStr],
+    queryFn: async () => {
+      const result = await bookingService.getAvailableDates(dateStr);
+
+      return result;
+    },
+    enabled,
+    staleTime: 60 * 60 * 1000,
     retry: 2,
   });
 };
