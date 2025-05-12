@@ -41,7 +41,7 @@ const defaultFormatter = (crumb: string) => {
   return crumb
     .replace(/[-_]/g, " ")
     .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-      index === 0 ? word.toUpperCase() : word.toLowerCase()
+      index === 0 ? word.toUpperCase() : word.toLowerCase(),
     );
 };
 
@@ -73,7 +73,7 @@ const PageTitleHeader = ({
     const label = addLabel || `Add New ${removeS(page)}`;
     const buttonClass = cn(
       buttonVariants({ variant: "default" }),
-      "gap-2 hover:bg-red-900"
+      "gap-2 hover:bg-red-900",
     );
 
     if (addLink) {
@@ -97,7 +97,7 @@ const PageTitleHeader = ({
     <section
       className={cn(
         "mb-2 flex flex-wrap items-center justify-between gap-4 md:mb-4 2xl:mb-6",
-        className
+        className,
       )}
     >
       {" "}

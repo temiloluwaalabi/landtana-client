@@ -27,7 +27,7 @@ export default async function ServiceDetailsServer({
 
   const filteredServices =
     services.services?.services.filter((service) =>
-      categoryIds.includes(service.category_id || "")
+      categoryIds.includes(service.category_id || ""),
     ) || [];
 
   if (!categoryD.success) {

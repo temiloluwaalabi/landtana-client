@@ -21,7 +21,7 @@ export const CategoryServiceList = ({
 }: Props) => {
   const filteredServices = services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
   );
   return (
     <MaxWidthContainer className="!py-[40px]">
@@ -52,7 +52,7 @@ export const CategoryServiceList = ({
               .filter(
                 (cat) =>
                   cat.parent_id === category.id &&
-                  services.some((service) => service.category_id === cat.id)
+                  services.some((service) => service.category_id === cat.id),
               )
               .map((cat) => (
                 <TabsTrigger

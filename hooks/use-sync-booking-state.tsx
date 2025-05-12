@@ -12,13 +12,10 @@ export default function useSyncBookingState() {
     step,
     type,
     preview,
-    isStateUpdate,
-    setIsStateUpdate,
     bookings,
     guests,
     currentGuestId,
     primaryGuestId,
-    isGroupBooking,
     checkout,
     confirmed,
     syncFromUrl,
@@ -47,46 +44,27 @@ export default function useSyncBookingState() {
       router.push(newUrl, { scroll: false });
     }
   }, [
+    bookings,
+    checkout,
+    confirmed,
+    currentGuestId,
+    guests,
+    preview,
+    primaryGuestId,
+    router,
     searchParams,
     step,
     type,
-    currentGuestId,
-    primaryGuestId,
-    bookings,
-    guests,
-    checkout,
-    preview,
-    confirmed,
-    router,
   ]);
 
   // Sync URL from state (debounced)
   useEffect(() => {
     debouncedUpdateUrl();
-  }, [
-    step,
-    type,
-    bookings,
-    currentGuestId,
-    guests,
-    isGroupBooking,
-    checkout,
-    preview,
-    confirmed,
-    searchParams,
-    router,
-    debouncedUpdateUrl,
-  ]);
+  }, [debouncedUpdateUrl]);
 
   useEffect(() => {
-    // console.log("EFFECT CALLED FROM");
-
-    // if (isStateUpdate) {
-    //   setIsStateUpdate(false); // Reset the flag
-    //   return;
-    // }
     if (searchParams) {
       syncFromUrl(searchParams);
     }
-  }, [isStateUpdate, searchParams, setIsStateUpdate, syncFromUrl]);
+  }, [searchParams, syncFromUrl]);
 }
