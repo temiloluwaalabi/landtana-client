@@ -18,7 +18,7 @@ export default async function DashboadBookingsPage() {
       bookings={MainBook || []}
       services={
         services.services?.services.sort(
-          (a, b) => Number(b.created_at) - Number(a.created_at)
+          (a, b) => Number(b.created_at) - Number(a.created_at),
         ) || []
       }
     />

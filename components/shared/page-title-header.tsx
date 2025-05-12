@@ -32,6 +32,8 @@ interface PageTitleHeaderProps {
   className?: string;
   addType?: string;
   showbtn?: boolean;
+  isNotDash?: boolean;
+  notLink?: string;
   addDialog?: boolean;
   dialogContent?: React.ReactNode;
 }
@@ -39,7 +41,7 @@ const defaultFormatter = (crumb: string) => {
   return crumb
     .replace(/[-_]/g, " ")
     .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-      index === 0 ? word.toUpperCase() : word.toLowerCase(),
+      index === 0 ? word.toUpperCase() : word.toLowerCase()
     );
 };
 
@@ -51,6 +53,8 @@ const PageTitleHeader = ({
   showCrumbs,
   showbtn,
   addLabel,
+  notLink,
+  isNotDash,
   onAddClick,
   showBtn = !!addLink || !!onAddClick,
   homeCrumb = { label: "Home", href: "/dashboard" },
@@ -69,7 +73,7 @@ const PageTitleHeader = ({
     const label = addLabel || `Add New ${removeS(page)}`;
     const buttonClass = cn(
       buttonVariants({ variant: "default" }),
-      "gap-2 hover:bg-red-900",
+      "gap-2 hover:bg-red-900"
     );
 
     if (addLink) {
@@ -93,7 +97,7 @@ const PageTitleHeader = ({
     <section
       className={cn(
         "mb-2 flex flex-wrap items-center justify-between gap-4 md:mb-4 2xl:mb-6",
-        className,
+        className
       )}
     >
       {" "}
@@ -116,7 +120,10 @@ const PageTitleHeader = ({
               <BreadcrumbSeparator />
               {breadcrumbs.map((crumb, index) => {
                 const isLast = index === breadcrumbs.length - 1;
-                const href = `/dashboard/${breadcrumbs.slice(0, index + 1).join("/")}`;
+
+                const href = isNotDash
+                  ? `${notLink}/`
+                  : `/dashboard/${breadcrumbs.slice(0, index + 1).join("/")}`;
                 const formattedCrumb = breadcrumbFormatter(crumb, index);
 
                 return (

@@ -67,7 +67,7 @@ export const SettingsClientPage = () => {
     },
   ]);
   const [flowStep, setFlowStep] = React.useState<"form" | "confirmation">(
-    "form"
+    "form",
   );
 
   const [email, setEmail] = React.useState("");
@@ -106,13 +106,13 @@ export const SettingsClientPage = () => {
   const handleSignOut = (deviceId: string) => {
     // Handle device sign out logic
     setConnectedDevices(
-      connectedDevices.filter((device) => device.id !== deviceId)
+      connectedDevices.filter((device) => device.id !== deviceId),
     );
   };
   const handleToggle = (
     categoryId: string,
     channel: "sms" | "email",
-    value: boolean
+    value: boolean,
   ) => {
     setCategories(
       categories.map((category) => {
@@ -123,7 +123,7 @@ export const SettingsClientPage = () => {
           };
         }
         return category;
-      })
+      }),
     );
   };
   return (

@@ -19,7 +19,7 @@ type Categories = {
   services: Service[];
 };
 
-const ExpertiseSection = ({ filteredCategories, services }: Categories) => {
+const ExpertiseSection = ({ filteredCategories }: Categories) => {
   // Animation variants
 
   // Use intersection observer for scrolling effect
@@ -41,7 +41,7 @@ const ExpertiseSection = ({ filteredCategories, services }: Categories) => {
           className="flex flex-col items-center justify-center space-y-4"
           variants={titleVariants}
         >
-          <h2 className="relative bg-gradient-to-r from-accent to-pink-400 bg-clip-text font-cormorant text-3xl font-bold text-accent md:text-4xl lg:text-6xl">
+          <h2 className="font-cormorant relative bg-gradient-to-r from-accent to-pink-400 bg-clip-text text-3xl font-bold text-accent md:text-4xl lg:text-6xl">
             Our Expertise
           </h2>
           <motion.div
@@ -62,9 +62,7 @@ const ExpertiseSection = ({ filteredCategories, services }: Categories) => {
         >
           {filteredCategories
             .filter((cat) => cat.parent_id === null)
-            .filter((cat) =>
-              services.some((service) => service.category_id === cat.id),
-            )
+
             .map((service) => (
               <motion.div
                 key={service.id}

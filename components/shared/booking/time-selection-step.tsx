@@ -191,7 +191,7 @@ export default function TimeSelectionStep({
   const hasSalonCapacity = (
     totalServiceDuration: number,
     bookedHours: number,
-    totalDailyHours: number
+    totalDailyHours: number,
   ): boolean => {
     // Convert service duration from minutes to hours
     const serviceDurationHours = totalServiceDuration / 60;
@@ -211,7 +211,7 @@ export default function TimeSelectionStep({
     selectedDate: Date,
     workingHours: WorkingHours,
     salonCapacity: SalonCapacity,
-    intervalMinutes: number = 30 // Time between slots (30 min by default)
+    intervalMinutes: number = 30, // Time between slots (30 min by default)
   ) => {
     if (!isBookingEnabled(workingHours)) {
       return [];
@@ -221,7 +221,7 @@ export default function TimeSelectionStep({
       !hasSalonCapacity(
         serviceMinDuration,
         salonCapacity.bookedHours,
-        salonCapacity.totalDailyHours
+        salonCapacity.totalDailyHours,
       )
     ) {
       return [];
@@ -258,12 +258,12 @@ export default function TimeSelectionStep({
         // Calculate total duration for this booking
         const totalDuration = (booking.services ?? []).reduce(
           (sum, service) => sum + service.duration,
-          0
+          0,
         );
 
         const bookingStartDate = parseTime(bookingStartTime);
         const bookingEndDate = new Date(
-          bookingStartDate.getTime() + totalDuration * 60 * 1000
+          bookingStartDate.getTime() + totalDuration * 60 * 1000,
         );
 
         // Increment occupancy for each 15-min slot this booking occupies
@@ -299,7 +299,7 @@ export default function TimeSelectionStep({
       const slotStartTime = slotStart.getTime();
 
       const potentialEndTime = new Date(
-        slotStartTime + serviceMinDuration * 60 * 1000
+        slotStartTime + serviceMinDuration * 60 * 1000,
       );
 
       // Skip if service would extend beyond closing time
@@ -544,7 +544,7 @@ export default function TimeSelectionStep({
       selectedDate,
       workingHours,
       salonCapacity,
-      60 // 30-minute intervals
+      60, // 30-minute intervals
     );
 
     if (availableStartTimes.length === 0) {
@@ -567,7 +567,7 @@ export default function TimeSelectionStep({
               `w-fit justify-center bg-transparent border border-[#D9D9D9] h-[42px]
              text-primary hover:text-white hover:bg-secondary hover:border-secondary`,
               time === startTime &&
-                "bg-[#FED8DE] text-secondary border-secondary"
+                "bg-[#FED8DE] text-secondary border-secondary",
             )}
             onClick={() => handleTimeSelect(startTime)}
           >

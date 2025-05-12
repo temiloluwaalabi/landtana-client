@@ -12,16 +12,23 @@ import PageTitleHeader from "../page-title-header";
 type Props = {
   services: Service[];
   category: Category;
+  categories: Category[];
 };
-export const CategoryServiceList = ({ services, category }: Props) => {
+export const CategoryServiceList = ({
+  services,
+  category,
+  categories,
+}: Props) => {
   const filteredServices = services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   return (
     <MaxWidthContainer className="!py-[40px]">
       <PageTitleHeader
         page={category.name}
+        isNotDash
+        notLink="/services"
         showCrumbs
         // lastItem={category.name.toLowerCase()}
       />
@@ -41,42 +48,21 @@ export const CategoryServiceList = ({ services, category }: Props) => {
             >
               All
             </TabsTrigger>
-            <TabsTrigger
-              className="rounded-[60px] text-sm data-[state=active]:bg-primary   data-[state=active]:text-white lg:text-base"
-              value="box-braid"
-            >
-              Box Braids
-            </TabsTrigger>
-            <TabsTrigger
-              className="rounded-[60px] text-sm data-[state=active]:bg-primary   data-[state=active]:text-white lg:text-base"
-              value="twists"
-            >
-              Twists
-            </TabsTrigger>
-            <TabsTrigger
-              className="rounded-[60px] text-sm data-[state=active]:bg-primary   data-[state=active]:text-white lg:text-base"
-              value="crochet"
-            >
-              Crochet
-            </TabsTrigger>
-            <TabsTrigger
-              className="rounded-[60px] text-sm data-[state=active]:bg-primary   data-[state=active]:text-white lg:text-base"
-              value="cornrows"
-            >
-              Cornrows
-            </TabsTrigger>
-            <TabsTrigger
-              className="rounded-[60px] text-sm data-[state=active]:bg-primary   data-[state=active]:text-white lg:text-base"
-              value="weavons"
-            >
-              Wig/Weavons
-            </TabsTrigger>
-            <TabsTrigger
-              className="rounded-[60px] text-sm data-[state=active]:bg-primary   data-[state=active]:text-white lg:text-base"
-              value="others"
-            >
-              Others
-            </TabsTrigger>
+            {categories
+              .filter(
+                (cat) =>
+                  cat.parent_id === category.id &&
+                  services.some((service) => service.category_id === cat.id)
+              )
+              .map((cat) => (
+                <TabsTrigger
+                  key={cat.id}
+                  className="rounded-[60px] text-sm data-[state=active]:bg-primary   data-[state=active]:text-white lg:text-base"
+                  value={cat.id}
+                >
+                  {cat.name}
+                </TabsTrigger>
+              ))}
           </TabsList>
           <TabsContent
             value="all"
@@ -91,6 +77,23 @@ export const CategoryServiceList = ({ services, category }: Props) => {
               View More Services{" "}
             </Button>
           </TabsContent>
+          {categories
+            .filter((cat) => cat.parent_id === category.id)
+            .map((cat) => (
+              <TabsContent key={cat.id} value={cat.id} className="">
+                <div className="grid w-full gap-5 md:grid-cols-2 xl:grid-cols-3">
+                  {filteredServices
+                    .filter((care) => care.category_id === cat.id)
+                    .slice(0, 12)
+                    .map((service) => (
+                      <ServicePriceCard key={service.id} service={service} />
+                    ))}
+                </div>
+                <Button className="mt-5 rounded-md border border-secondary bg-transparent text-secondary">
+                  View More Services{" "}
+                </Button>
+              </TabsContent>
+            ))}
         </Tabs>
       </div>
     </MaxWidthContainer>

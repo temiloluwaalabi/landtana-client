@@ -56,12 +56,12 @@ export default function DateSelectionStep({
         const startOfMonth = new Date(
           calendarMonth.getFullYear(),
           calendarMonth.getMonth(),
-          1
+          1,
         );
         const endOfMonth = new Date(
           calendarMonth.getFullYear(),
           calendarMonth.getMonth() + 1,
-          0
+          0,
         );
 
         // Create a dictionary to store availability data
@@ -83,7 +83,7 @@ export default function DateSelectionStep({
           } catch (error) {
             console.error(
               `Failed to fetch availability for ${dateStr}:`,
-              error
+              error,
             );
           }
 

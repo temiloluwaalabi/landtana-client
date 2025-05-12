@@ -2,20 +2,19 @@
 import { motion } from "framer-motion";
 import { Star, StarHalf } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import React from "react";
 import { useInView } from "react-intersection-observer";
 
 import EnhancedServicesCarousel from "@/components/carousel/service-carousel";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { QuillPreview } from "@/components/ui/quill-preview";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { durations } from "@/config/constants";
+import useSession from "@/hooks/use-session";
+import { useBookingStore } from "@/lib/use-booking-store";
 import { toCurrency } from "@/lib/utils";
-import { Category, Service, StyleOption } from "@/types";
+import { Category, Service } from "@/types";
 
 import MaxWidthContainer from "../max-width-container";
 import PageTitleHeader from "../page-title-header";
@@ -27,14 +26,8 @@ type Props = {
   subCat: Category[];
 };
 export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
-  const [step, setStep] = useState(1);
-  const [selectedStyleOption, setSelectedStyleOption] = useState<string>("");
-  const [additionalServiceType, setAdditionalServiceType] =
-    useState<string>(""); // 'pre-service' or 'post-service'
-  const [selectedVariations, setSelectedVariations] = useState<StyleOption[]>(
-    [],
-  );
-  console.log(additionalServiceType);
+  const { session } = useSession();
+  const router = useRouter();
   const [reviewsRef, reviewsInView] = useInView({
     triggerOnce: false,
     threshold: 0.1,
@@ -73,54 +66,7 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
-  // useEffect to handle initial step setup
-  useEffect(() => {
-    if (!service.variations?.length && service.style_options?.length > 0) {
-      setStep(2); // Start at style options if no variations but style options exist
-    } else if (!service.variations?.length && !service.style_options?.length) {
-      setStep(3); // Start at additional services if no variations and no style options
-    } else {
-      setStep(1); // Default to variations step
-    }
-  }, [service.variations, service.style_options]);
 
-  const handleSelectStyleOption = (option: string) => {
-    setSelectedStyleOption(option);
-  };
-
-  // const handleSelectAdditionalServiceType = (type: string) => {
-  //   setAdditionalServiceType(type);
-  //   setStep(4)
-  // };
-
-  const handleVariationChange = (variation: StyleOption) => {
-    if (selectedVariations.includes(variation)) {
-      setSelectedVariations(selectedVariations.filter((v) => v !== variation));
-    } else {
-      setSelectedVariations([...selectedVariations, variation]);
-    }
-  };
-  const handleContinue = () => {
-    if (step === 1) {
-      if (service.variations?.length > 0 && !service.style_options?.length) {
-        setStep(3); // Skip to additional services if no style options
-      } else {
-        setStep(2); // Move to style options
-      }
-    } else if (step === 2) {
-      setStep(3); // Move to additional services
-    } else {
-      setStep(4); // Move to booking
-    }
-  };
-  const handleSkip = () => {
-    setStep(4); // Skip to booking
-  };
-
-  const handleAdditionalServiceType = (type: string) => {
-    setAdditionalServiceType(type);
-    setStep(4); // Move to booking
-  };
   return (
     <>
       <MaxWidthContainer className="!pt-[40px]">
@@ -170,196 +116,25 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
               />
             </motion.div>
             <motion.div variants={staggerChildren} className="-mt-2">
-              {" "}
-              {/* STEP 1: Variations */}
-              {step === 1 && service.variations?.length > 0 && (
-                <motion.div
-                  variants={childVariant}
-                  className="rounded-xl border border-purple-100 bg-white/80 p-4 shadow-sm backdrop-blur-sm"
-                >
-                  {" "}
-                  <h6 className="font-medium">Variations</h6>
-                  <p className="text-sm">Choose a variation to get started</p>
-                  <div className="space-y-2">
-                    {service.variations.map((variation) => (
-                      <motion.div
-                        key={variation.id}
-                        variants={childVariant}
-                        className="flex items-center gap-2 rounded-lg p-2 transition-colors hover:bg-purple-50"
-                      >
-                        <Checkbox
-                          checked={selectedVariations.includes(variation)}
-                          onChange={() => handleVariationChange(variation)}
-                          className="size-8"
-                        />
-                        <Label>
-                          {variation.name} - {toCurrency(variation.price, true)}{" "}
-                          -{" "}
-                          {
-                            durations.find(
-                              (dur) => dur.value === variation.duration,
-                            )?.label
-                          }
-                        </Label>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-              {step === 2 && service.style_options?.length > 0 && (
-                <motion.div
-                  variants={childVariant}
-                  className="space-y-2 rounded-xl"
-                >
-                  {" "}
-                  <div>
-                    <h6 className="font-medium">Style Options</h6>
-                    <p className="text-sm">
-                      Choose a style option to get started
-                    </p>
-                  </div>
-                  <div className="space-y-2">
-                    <RadioGroup
-                      onValueChange={(value) => handleSelectStyleOption(value)}
-                      defaultValue={selectedStyleOption}
-                      value={selectedStyleOption}
-                      className="cursor-pointer"
-                    >
-                      {service.style_options.map((option) => (
-                        <motion.div
-                          key={option.id}
-                          variants={childVariant}
-                          onClick={() => handleSelectStyleOption(option.id)}
-                          className="flex cursor-pointer items-center gap-2 rounded-lg border p-2 transition-colors hover:bg-purple-50"
-                        >
-                          <RadioGroupItem
-                            value={option.id}
-                            // checked={option === selectedStyleOption}
-                            // onChange={() => handleSelectStyleOption(option)}
-                            className="size-6"
-                          />
-                          <Label>
-                            {option.name} - {toCurrency(option.price, true)} -{" "}
-                            {
-                              durations.find(
-                                (dur) => dur.value === option.duration,
-                              )?.label
-                            }
-                          </Label>
-                        </motion.div>
-                      ))}
-                    </RadioGroup>
-                  </div>
-                </motion.div>
-              )}
-              {step === 3 && (
-                <motion.div
-                  variants={childVariant}
-                  className="space-y-3 rounded-xl border border-purple-100 bg-white/80 p-4 shadow-sm backdrop-blur-sm"
-                >
-                  {" "}
-                  <div>
-                    <h6 className="font-medium">Additional Services</h6>
-                    <p className="text-sm">
-                      Do you need any additional services?
-                    </p>
-                  </div>
-                  <div className="space-y-2">
-                    <Button
-                      onClick={() => handleAdditionalServiceType("pre-service")}
-                      className="w-full"
-                    >
-                      Pre-Service
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        handleAdditionalServiceType("post-service")
-                      }
-                      className="w-full"
-                    >
-                      Post-Service
-                    </Button>
-                    <Button
-                      onClick={handleSkip}
-                      variant="outline"
-                      className="w-full"
-                    >
-                      Skip
-                    </Button>
-                  </div>
-                </motion.div>
-              )}
-              {step === 4 && (
-                <motion.div
-                  variants={childVariant}
-                  className="rounded-xl border border-purple-100 bg-white/80 p-4 shadow-sm backdrop-blur-sm"
-                >
-                  {" "}
-                  <div>
-                    <h6 className="font-medium">Booking</h6>
-                    <p className="text-sm">
-                      Proceed to book your selected services:
-                    </p>
-                  </div>
-                  <div className="mt-4 flex items-center gap-4">
-                    <Button className="h-[45px] w-full bg-secondary">
-                      Book Now
-                    </Button>
-                    <Button className="h-[45px] w-full border border-secondary bg-transparent text-secondary hover:border-primary hover:text-white">
-                      Save for later
-                    </Button>
-                  </div>
-                </motion.div>
-              )}
-              {(step === 1 || step === 2) && (
-                <motion.div
-                  variants={childVariant}
-                  className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2"
-                >
-                  <Button
-                    onClick={handleContinue}
-                    className="h-[45px] w-full bg-secondary shadow-md hover:bg-secondary/90"
-                  >
-                    Continue
-                  </Button>
-                  <Button
-                    onClick={handleSkip}
-                    variant="outline"
-                    className="h-[45px] w-full"
-                  >
-                    Skip
-                  </Button>
-                </motion.div>
-              )}
-              {/* <div>
-                <h6 className="font-medium">Additional Services</h6>
-                <p className="text-sm">
-                  Indicate the additional services you need by clicking the
-                  checkbox
-                </p>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Checkbox className="size-8" />
-                  <Label>Addon 1 - $20</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Checkbox className="size-8" />
-                  <Label>Addon 2- $20</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Checkbox className="size-8" />
-                  <Label>Addon 3 - $20</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Checkbox className="size-8" />
-                  <Label>Addon 4 - $20</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Checkbox className="size-8" />
-                  <Label>Addon 5 - $20</Label>
-                </div>
-              </div> */}
+              <Button
+                onClick={() => {
+                  useBookingStore.getState().updateState({
+                    type: "individual",
+                    step: 1,
+                    currentGuestId: session.id,
+                    primaryGuestId: session.id,
+                    bookings: [
+                      {
+                        serviceId: service.id,
+                        stylist: "ANITA ABAWAH",
+                      },
+                    ],
+                  });
+                  router.push("/book-service");
+                }}
+              >
+                Book Service
+              </Button>
             </motion.div>
           </motion.div>
         </div>

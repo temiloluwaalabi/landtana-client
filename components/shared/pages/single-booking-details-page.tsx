@@ -182,7 +182,7 @@ export const BookingDetails = ({ booking, services }: BookingDetailsProps) => {
 
   // Determine if there are aftercare tips available
   const hasAftercareTips = services.find(
-    (ser) => ser.name === mainService?.name
+    (ser) => ser.name === mainService?.name,
   );
 
   return (

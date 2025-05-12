@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 };
 export default async function MainServicesArchive() {
   const categories = await getAllCategories();
+
   const services = await getAllServices();
   return (
     <ServicesArchiveClient
