@@ -32,7 +32,7 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
   const [additionalServiceType, setAdditionalServiceType] =
     useState<string>(""); // 'pre-service' or 'post-service'
   const [selectedVariations, setSelectedVariations] = useState<StyleOption[]>(
-    [],
+    []
   );
   console.log(additionalServiceType);
   const [reviewsRef, reviewsInView] = useInView({
@@ -127,7 +127,7 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
         <PageTitleHeader
           page={service.name}
           showCrumbs
-          lastItem={service.name.toLowerCase()}
+          // lastItem={service.name.toLowerCase()}
         />
         <div className="grid grid-cols-1 gap-10 !pt-[10px] lg:grid-cols-2">
           <motion.div
@@ -165,7 +165,7 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
             </div>
             <motion.div variants={fadeInUp}>
               <QuillPreview
-                className="prose prose-sm dark:text-light-200/80 dark:[&_p]:text-light-400 dark:[&_span]:!text-light-400 -mt-2 max-w-none [&_.ql-editor]:flex [&_.ql-editor]:flex-col [&_.ql-editor]:gap-2 [&_.ql-editor]:px-0 [&_.ql-editor]:text-base [&_h2]:hidden [&_h4]:text-base [&_li]:text-base [&_p:first-of-type]:line-clamp-2 [&_p:not(:first-of-type)]:hidden [&_p]:text-base [&_p]:font-normal [&_p]:leading-[25px] [&_p]:tracking-wide [&_p]:!text-black [&_p_br]:hidden [&_span]:!bg-transparent [&_span]:!text-black [&_ul]:space-y-3"
+                className="prose prose-sm -mt-2 max-w-none dark:text-light-200/80 [&_.ql-editor]:flex [&_.ql-editor]:flex-col [&_.ql-editor]:gap-2 [&_.ql-editor]:px-0 [&_.ql-editor]:text-base [&_h2]:hidden [&_h4]:text-base [&_li]:text-base [&_p:first-of-type]:line-clamp-2 [&_p:not(:first-of-type)]:hidden [&_p]:text-base [&_p]:font-normal [&_p]:leading-[25px] [&_p]:tracking-wide [&_p]:!text-black dark:[&_p]:text-light-400 [&_p_br]:hidden [&_span]:!bg-transparent [&_span]:!text-black dark:[&_span]:!text-light-400 [&_ul]:space-y-3"
                 value={service.description}
               />
             </motion.div>
@@ -197,7 +197,7 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
                           -{" "}
                           {
                             durations.find(
-                              (dur) => dur.value === variation.duration,
+                              (dur) => dur.value === variation.duration
                             )?.label
                           }
                         </Label>
@@ -242,7 +242,7 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
                             {option.name} - {toCurrency(option.price, true)} -{" "}
                             {
                               durations.find(
-                                (dur) => dur.value === option.duration,
+                                (dur) => dur.value === option.duration
                               )?.label
                             }
                           </Label>
@@ -377,7 +377,7 @@ export const ServiceDetailsPage = ({ service, services, subCat }: Props) => {
           {" "}
           <h2 className="font-lora text-lg font-medium">About this service</h2>
           <QuillPreview
-            className={`dark:text-light-200/80 dark:[&_p]:text-light-400 dark:[&_span]:!text-light-400 -mt-2 [&_.ql-editor]:flex [&_.ql-editor]:flex-col [&_.ql-editor]:gap-2 [&_.ql-editor]:px-0 [&_.ql-editor]:text-base [&_h2]:hidden [&_h4]:text-base [&_li]:text-base  [&_p]:text-base [&_p]:font-normal [&_p]:leading-[25px] [&_p]:tracking-wide [&_p]:!text-black [&_p_br]:hidden [&_span]:!bg-transparent [&_span]:!text-black [&_ul]:space-y-3`}
+            className={`-mt-2 dark:text-light-200/80 [&_.ql-editor]:flex [&_.ql-editor]:flex-col [&_.ql-editor]:gap-2 [&_.ql-editor]:px-0 [&_.ql-editor]:text-base [&_h2]:hidden [&_h4]:text-base [&_li]:text-base [&_p]:text-base [&_p]:font-normal  [&_p]:leading-[25px] [&_p]:tracking-wide [&_p]:!text-black dark:[&_p]:text-light-400 [&_p_br]:hidden [&_span]:!bg-transparent [&_span]:!text-black dark:[&_span]:!text-light-400 [&_ul]:space-y-3`}
             value={service.description}
           />
         </motion.div>

@@ -34,11 +34,11 @@ export const AppSidebar = ({
     >
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem className="cursor-pointer rounded-md hover:bg-white dark:!bg-white dark:!hover:bg-white">
+          <SidebarMenuItem className="dark:!hover:bg-white cursor-pointer rounded-md hover:bg-white dark:!bg-white">
             <SidebarMenuButton
               size="lg"
               asChild
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group"
+              className="group data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="flex items-center justify-between">
                 <Logo

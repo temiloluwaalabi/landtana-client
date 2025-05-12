@@ -249,11 +249,11 @@ export const HomePageClient = (props: Props) => {
 
   const filteredServices = props.services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const filteredCategories = props.categories.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   // const cards = data.map((card) => (
   //   <motion.div
@@ -347,7 +347,7 @@ export const HomePageClient = (props: Props) => {
               </div>
               <motion.h2
                 variants={fadeInUp}
-                className="max-w-[322px] font-cormorant text-5xl font-bold text-[#1E0203]"
+                className="font-cormorant max-w-[322px] text-5xl font-bold text-[#1E0203]"
               >
                 All things Braid at your service
               </motion.h2>
@@ -502,7 +502,7 @@ export const HomePageClient = (props: Props) => {
               variants={titleVariants}
               className="flex flex-col items-center justify-center gap-2"
             >
-              <h2 className="text-center font-cormorant text-3xl font-bold text-accent lg:text-4xl xl:text-6xl">
+              <h2 className="font-cormorant text-center text-3xl font-bold text-accent lg:text-4xl xl:text-6xl">
                 Relax we’re always here for you!{" "}
               </h2>
               <motion.div

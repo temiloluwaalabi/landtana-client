@@ -16,19 +16,19 @@ type Props = {
 export const CategoryServiceList = ({ services, category }: Props) => {
   const filteredServices = services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   return (
     <MaxWidthContainer className="!py-[40px]">
       <PageTitleHeader
         page={category.name}
         showCrumbs
-        lastItem={category.name.toLowerCase()}
+        // lastItem={category.name.toLowerCase()}
       />
 
       <div className="relative flex flex-col justify-center space-y-10 p-0">
         <div className="flex w-full flex-col items-start justify-start space-y-4 p-0">
-          <h2 className="p-0 text-left font-cormorant text-4xl font-bold text-accent">
+          <h2 className="font-cormorant p-0 text-left text-4xl font-bold text-accent">
             Explore Our {category.name} Services
           </h2>
           <div className="h-1 w-20 rounded-full bg-gradient-to-r from-accent to-pink-400" />
