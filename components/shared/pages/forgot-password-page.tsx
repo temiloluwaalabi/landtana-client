@@ -1,4 +1,4 @@
-// @flow
+"use client";
 import * as React from "react";
 
 import ForgotPasswordForm from "@/components/forms/forgot-password";

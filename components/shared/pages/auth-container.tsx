@@ -13,6 +13,19 @@ type AuthContProps = {
   form: React.ReactNode;
 };
 export const AuthContainer = (props: AuthContProps) => {
+  const [windowWidth, setWindowWidth] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    setWindowWidth(window.innerWidth);
+
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   // Animation variants
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -100,7 +113,11 @@ export const AuthContainer = (props: AuthContProps) => {
           <div className="space-y-6">
             {galleryImages.slice(0, 3).map((img, index) => {
               const height =
-                window.innerWidth > 1536 ? img.height : img.smHeight;
+                typeof windowWidth === "number"
+                  ? windowWidth > 1536
+                    ? img.height
+                    : img.smHeight
+                  : img.smHeight; // fallback during SSR
 
               return (
                 <motion.div

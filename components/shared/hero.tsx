@@ -35,7 +35,7 @@ const BlueVariant = () => {
           </h4>
         </div>
         <div>
-          <h1 className="text-center font-cormorant text-[40px] font-bold leading-[40px] text-white md:text-[50px] md:leading-[60px] lg:text-[70px] lg:leading-[90px] xl:text-[100px] 2xl:text-[130px] 2xl:leading-[106px]">
+          <h1 className="font-cormorant text-center text-[40px] font-bold leading-[40px] text-white md:text-[50px] md:leading-[60px] lg:text-[70px] lg:leading-[90px] xl:text-[100px] 2xl:text-[130px] 2xl:leading-[106px]">
             Transform your look with our expert braiding services at Landtana
             Crown Braids
           </h1>
@@ -139,7 +139,7 @@ const GreenVariant = () => {
           </motion.div>
 
           <motion.div variants={fadeInUp}>
-            <h1 className="text-left font-cormorant text-[30px] font-bold leading-[35px] text-white md:text-[50px] md:leading-[55px] lg:text-[60px] lg:leading-[60px] xl:text-[90px] xl:leading-[80px]">
+            <h1 className="font-cormorant text-left text-[30px] font-bold leading-[35px] text-white md:text-[50px] md:leading-[55px] lg:text-[60px] lg:leading-[60px] xl:text-[90px] xl:leading-[80px]">
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

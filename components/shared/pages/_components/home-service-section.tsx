@@ -87,7 +87,7 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
   const getFilteredServices = () => {
     if (selectedTab === "all") return filteredServices;
     return filteredServices.filter(
-      (service) => service.category_id === selectedTab,
+      (service) => service.category_id === selectedTab
     );
   };
 
@@ -107,7 +107,7 @@ const ServicesSection = ({ filteredServices, categories }: Services) => {
           className="flex w-full  flex-col items-start justify-start space-y-4"
           variants={titleVariants}
         >
-          <h2 className="relative bg-gradient-to-r from-secondary to-pink-400 bg-clip-text font-cormorant text-3xl font-bold text-accent md:text-4xl lg:text-6xl">
+          <h2 className="font-cormorant relative bg-gradient-to-r from-secondary to-pink-400 bg-clip-text text-3xl font-bold text-accent md:text-4xl lg:text-6xl">
             Explore Our Braiding Services
             <motion.span
               className="absolute -bottom-3 left-0 h-1 rounded-full bg-gradient-to-r from-primary to-accent"

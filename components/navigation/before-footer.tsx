@@ -11,10 +11,10 @@ export const BeforeFooter = () => {
       <div className="absolute left-0 top-0 z-20 size-full bg-accent/80" />
       <div className="relative z-50 flex flex-col items-center gap-4 text-white">
         <div>
-          <h2 className="max-w-4xl text-center font-cormorant text-6xl font-bold uppercase">
+          <h2 className="font-cormorant max-w-4xl text-center text-6xl font-bold uppercase">
             Indulge in a premium hair styling experience
           </h2>
-          <h2 className="max-w-4xl text-center font-cormorant text-6xl font-bold text-yellow-300">
+          <h2 className="font-cormorant max-w-4xl text-center text-6xl font-bold text-yellow-300">
             Tailored for you
           </h2>
         </div>

@@ -84,7 +84,7 @@ const ProfessionalSection = ({ filteredServices }: Services) => {
   const getFilteredServices = () => {
     if (selectedTab === "all") return filteredServices;
     return filteredServices.filter(
-      (service) => service.category_id === selectedTab,
+      (service) => service.category_id === selectedTab
     );
   };
 
@@ -103,7 +103,7 @@ const ProfessionalSection = ({ filteredServices }: Services) => {
           className="flex w-full flex-col items-start justify-start space-y-4"
           variants={titleVariants}
         >
-          <h2 className="relative font-cormorant text-5xl font-bold text-accent">
+          <h2 className="font-cormorant relative text-5xl font-bold text-accent">
             Meet Our Professionals
             <motion.span
               className="absolute -bottom-3 left-0 h-1 rounded-full bg-gradient-to-r from-primary to-accent"

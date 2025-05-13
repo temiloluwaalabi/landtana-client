@@ -108,7 +108,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
   const currentStepDetails = steps.find(
     (step) =>
       step.step === currentStep &&
-      (!step.type || (type && step.type.includes(type))),
+      (!step.type || (type && step.type.includes(type)))
   );
 
   if (!currentStepDetails) {
@@ -153,7 +153,7 @@ export const StepHeader = ({ currentStep, onGoBack }: StepHeaderProps) => {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="mb-4 space-y-2"
         >
-          <h2 className="bg-gradient-to-r from-primary to-secondary bg-clip-text font-cormorant text-3xl font-bold text-transparent lg:text-5xl">
+          <h2 className="font-cormorant bg-gradient-to-r from-primary to-secondary bg-clip-text text-3xl font-bold text-transparent lg:text-5xl">
             {currentStepDetails.title}
           </h2>
           <p className="max-w-md font-lora text-sm font-normal text-gray-600 lg:text-base">

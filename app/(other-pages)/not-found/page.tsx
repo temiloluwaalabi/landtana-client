@@ -26,11 +26,11 @@ const NotPage: React.FC = () => {
       className="itemc flex h-screen
          flex-col justify-center"
     >
-      <div className="dark:text-light-700 text-center">
+      <div className="text-center dark:text-light-700">
         <h1 className="mb-4 text-4xl font-bold">
           {getPageName()} - Does not exist!!
         </h1>
-        <p className="dark:text-light-500 text-gray-600">
+        <p className="text-gray-600 dark:text-light-500">
           We&apos;re working on something awesome. Stay tuned!
         </p>
         <p className="mt-4 text-red-500">

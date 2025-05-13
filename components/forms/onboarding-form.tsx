@@ -90,7 +90,7 @@ export default function OnboardingForm() {
                       </FormControl>
                       <FormLabel
                         htmlFor={gender}
-                        className="dark:text-light-200 !m-0 text-sm font-normal text-[#252525]"
+                        className="!m-0 text-sm font-normal text-[#252525] dark:text-light-200"
                       >
                         {gender}
                       </FormLabel>

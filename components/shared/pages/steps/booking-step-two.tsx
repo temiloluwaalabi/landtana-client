@@ -256,7 +256,7 @@ export const BookingStepTwo = (props: Props) => {
 
             <div className="flex flex-col items-start space-y-4">
               <div className="flex flex-col items-start">
-                <h6 className="text-ellipsis whitespace-nowrap font-cormorant text-lg font-semibold text-black 2xl:text-xl">
+                <h6 className="font-cormorant text-ellipsis whitespace-nowrap text-lg font-semibold text-black 2xl:text-xl">
                   {service.name}
                 </h6>
                 <div className="flex items-center space-x-2 text-sm text-gray-500">

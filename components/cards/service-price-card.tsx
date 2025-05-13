@@ -97,7 +97,7 @@ export const ServicePriceCard = (props: Props) => {
         <div className="flex flex-col justify-between gap-1">
           <motion.h3
             variants={textVariants}
-            className="max-w-[130px] font-cormorant text-lg font-semibold !leading-5 text-gray-800"
+            className="font-cormorant max-w-[130px] text-lg font-semibold !leading-5 text-gray-800"
           >
             <Link href={`/services/${props.service.id}`}>
               {props.service.name}
@@ -194,7 +194,7 @@ export const ServicePriceCard = (props: Props) => {
       <div className="z-10 flex flex-col gap-1">
         <motion.h3
           variants={textVariants}
-          className="cursor-pointer font-cormorant text-2xl font-semibold text-gray-800"
+          className="font-cormorant cursor-pointer text-2xl font-semibold text-gray-800"
         >
           <Link href={`/services/${props.service.id}`}>
             {props.service.name}
