@@ -13,20 +13,20 @@ type AuthContProps = {
   form: React.ReactNode;
 };
 export const AuthContainer = (props: AuthContProps) => {
-  const [windowWidth, setWindowWidth] = React.useState<number | null>(null);
+  // const [windowWidth, setWindowWidth] = React.useState<number | null>(null);
 
-  React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      setWindowWidth(window.innerWidth);
+  // React.useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     setWindowWidth(window.innerWidth);
 
-      const handleResize = () => {
-        setWindowWidth(window.innerWidth);
-      };
+  //     const handleResize = () => {
+  //       setWindowWidth(window.innerWidth);
+  //     };
 
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }
-  }, []);
+  //     window.addEventListener("resize", handleResize);
+  //     return () => window.removeEventListener("resize", handleResize);
+  //   }
+  // }, []);
 
   // Animation variants
   const fadeInUp = {
@@ -114,19 +114,22 @@ export const AuthContainer = (props: AuthContProps) => {
           {/* First column */}
           <div className="space-y-6">
             {galleryImages.slice(0, 3).map((img, index) => {
-              const height =
-                typeof windowWidth === "number"
-                  ? windowWidth > 1536
-                    ? img.height
-                    : img.smHeight
-                  : img.smHeight; // fallback during SSR
+              // const height =
+              //   typeof windowWidth === "number"
+              //     ? windowWidth > 1536
+              //       ? img.height
+              //       : img.smHeight
+              //     : img.smHeight; // fallback during SSR
 
               return (
                 <motion.div
                   key={index}
-                  className={`relative w-full overflow-hidden `}
-                  style={{ height }}
-                  custom={img.customAnimation}
+                  className={`relative w-full overflow-hidden ${
+                    index < 3
+                      ? "h-[250px] sm:h-[200px]"
+                      : "h-[550px] sm:h-[400px]"
+                  }`}
+                  // custom={img.customAnimation}
                   initial="hidden"
                   animate="visible"
                   variants={staggerImages}
