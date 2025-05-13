@@ -70,12 +70,12 @@ export default function DateSelectionStep({
         const startOfMonth = new Date(
           calendarMonth.getFullYear(),
           calendarMonth.getMonth(),
-          1
+          1,
         );
         const endOfMonth = new Date(
           calendarMonth.getFullYear(),
           calendarMonth.getMonth() + 1,
-          0
+          0,
         );
 
         // Create a dictionary to store availability data
@@ -102,7 +102,7 @@ export default function DateSelectionStep({
           } catch (error) {
             console.error(
               `Failed to fetch availability for ${dateStr}:`,
-              error
+              error,
             );
           }
 
@@ -127,12 +127,12 @@ export default function DateSelectionStep({
     const startOfMonth = new Date(
       calendarMonth.getFullYear(),
       calendarMonth.getMonth(),
-      1
+      1,
     );
     const endOfMonth = new Date(
       calendarMonth.getFullYear(),
       calendarMonth.getMonth() + 1,
-      0
+      0,
     );
 
     const dates: Date[] = [];
@@ -460,7 +460,7 @@ export default function DateSelectionStep({
                               "border rounded-lg overflow-hidden",
                               isDateSelected
                                 ? "border-primary ring-1 ring-primary"
-                                : "border-gray-200"
+                                : "border-gray-200",
                             )}
                           >
                             <div
@@ -468,7 +468,7 @@ export default function DateSelectionStep({
                                 "p-4 cursor-pointer",
                                 isDateSelected
                                   ? "bg-primary/10"
-                                  : "hover:bg-gray-50"
+                                  : "hover:bg-gray-50",
                               )}
                               onClick={() => handleDateSelect(day)}
                             >
@@ -494,7 +494,7 @@ export default function DateSelectionStep({
                                             ? "text-red-500"
                                             : dayAvailability.availableSlots < 3
                                               ? "text-amber-600"
-                                              : "text-green-600"
+                                              : "text-green-600",
                                         )}
                                       >
                                         {dayAvailability.availableSlots} slots
