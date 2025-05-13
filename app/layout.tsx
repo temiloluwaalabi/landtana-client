@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Script from "next/script";
 import NextTopLoader from "nextjs-toploader";
+import { Suspense } from "react";
 
 import ScrollToTop from "@/components/navigation/scroll-to-top";
 // import { PWAComponents } from "@/components/pwa/pwa-components";
@@ -16,7 +17,7 @@ import { cormorant, iSans, lora } from "./fonts";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com",
+    process.env.NEXT_PUBLIC_API_BASE_URL || "https://landtanacrownbraids.com"
   ),
   title: "Landtana Crown Braids | Premium Braiding Salon in San Antonio",
   description:
@@ -156,13 +157,13 @@ export default async function RootLayout({
           cormorant.variable,
           lora.variable,
           iSans.variable,
-          "font-lora antialiased",
+          "font-lora antialiased"
         )}
       >
         <Providers>
           <NextTopLoader color="#216015" showSpinner={false} />
           <Toaster />
-          {children}
+          <Suspense>{children}</Suspense>
         </Providers>
         <ScrollToTop />
       </body>
