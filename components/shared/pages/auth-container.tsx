@@ -126,8 +126,8 @@ export const AuthContainer = (props: AuthContProps) => {
                   key={index}
                   className={`relative w-full overflow-hidden ${
                     index < 3
-                      ? "h-[250px] sm:h-[200px]"
-                      : "h-[550px] sm:h-[400px]"
+                      ? "h-[250px] sm:h-[350px]"
+                      : "h-[550px] sm:h-[650px]"
                   }`}
                   // custom={img.customAnimation}
                   initial="hidden"
@@ -157,15 +157,17 @@ export const AuthContainer = (props: AuthContProps) => {
           {/* Second column */}
           <div className="space-y-6">
             {galleryImages.slice(3, 6).map((img, index) => {
-              const height =
-                window.innerWidth > 1536 ? img.height : img.smHeight;
+              // const height =
+              //   window.innerWidth > 1536 ? img.height : img.smHeight;
 
               return (
                 <motion.div
                   key={index + 3}
-                  className="relative w-full overflow-hidden"
-                  style={{ height }}
-                  custom={img.customAnimation}
+                  className={`relative w-full overflow-hidden ${
+                    index < 3
+                      ? "h-[250px] sm:h-[350px]"
+                      : "h-[550px] sm:h-[650px]"
+                  }`}
                   initial="hidden"
                   animate="visible"
                   variants={staggerImages}
