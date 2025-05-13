@@ -17,14 +17,14 @@ export const ProfessionalCard = () => {
       <div className="z-10 flex flex-col gap-1">
         <div className="flex items-center justify-between">
           <h3 className="font-cormorant text-2xl font-bold text-gray-900">
-            Tax Claire
+            ANITA ABAWAH
           </h3>
           <h3 className="font-cormorant text-2xl font-bold text-primary">
             4.5
           </h3>
         </div>
         <p className="font-lora text-base font-normal text-gray-900">
-          Specializes in Box Braid, Twist and Hair Dye.{" "}
+          Specializes in Hair Braiding. Over 7years + experience{" "}
         </p>
         <a
           href="#"

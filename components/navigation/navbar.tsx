@@ -81,7 +81,7 @@ const NavContent = ({ otherClasses, routes }: ContentProps) => {
                   "!bg-transparent hover:!bg-secondary text-base text-black uppercase",
                   navigationMenuTriggerStyle(),
                   isActive &&
-                    "!text-primary font-bold underline underline-offset-4 text-white",
+                    "!text-primary font-bold underline underline-offset-4 text-white"
                 )}
               >
                 {nav.name}
@@ -183,7 +183,7 @@ const LeftNavbar = (props: NavbarProps) => {
                     href={route.href}
                     className={cn(
                       "text-lg text-black font-fira font-normal",
-                      isActive && "text-primary underline underline-offset-8",
+                      isActive && "text-primary underline underline-offset-8"
                     )}
                   >
                     {route.name}
@@ -217,7 +217,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
     <nav
       className={cn(
         "flex items-center justify-between lg:grid gap-2 lg:grid-cols-12 ",
-        props.className,
+        props.className
       )}
     >
       <Sheet open={openSheet} onOpenChange={setopenSheet}>
@@ -239,7 +239,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                     href={route.href}
                     className={cn(
                       "text-lg text-black font-fira font-normal",
-                      isActive && "text-primary underline underline-offset-8",
+                      isActive && "text-primary underline underline-offset-8"
                     )}
                   >
                     {route.name}
@@ -262,12 +262,12 @@ const CenterLogoNavbar = (props: NavbarProps) => {
       </div> */}
       <div
         className={cn(
-          " relative items-center flex col-span-2  justify-center  2xl:justify-start ",
+          " relative items-center flex col-span-2  justify-center  2xl:justify-start "
         )}
       >
         <Logo />
       </div>
-      <div className="z-50 col-span-5 flex items-center justify-between gap-4 ">
+      <div className="z-50 col-span-5 hidden items-center justify-between gap-4 lg:flex ">
         <NavContent
           isLogeedIn={props.isLogeedIn}
           routes={navbarROutes.slice(4)}
@@ -305,7 +305,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                     <div className="">
                       <Avatar
                         className={cn(
-                          "!h-12 w-12 sm:!h-16 sm:w-16 border-2 cursor-pointer border-gray-0 dark:border-gray-100",
+                          "!h-12 w-12 sm:!h-16 sm:w-16 border-2 cursor-pointer border-gray-0 dark:border-gray-100"
                         )}
                       >
                         <AvatarImage
@@ -330,11 +330,11 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                     {authMenuRoutes.map((route, id) => {
                       const pathnameExistsInDropdowns: any =
                         route.dropdownItems?.filter(
-                          (dropdownItem) => dropdownItem.href === pathname,
+                          (dropdownItem) => dropdownItem.href === pathname
                         );
                       // const isOpen = openIndex === id;
                       const isDropdownOpen = Boolean(
-                        pathnameExistsInDropdowns?.length,
+                        pathnameExistsInDropdowns?.length
                       );
                       const isActive = pathname === (route.href as string);
 
@@ -360,7 +360,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                                 <p
                                   className={cn(
                                     "flex  h-full items-center w-full text-black justify-between py-3 gap-2 mb-2 hover:px-2 hover:rounded-md",
-                                    isActive && "text-primary ",
+                                    isActive && "text-primary "
                                   )}
                                 >
                                   <div className="flex items-center gap-2">
@@ -390,7 +390,7 @@ const CenterLogoNavbar = (props: NavbarProps) => {
                                         href={item.href}
                                         className={cn(
                                           "text-14_medium font-semibold flex  h-full items-center py-3 gap-2 cursor-pointer ",
-                                          isChildActive && "text-primary",
+                                          isChildActive && "text-primary"
                                         )}
                                       >
                                         {item.name}
@@ -437,6 +437,166 @@ const CenterLogoNavbar = (props: NavbarProps) => {
             </Button>
           )}
         </div>
+      </div>
+      <div className="lg:hidden">
+        {props.isLogeedIn === true ? (
+          <DropdownMenu open={openAuthMenu} onOpenChange={setOpenAuthMenu}>
+            <DropdownMenuTrigger>
+              <div className="relative flex items-center gap-2">
+                <Avatar>
+                  <AvatarFallback>CN</AvatarFallback>
+                  {/* <AvatarImage src={props.avatar || ""} /> */}
+                </Avatar>
+                {/* <div>
+                    <h4>
+                      {session.first_name}
+                      {session.email}
+                    </h4>
+                    <p>{props.loggedInUser.phone_no}</p>
+                  </div> */}
+                <ChevronDown
+                  className={cn(" size-4", openAuthMenu && "rotate-180")}
+                />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              side="bottom"
+              sideOffset={5}
+              className="w-[328px] rounded-md p-3"
+            >
+              <Card className="flex flex-col gap-0 border-none p-0 shadow-none outline-none">
+                <CardHeader className="!flex flex-row items-center gap-4  p-0">
+                  <div className="">
+                    <Avatar
+                      className={cn(
+                        "!h-12 w-12 sm:!h-16 sm:w-16 border-2 cursor-pointer border-gray-0 dark:border-gray-100"
+                      )}
+                    >
+                      <AvatarImage src={""} className="!z-10 cursor-pointer" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </div>
+
+                  <div className="space-y-1">
+                    <h2 className="font-mont text-base font-semibold">
+                      {session.first_name}
+                    </h2>
+                    <p className="font-mont text-sm font-normal">
+                      {session.email}
+                    </p>
+                  </div>
+                </CardHeader>
+                <DropdownMenuSeparator className="my-2 bg-primary opacity-25" />
+                <CardContent className=" !p-0">
+                  {authMenuRoutes.map((route, id) => {
+                    const pathnameExistsInDropdowns: any =
+                      route.dropdownItems?.filter(
+                        (dropdownItem) => dropdownItem.href === pathname
+                      );
+                    // const isOpen = openIndex === id;
+                    const isDropdownOpen = Boolean(
+                      pathnameExistsInDropdowns?.length
+                    );
+                    const isActive = pathname === (route.href as string);
+
+                    return (
+                      <div
+                        key={route.name + "-" + id}
+                        onSelect={(e) => e.preventDefault()}
+                      >
+                        {route?.dropdownItems && route?.dropdownItems.length ? (
+                          <Collapsible
+                            defaultOpen={isDropdownOpen}
+                            className="group/collapsible"
+                            // open={isOpen}
+                            // onOpenChange={(newOpenState) =>
+                            //   handleOpenChange(id, newOpenState)
+                            // }
+                          >
+                            <CollapsibleTrigger
+                              className="w-full cursor-pointer"
+                              asChild
+                            >
+                              <p
+                                className={cn(
+                                  "flex  h-full items-center w-full text-black justify-between py-3 gap-2 mb-2 hover:px-2 hover:rounded-md",
+                                  isActive && "text-primary "
+                                )}
+                              >
+                                <div className="flex items-center gap-2">
+                                  {route.icon && (
+                                    <route.icon className="size-4" />
+                                  )}{" "}
+                                  <p className="text-14_medium font-semibold">
+                                    {route.name}
+                                  </p>
+                                </div>
+                                <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                              </p>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="rounded-xl  px-2">
+                              {route.dropdownItems.map((item, index) => {
+                                const isChildActive =
+                                  pathname === (item.href as string);
+                                return (
+                                  <div
+                                    key={item.name + index}
+                                    className="flex items-center gap-2"
+                                  >
+                                    {item.icon && (
+                                      <item.icon className="size-4" />
+                                    )}{" "}
+                                    <Link
+                                      href={item.href}
+                                      className={cn(
+                                        "text-14_medium font-semibold flex  h-full items-center py-3 gap-2 cursor-pointer ",
+                                        isChildActive && "text-primary"
+                                      )}
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  </div>
+                                );
+                              })}
+                            </CollapsibleContent>
+                          </Collapsible>
+                        ) : (
+                          <p className="mb-3 text-base text-primary ">
+                            <Link href={route.href || "/"}>{route.name}</Link>
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  <DropdownMenuItem
+                    className="p-0"
+                    onSelect={(e) => e.preventDefault()}
+                  >
+                    <LogoutModal
+                      trigger={
+                        <Button
+                          variant={"ghost"}
+                          className="flex w-full items-center justify-start border border-red-900 bg-red-100 p-2 text-red-900 hover:bg-red-600 hover:px-2 hover:text-white"
+                        >
+                          <LogOutIcon className="mr-2 size-4" />
+                          Logout
+                        </Button>
+                      }
+                    />
+                  </DropdownMenuItem>
+                </CardContent>
+              </Card>{" "}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button className="z-50">
+            <Link className="" href={"/sign-in"}>
+              Sign In
+            </Link>
+          </Button>
+        )}
       </div>
     </nav>
   );

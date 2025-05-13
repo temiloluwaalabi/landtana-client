@@ -423,9 +423,42 @@ export default function AboutUsClient() {
             variants={staggerChildren}
           >
             {[
-              "Eco-Friendly Products",
-              "Ergonomic Seating",
-              "Refreshment Bar",
+              {
+                title: "Eco-Friendly Products",
+                description:
+                  "We prioritize sustainability by using environmentally friendly hair care products.",
+                icon: "🌿",
+              },
+              {
+                title: "Ergonomic Seating",
+                description:
+                  "Experience ultimate comfort during your session with our specially designed chairs.",
+                icon: "💺",
+              },
+              {
+                title: "Refreshment Bar",
+                description:
+                  "Enjoy complimentary beverages and snacks while you relax.",
+                icon: "☕",
+              },
+              {
+                title: "Private Styling Rooms",
+                description:
+                  "For a more personalized and intimate experience, we offer private styling areas.",
+                icon: "🔒",
+              },
+              {
+                title: "Modern Equipment",
+                description:
+                  "Our salon is equipped with state-of-the-art tools for precision and quality.",
+                icon: "🛠️",
+              },
+              {
+                title: "Relaxing Ambiance",
+                description:
+                  "Immerse yourself in a serene environment designed to soothe your senses.",
+                icon: "🕯️",
+              },
             ].map((feature, index) => (
               <motion.div
                 key={index}
@@ -433,10 +466,10 @@ export default function AboutUsClient() {
                 className="rounded-xl border border-purple-100 bg-gradient-to-br from-white to-purple-50 p-6"
               >
                 <div className="mb-4 flex size-12 items-center justify-center rounded-lg bg-purple-100">
-                  <span className="text-2xl">✨</span>
+                  <span className="text-2xl">{feature.icon}</span>
                 </div>
-                <h3 className="mb-2 text-lg font-semibold">{feature}</h3>
-                <p className="text-sm text-gray-600">test</p>
+                <h3 className="mb-2 text-lg font-semibold">{feature.title}</h3>
+                <p className="text-sm text-gray-600">{feature.description}</p>
               </motion.div>
             ))}
           </motion.div>

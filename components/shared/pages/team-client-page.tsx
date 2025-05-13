@@ -37,9 +37,9 @@ export default function TeamPageClient() {
   // You would replace this with your actual team data
   const teamMembers: TeamMember[] = [
     {
-      name: "Jane Doe",
+      name: "ANITA ABAWAH",
       title: "Master Braider & Salon Owner",
-      bio: "With over 10 years of experience in the hair braiding industry, Jane founded Landtana Crown Braids with a vision to create a space where the art of braiding is celebrated. Specializing in intricate protective styles, she has developed a reputation for creating beautiful, long-lasting braids that honor both tradition and contemporary trends.",
+      bio: "With over 7 years of experience in the hair braiding industry, Anita Abawah founded Landtana Crown Braids with a vision to create a space where the art of braiding is celebrated. Specializing in intricate protective styles, she has developed a reputation for creating beautiful, long-lasting braids that honor both tradition and contemporary trends. Holder of BSC in ECONOMICS",
       image:
         "https://res.cloudinary.com/davidleo/image/upload/v1739748138/landtana/DALL_E_2025-02-17_00.20.25_-_A_high-end_hair_salon_specializing_in_hair_treatments_showing_a_stylist_applying_a_nourishing_hair_mask_to_a_client_s_hair._The_salon_features_a_rela_rn2n6i.webp",
       specialties: ["Box Braids", "Goddess Braids", "Cornrow Designs"],

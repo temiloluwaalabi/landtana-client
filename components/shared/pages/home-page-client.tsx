@@ -99,7 +99,7 @@ export const InstagramFeed = () => {
           whileHover="hover"
           whileTap={{ scale: 0.95 }}
           initial="rest"
-          href="https://instagram.com"
+          href="https://www.instagram.com/landtanacrownbraids?igsh=eDU1am45MzY4M3Bm&utm_source=qr"
           target="_blank"
           className="flex items-center gap-2 text-secondary"
         >
@@ -249,11 +249,11 @@ export const HomePageClient = (props: Props) => {
 
   const filteredServices = props.services.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   const filteredCategories = props.categories.sort(
     (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
   // const cards = data.map((card) => (
   //   <motion.div

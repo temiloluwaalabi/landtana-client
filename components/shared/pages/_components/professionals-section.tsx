@@ -84,7 +84,7 @@ const ProfessionalSection = ({ filteredServices }: Services) => {
   const getFilteredServices = () => {
     if (selectedTab === "all") return filteredServices;
     return filteredServices.filter(
-      (service) => service.category_id === selectedTab,
+      (service) => service.category_id === selectedTab
     );
   };
 
@@ -171,7 +171,7 @@ const ProfessionalSection = ({ filteredServices }: Services) => {
                 animate="visible"
                 exit="exit"
               >
-                {demoservices.slice(0, 6).map((service, index) => (
+                {demoservices.slice(0, 1).map((service, index) => (
                   <motion.div
                     key={service.name}
                     variants={cardVariants}

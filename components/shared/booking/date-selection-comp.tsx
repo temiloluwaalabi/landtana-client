@@ -8,15 +8,24 @@ import {
   isToday,
   isSameDay,
   addDays,
+  startOfDay,
 } from "date-fns";
 // import { AlertCircle } from "lucide-react";
-import { AlertCircle, CalendarIcon, Loader2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import {
+  AlertCircle,
+  Calendar1Icon,
+  CalendarIcon,
+  Loader2,
+  ViewIcon,
+} from "lucide-react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { getDateBooking } from "@/app/actions/bookings.action";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useBookingStore } from "@/lib/use-booking-store";
+import { cn } from "@/lib/utils";
 import { Service } from "@/types";
 
 import TimeSelectionStep from "./time-selection-step";
@@ -37,14 +46,19 @@ export default function DateSelectionStep({
   services,
   onBack,
 }: DateSelectionStepProps) {
+  const [view, setView] = useState<"month" | "day">("month");
+
   const [showTimeSelector, setShowTimeSelector] = useState(false);
   const [availabilityData, setAvailabilityData] = useState<
     Record<string, SlotAvailability>
   >({});
   const [calendarMonth, setCalendarMonth] = useState<Date>(new Date());
-
   const [loading, setLoading] = useState(true);
   const { date, updateState } = useBookingStore();
+  const [visibleDates, setVisibleDates] = useState<Date[]>([]);
+  const [visibleDatesCount, setVisibleDatesCount] = useState<number>(10);
+
+  const isMobile = useIsMobile();
 
   const selectedDate = date;
   // Fetch availability data for the current month
@@ -56,12 +70,12 @@ export default function DateSelectionStep({
         const startOfMonth = new Date(
           calendarMonth.getFullYear(),
           calendarMonth.getMonth(),
-          1,
+          1
         );
         const endOfMonth = new Date(
           calendarMonth.getFullYear(),
           calendarMonth.getMonth() + 1,
-          0,
+          0
         );
 
         // Create a dictionary to store availability data
@@ -88,7 +102,7 @@ export default function DateSelectionStep({
           } catch (error) {
             console.error(
               `Failed to fetch availability for ${dateStr}:`,
-              error,
+              error
             );
           }
 
@@ -107,7 +121,51 @@ export default function DateSelectionStep({
     fetchAvailabilityForMonth();
   }, [calendarMonth]);
 
-  console.log("availableDa", availabilityData);
+  const generateVisibleDates = useCallback(() => {
+    // Start from today or selected date
+    // Start from the first day of the current month
+    const startOfMonth = new Date(
+      calendarMonth.getFullYear(),
+      calendarMonth.getMonth(),
+      1
+    );
+    const endOfMonth = new Date(
+      calendarMonth.getFullYear(),
+      calendarMonth.getMonth() + 1,
+      0
+    );
+
+    const dates: Date[] = [];
+    let currentDate = startOfDay(startOfMonth);
+
+    // Get dates for the current month only
+    while (currentDate <= endOfMonth) {
+      const dateStr = format(currentDate, "yyyy-MM-dd");
+      const dateAvailability = availabilityData[dateStr];
+
+      // Include the date if it's not before today and has available slots
+      if (
+        (!isBefore(currentDate, startOfDay(new Date())) ||
+          isSameDay(currentDate, new Date())) &&
+        (!dateAvailability || dateAvailability.availableSlots > 0)
+      ) {
+        dates.push(currentDate);
+      }
+
+      currentDate = addDays(currentDate, 1);
+    }
+
+    setVisibleDates(dates);
+    setVisibleDatesCount(Math.min(8, dates.length)); // Reset to showing first 8 dates
+  }, [availabilityData, calendarMonth]);
+
+  // Generate the next set of available dates when in day view
+  useEffect(() => {
+    if (view === "day") {
+      generateVisibleDates();
+    }
+  }, [view, generateVisibleDates]);
+
   const handleDateSelect = async (date: Date | undefined) => {
     if (!date || !isValid(date)) return;
 
@@ -118,8 +176,15 @@ export default function DateSelectionStep({
       updateState({
         date,
       });
-
-      onNext();
+      if (view === "month") {
+        if (isMobile) {
+          setView("day");
+        } else {
+          setShowTimeSelector(true);
+        }
+      } else if (view === "day") {
+        onNext();
+      }
     }
   };
   const disabledDates = (date: Date) => {
@@ -170,8 +235,15 @@ export default function DateSelectionStep({
           date: day,
         });
 
-        setShowTimeSelector(true);
-        onNext();
+        if (view === "month") {
+          if (isMobile) {
+            setView("day");
+          } else {
+            setShowTimeSelector(true);
+          }
+        } else if (view === "day") {
+          onNext();
+        }
       }
     };
 
@@ -236,8 +308,45 @@ export default function DateSelectionStep({
 
   const handleMonthChange = (month: Date) => {
     setCalendarMonth(month);
+    if (view === "day") {
+      setCalendarMonth(month);
+    }
   };
 
+  const handleViewMoreDates = () => {
+    // Show more dates on mobile view
+    setVisibleDatesCount((prev) => {
+      const newCount = prev + 8; // Add 8 more dates to view
+      return Math.min(newCount, visibleDates.length); // Don't exceed available dates
+    });
+  };
+  const handleNextMonth = () => {
+    const nextMonth = new Date(calendarMonth);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    setCalendarMonth(nextMonth);
+  };
+
+  useEffect(() => {
+    if (isMobile) {
+      setView("day");
+    }
+  }, [isMobile]);
+  const handlePreviousMonth = () => {
+    const prevMonth = new Date(calendarMonth);
+    prevMonth.setMonth(prevMonth.getMonth() - 1);
+
+    // Don't allow going before current month if it would show past dates
+    const today = new Date();
+    if (
+      prevMonth.getFullYear() < today.getFullYear() ||
+      (prevMonth.getFullYear() === today.getFullYear() &&
+        prevMonth.getMonth() < today.getMonth())
+    ) {
+      return;
+    }
+
+    setCalendarMonth(prevMonth);
+  };
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center space-y-4 py-10 text-center">
@@ -261,37 +370,202 @@ export default function DateSelectionStep({
             <h2 className="text-xs font-semibold md:text-sm lg:text-xl">
               Select a Date
             </h2>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <div className="mr-3 flex items-center">
-                <div className="mr-1 size-3 rounded-full bg-green-100"></div>
-                <span>Available</span>
-              </div>
-              <div className="mr-3 flex items-center">
-                <div className="mr-1 size-3 rounded-full bg-amber-100"></div>
-                <span>Limited</span>
-              </div>
-              <div className="flex items-center">
-                <div className="mr-1 size-3 rounded-full bg-red-100"></div>
-                <span>Booked</span>
-              </div>
+            {/* View toggle buttons */}
+            <div className="flex items-center space-x-2">
+              <Button
+                variant={view === "month" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setView("month")}
+                className="flex items-center"
+              >
+                <Calendar1Icon className="mr-1 size-4" />
+                <span className="hidden sm:inline">Month</span>
+              </Button>
+              <Button
+                variant={view === "day" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setView("day")}
+                className="flex items-center"
+              >
+                <ViewIcon className="mr-1 size-4" />
+                <span className="hidden sm:inline">Day</span>
+              </Button>
             </div>
           </div>
 
-          <Calendar
-            showOutsideDays={false}
-            weekStartsOn={1}
-            mode="single"
-            month={calendarMonth}
-            selected={selectedDate || undefined}
-            onSelect={(date) => handleDateSelect(date)}
-            onMonthChange={handleMonthChange}
-            disabled={(date) => disabledDates(date)}
-            className="rounded-md border"
-            components={{
-              DayContent: ({ date, activeModifiers, ...props }) =>
-                dayRenderer(date, { activeModifiers, ...props }),
-            }}
-          />
+          {view === "month" ? (
+            <>
+              <Calendar
+                showOutsideDays={false}
+                weekStartsOn={1}
+                mode="single"
+                month={calendarMonth}
+                selected={selectedDate || undefined}
+                onSelect={(date) => handleDateSelect(date)}
+                onMonthChange={handleMonthChange}
+                disabled={(date) => disabledDates(date)}
+                className="rounded-md border"
+                components={{
+                  DayContent: ({ date, activeModifiers, ...props }) =>
+                    dayRenderer(date, { activeModifiers, ...props }),
+                }}
+              />
+            </>
+          ) : (
+            <div className="flex w-full flex-col space-y-4">
+              {visibleDates.length > 0 ? (
+                <div className="flex w-full flex-col space-y-4">
+                  {/* Month navigation header */}
+                  <div className="mb-2 flex items-center justify-between">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handlePreviousMonth}
+                      disabled={
+                        new Date().getMonth() === calendarMonth.getMonth() &&
+                        new Date().getFullYear() === calendarMonth.getFullYear()
+                      }
+                      className="text-gray-500"
+                    >
+                      &lt; Previous
+                    </Button>
+                    <h3 className="text-sm font-medium">
+                      {format(calendarMonth, "MMMM yyyy")}
+                    </h3>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleNextMonth}
+                      className="text-gray-500"
+                      disabled={visibleDates.length - visibleDatesCount > 0}
+                    >
+                      Next &gt;
+                    </Button>
+                  </div>
+                  {/* Day selection */}
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    {/* Only show the number of dates based on visibleDatesCount */}
+                    {visibleDates
+                      .slice(0, visibleDatesCount)
+                      .map((day, index) => {
+                        const dateStr = format(day, "yyyy-MM-dd");
+                        const dayAvailability = availabilityData[dateStr];
+                        const isDateSelected =
+                          selectedDate && isSameDay(selectedDate, day);
+
+                        return (
+                          <div
+                            key={dateStr}
+                            className={cn(
+                              "border rounded-lg overflow-hidden",
+                              isDateSelected
+                                ? "border-primary ring-1 ring-primary"
+                                : "border-gray-200"
+                            )}
+                          >
+                            <div
+                              className={cn(
+                                "p-4 cursor-pointer",
+                                isDateSelected
+                                  ? "bg-primary/10"
+                                  : "hover:bg-gray-50"
+                              )}
+                              onClick={() => handleDateSelect(day)}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                  <div className="mr-4 text-center">
+                                    <div className="text-2xl font-bold">
+                                      {format(day, "dd")}
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                      {format(day, "EEE")}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="font-medium">
+                                      {format(day, "MMMM d, yyyy")}
+                                    </div>
+                                    {dayAvailability && (
+                                      <div
+                                        className={cn(
+                                          "text-sm",
+                                          dayAvailability.availableSlots === 0
+                                            ? "text-red-500"
+                                            : dayAvailability.availableSlots < 3
+                                              ? "text-amber-600"
+                                              : "text-green-600"
+                                        )}
+                                      >
+                                        {dayAvailability.availableSlots} slots
+                                        available
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                <div>
+                                  {isDateSelected && (
+                                    <div className="size-4 rounded-full bg-primary"></div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Time slots - show only when date is selected */}
+                              {isDateSelected && dayAvailability && (
+                                <TimeSelectionStep
+                                  services={services}
+                                  onNext={() => console.log("DATE SELECTED")}
+                                  onBack={() => setShowTimeSelector(false)}
+                                />
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+
+                  {/* View more dates button */}
+                  {visibleDatesCount < visibleDates.length && (
+                    <div className="mt-6 flex justify-center">
+                      <Button
+                        variant="outline"
+                        onClick={handleViewMoreDates}
+                        className="w-full md:w-auto"
+                      >
+                        View{" "}
+                        {Math.min(8, visibleDates.length - visibleDatesCount)}{" "}
+                        more dates
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Navigation */}
+                  <div className="mt-4 flex justify-between">
+                    <Button variant="outline" onClick={onBack}>
+                      Back
+                    </Button>
+                    <Button variant="outline" onClick={() => setView("month")}>
+                      Show Calendar
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-8">
+                  <p className="text-muted-foreground">
+                    No available dates found.
+                  </p>
+                  <div className="mt-4 flex space-x-4">
+                    <Button variant="outline" onClick={handleNextMonth}>
+                      Try Next Month
+                    </Button>
+                    <Button variant="outline" onClick={() => setView("month")}>
+                      Return to Calendar
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {selectedDate && (
             <div className="mt-6 w-full">
