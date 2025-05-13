@@ -13,9 +13,9 @@ import {
 import { AlertCircle, CalendarIcon, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
+import { getDateBooking } from "@/app/actions/bookings.action";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { bookingService } from "@/lib/api/api";
 import { useBookingStore } from "@/lib/use-booking-store";
 import { Service } from "@/types";
 
@@ -56,12 +56,12 @@ export default function DateSelectionStep({
         const startOfMonth = new Date(
           calendarMonth.getFullYear(),
           calendarMonth.getMonth(),
-          1,
+          1
         );
         const endOfMonth = new Date(
           calendarMonth.getFullYear(),
           calendarMonth.getMonth() + 1,
-          0,
+          0
         );
 
         // Create a dictionary to store availability data
@@ -75,15 +75,20 @@ export default function DateSelectionStep({
           console.log("DATE STR", dateStr);
           // Fetch data from the API
           try {
-            const response = await bookingService.getAvailableDates(dateStr);
+            const response = await getDateBooking(dateStr);
 
             if (response) {
-              availabilityDict[dateStr] = response;
+              availabilityDict[dateStr] = response.bookings || {
+                date: dateStr,
+                maxBookings: 0,
+                availableSlots: 0,
+                bookedSlots: 0,
+              };
             }
           } catch (error) {
             console.error(
               `Failed to fetch availability for ${dateStr}:`,
-              error,
+              error
             );
           }
 
@@ -253,8 +258,10 @@ export default function DateSelectionStep({
       ) : (
         <div className="flex w-full flex-col items-center">
           <div className="mb-4 flex w-full items-center justify-between">
-            <h2 className="text-xl font-semibold">Select a Date</h2>
-            <div className="flex items-center text-sm text-muted-foreground">
+            <h2 className="text-xs font-semibold md:text-sm lg:text-xl">
+              Select a Date
+            </h2>
+            <div className="flex items-center text-xs text-muted-foreground">
               <div className="mr-3 flex items-center">
                 <div className="mr-1 size-3 rounded-full bg-green-100"></div>
                 <span>Available</span>

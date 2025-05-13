@@ -79,6 +79,47 @@ export const getGroupBookingsByUser = async () => {
     };
   }
 };
+export const getDateBooking = async (dateStr: string) => {
+  try {
+    const session = await getSession();
+
+    if (!session || !session.isLoggedIn) {
+      throw new UnauthorizedError();
+    }
+    const bookings = await bookingService.getAvailableDates(dateStr);
+
+    logger.info("Dates Successfully Fetched");
+
+    return {
+      success: true,
+      bookings,
+    };
+  } catch (error) {
+    logger.error({ error }, "FAILED FETCHING Dates");
+
+    if (error instanceof UnauthorizedError) {
+      return {
+        success: false,
+        message: error.message,
+        status: error.statusCode,
+      };
+    }
+    if (error instanceof ApiError) {
+      return {
+        success: false,
+        message: error.message,
+        rawErrors: error.rawErrors,
+        status: error.statusCode,
+      };
+    }
+
+    return {
+      success: false,
+      message: "Fetching dates failed",
+      status: 500,
+    };
+  }
+};
 export const getAllBookings = async () => {
   try {
     const session = await getSession();
