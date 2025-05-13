@@ -16,14 +16,16 @@ export const AuthContainer = (props: AuthContProps) => {
   const [windowWidth, setWindowWidth] = React.useState<number | null>(null);
 
   React.useEffect(() => {
-    setWindowWidth(window.innerWidth);
-
-    const handleResize = () => {
+    if (typeof window !== "undefined") {
       setWindowWidth(window.innerWidth);
-    };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+      };
+
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
   // Animation variants

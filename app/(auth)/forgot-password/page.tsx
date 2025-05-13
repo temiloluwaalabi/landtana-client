@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 
 import { ForgotPasswordClient } from "@/components/shared/pages/forgot-password-page";
 
